@@ -234,3 +234,8 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+/IFT-3100-TP.sln
+/IFT-3100-TP.vcxproj
+/IFT-3100-TP.vcxproj.filters
+/addons.make
+/icon.rc
