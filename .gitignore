@@ -245,4 +245,4 @@ _Pvt_Extensions
 *.qbs
 [Mm]akefile
 *.make
-./bin/data/*
+bin/data/*
