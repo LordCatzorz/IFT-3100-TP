@@ -1,13 +1,20 @@
 #include "ofApp.h"
-#include "Shapes.h"
+
+string loadedImage;
+void FileOpenCallback(string param){
+    loadedImage = param;
+}
 
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	ofEnableDepthTest();
-	Shapes shape = Shapes();
-	mesh = shape.createCube();
-	
+    //ofEnableDepthTest();
+    ofSetFrameRate(24);
+    Shapes shape = Shapes();
+    mesh = shape.createCube();
+    Gui = new GUI();
+
+    Gui->AddImageOpenedListener(&FileOpenCallback);
 }
 
 //--------------------------------------------------------------
@@ -19,12 +26,21 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+
 	ofPushMatrix();
 	ofTranslate(100, 100);
 	ofScale(15, 15);
 	ofSetColor(ofColor::aqua);
 	mesh->draw();
 	ofPopMatrix();
+
+    Gui->Draw();
+
+    if(!loadedImage.empty()){
+        ofImage * image = new ofImage();
+        image->load(loadedImage);
+        image->draw(200, 10, 300, 300);
+    }
 }
 
 //--------------------------------------------------------------

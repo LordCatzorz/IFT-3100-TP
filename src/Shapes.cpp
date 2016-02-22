@@ -1,4 +1,4 @@
-#include "shapes.h"
+#include "Shapes.h"
 ///@Todo: Make sure all shapes have a diameter of 1
 
 Shapes::Shapes()
@@ -98,12 +98,12 @@ ofMesh * Shapes::createOctahedron()
 
 ofMesh * Shapes::createDodecahedron()
 {
-	throw exception("Not yet implemented");
+    throw std::runtime_error("Not yet implemented");
 }
 
 ofMesh * Shapes::createIcosahedron()
 {
-	throw exception("Not yet implemented");
+    throw std::runtime_error("Not yet implemented");
 }
 
 ofMesh* Shapes::createCube()
@@ -113,7 +113,7 @@ ofMesh* Shapes::createCube()
 
 ofMesh* Shapes::createSphere()
 {
-	throw exception("Not yet implemented");
+    throw std::runtime_error("Not yet implemented");
 }
 
 

@@ -242,3 +242,7 @@ _Pvt_Extensions
 /IFT-3100-TP.vcxproj.filters
 /addons.make
 /icon.rc
+*.qbs
+[Mm]akefile
+*.make
+./bin/data/*

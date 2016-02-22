@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Shapes.h"
+#include "GUI.h"
 
 class ofApp : public ofBaseApp{
 
@@ -20,5 +22,8 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		ofMesh* mesh;
+        ofMesh* mesh;
+        //void FileOpenCallback(string param);
+    private:
+        GUI* Gui;
 };
