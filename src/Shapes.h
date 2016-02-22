@@ -4,6 +4,7 @@
 class Shapes
 {
 public:
+
     Shapes();
     ~Shapes();
     ofMesh* createTetrahedron();
@@ -15,6 +16,7 @@ public:
     ofMesh* createCube();
 
     ofMesh* createSphere();
+
 private:
 
 };
