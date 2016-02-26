@@ -3,6 +3,10 @@
 #include "ofMain.h"
 #include "Shapes.h"
 #include "GUI.h"
+#include "Primitives.h"
+#include <fstream>
+#include <iterator>
+#include <algorithm>
 
 class ofApp : public ofBaseApp{
 
@@ -23,7 +27,9 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
         ofMesh* mesh;
-        //void FileOpenCallback(string param);
+        void FileOpenCallback(string param);
     private:
         GUI* Gui;
+        std::vector<Image> visibleImages;
+        void saveFile(string path, std::ifstream & file);
 };

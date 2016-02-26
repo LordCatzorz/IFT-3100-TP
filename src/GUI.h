@@ -8,23 +8,19 @@
 #ifdef __linux__
 #include "gtk/gtk.h"
 #endif
-#include <fstream>
-#include <iterator>
-#include <algorithm>
 
 class GUI
 {
 public:
-	GUI();
-	void Draw();
-	void AddImageOpenedListener(void (inCallBackFunction)(string));
+    GUI();
+    void Draw();
+    void AddImageOpenedListener(std::function<void(std::string)> fnc);
 private:
 	ofxButton openFileBtn;
 	ofxPanel gui;
 	void openFileBtnCallback();
-	ofFileDialogResult requestUsrFile();
-	void saveFile(string path, std::ifstream & file);
-	void(*callBackFunction)(string);
+    ofFileDialogResult requestUsrFile();
+    std::function<void(std::string)> imageOpenCallback;
 };
 
 #endif // GUI_H

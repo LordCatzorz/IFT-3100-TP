@@ -1,8 +1,29 @@
 #include "ofApp.h"
 
-string loadedImage;
-void FileOpenCallback(string param){
-    loadedImage = param;
+void ofApp::FileOpenCallback(string param){
+
+    std::ifstream input( param, std::ios::binary );
+    string imageName = param.substr(param.find_last_of("/"));
+    saveFile("./data" + imageName, input);
+    input.close();
+
+    Image * newImage = new Image();
+    newImage->X = 0;
+    newImage->Y = 0;
+    newImage->Width = 300;
+    newImage->Height = 300;
+    newImage->Name = imageName.substr(1);
+    visibleImages.insert(visibleImages.end(), *newImage);
+}
+
+void ofApp::saveFile(string path, std::ifstream & file){
+    std::ofstream output(path, std::ios::binary );
+
+    std::copy(
+     std::istreambuf_iterator<char>(file),
+     std::istreambuf_iterator<char>( ),
+     std::ostreambuf_iterator<char>(output));
+    output.close();
 }
 
 //--------------------------------------------------------------
@@ -14,7 +35,7 @@ void ofApp::setup()
     mesh = shape.createCube();
     Gui = new GUI();
 
-    Gui->AddImageOpenedListener(&FileOpenCallback);
+    Gui->AddImageOpenedListener(std::bind(&ofApp::FileOpenCallback, this, std::placeholders::_1));
 }
 
 //--------------------------------------------------------------
@@ -26,7 +47,6 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-
 	ofPushMatrix();
 	ofTranslate(100, 100);
 	ofScale(15, 15);
@@ -36,10 +56,12 @@ void ofApp::draw()
 
     Gui->Draw();
 
-    if(!loadedImage.empty()){
+    for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end(); i++){
         ofImage * image = new ofImage();
-        image->load(loadedImage);
-        image->draw(200, 10, 300, 300);
+        image->load((*i).Name);
+        image->draw((*i).X, (*i).Y);
+        (*i).Width = image->getWidth();
+        (*i).Height = image->getHeight();
     }
 }
 
