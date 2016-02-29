@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "Shapes.h"
 #include "GUI.h"
+#include "MouseWatcher.h"
 #include "Primitives.h"
 #include <fstream>
 #include <iterator>
@@ -30,6 +31,9 @@ class ofApp : public ofBaseApp{
         void FileOpenCallback(string param);
     private:
         GUI* Gui;
+        MouseWatcher * mouseWatcher;
         std::vector<Image> visibleImages;
         void saveFile(string path, std::ifstream & file);
+
+        bool isRecordingMouseMouvements = false;
 };

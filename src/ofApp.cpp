@@ -34,8 +34,8 @@ void ofApp::setup()
     Shapes shape = Shapes();
     mesh = shape.createCube();
     Gui = new GUI();
-
     Gui->AddImageOpenedListener(std::bind(&ofApp::FileOpenCallback, this, std::placeholders::_1));
+    mouseWatcher = new MouseWatcher();
 }
 
 //--------------------------------------------------------------
@@ -63,6 +63,12 @@ void ofApp::draw()
         (*i).Width = image->getWidth();
         (*i).Height = image->getHeight();
     }
+
+    ofSetColor(ofColor::black);
+    if(isRecordingMouseMouvements)
+        ofDrawRectangle(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
+                        mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x,
+                        mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
 }
 
 //--------------------------------------------------------------
@@ -86,31 +92,40 @@ void ofApp::mouseMoved(int x, int y)
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button)
 {
-
+    if(button == 0){
+        isRecordingMouseMouvements = true;
+        mouseWatcher->Record(x, y);
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button)
 {
-
+    if(button == 0){
+        isRecordingMouseMouvements = true;
+        mouseWatcher->Record(x, y);
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button)
 {
-
+    if(button == 0){
+        isRecordingMouseMouvements = false;
+        mouseWatcher->StopRecording();
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseEntered(int x, int y)
 {
-
+    mouseWatcher->ResumeRecording();
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseExited(int x, int y)
 {
-
+    mouseWatcher->PauseRecording();
 }
 
 //--------------------------------------------------------------
