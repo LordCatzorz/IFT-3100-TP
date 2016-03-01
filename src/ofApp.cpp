@@ -7,12 +7,12 @@ void ofApp::FileOpenCallback(string param){
     saveFile("./data" + imageName, input);
     input.close();
 
-    Image * newImage = new Image();
-    newImage->X = 0;
-    newImage->Y = 0;
-    newImage->Width = 300;
-    newImage->Height = 300;
-    newImage->Name = imageName.substr(1);
+    Image * newImage = new Image(imageName.substr(1));
+    //newImage->X = 0;
+    //newImage->Y = 0;
+    //newImage->Width = 300;
+    //newImage->Height = 300;
+    //newImage->Name = imageName.substr(1);
     visibleImages.insert(visibleImages.end(), *newImage);
 }
 
@@ -57,18 +57,19 @@ void ofApp::draw()
     Gui->Draw();
 
     for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end(); i++){
-        ofImage * image = new ofImage();
-        image->load((*i).Name);
-        image->draw((*i).X, (*i).Y);
-        (*i).Width = image->getWidth();
-        (*i).Height = image->getHeight();
+        //Image * image = new Image((*i).Name);
+        //image->load((*i).Name);
+        //image->draw((*i).X, (*i).Y);
+        //(*i).Width = image->getWidth();
+        //(*i).Height = image->getHeight();
+        (*i).Draw();
     }
 
-    ofSetColor(ofColor::black);
+    /*ofSetColor(ofColor::black);
     if(isRecordingMouseMouvements)
         ofDrawRectangle(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
                         mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x,
-                        mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
+                        mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);*/
 }
 
 //--------------------------------------------------------------
@@ -86,15 +87,23 @@ void ofApp::keyReleased(int key)
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y)
 {
-
+    for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end() && selectedImage == nullptr; i++){
+        if((*i).IsPointWithinBounds(x, y)){
+            (*i).ShowBorders(true);
+        }else{
+            (*i).ShowBorders(false);
+        }
+    }
 }
-
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button)
 {
     if(button == 0){
         isRecordingMouseMouvements = true;
         mouseWatcher->Record(x, y);
+
+        if(selectedImage != nullptr)
+            selectedImage->AffectVector(x, y, mouseWatcher->CurretVector());
     }
 }
 
@@ -102,6 +111,13 @@ void ofApp::mouseDragged(int x, int y, int button)
 void ofApp::mousePressed(int x, int y, int button)
 {
     if(button == 0){
+        for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end() && selectedImage == nullptr; i++){
+            if((*i).IsPointWithinBounds(x, y)){
+                selectedImage = &(*i);
+                selectedImage->ShowBorders(true);
+            }
+        }
+
         isRecordingMouseMouvements = true;
         mouseWatcher->Record(x, y);
     }
@@ -110,6 +126,10 @@ void ofApp::mousePressed(int x, int y, int button)
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button)
 {
+
+    if(selectedImage != nullptr)
+        selectedImage->ShowBorders(false);
+    selectedImage = nullptr;
     if(button == 0){
         isRecordingMouseMouvements = false;
         mouseWatcher->StopRecording();

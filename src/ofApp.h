@@ -4,7 +4,8 @@
 #include "Shapes.h"
 #include "GUI.h"
 #include "MouseWatcher.h"
-#include "Primitives.h"
+#include "Image.h"
+//#include "Primitives.h"
 #include <fstream>
 #include <iterator>
 #include <algorithm>
@@ -33,6 +34,7 @@ class ofApp : public ofBaseApp{
         GUI* Gui;
         MouseWatcher * mouseWatcher;
         std::vector<Image> visibleImages;
+        Image * selectedImage;
         void saveFile(string path, std::ifstream & file);
 
         bool isRecordingMouseMouvements = false;

@@ -10,6 +10,7 @@ public:
     void StopRecording();
     void PauseRecording();
     void ResumeRecording();
+    ofVec3f * CurretVector();
     ofPoint * TopLeftPoint();
     ofPoint * TopRightPoint();
     ofPoint * BottomLeftPoint();
@@ -23,6 +24,8 @@ private:
     int coordX2 = -1;
     int coordY2 = -1;
 
+    ofPoint lastRecordedPoint;
+    ofVec3f currectVector;
     ofPoint topLeftPoint;
     ofPoint topRightPoint;
     ofPoint bottomLeftPoint;
