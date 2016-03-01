@@ -98,12 +98,100 @@ ofMesh * Shapes::createOctahedron()
 
 ofMesh * Shapes::createDodecahedron()
 {
-    throw std::runtime_error("Not yet implemented");
+	ofMesh* mesh = new ofMesh();
+	double heightOfRoof = (sqrt(5) - 1) / 2.0;
+
+	mesh->addVertex(ofPoint(1, 1, 1));
+	mesh->addVertex(ofPoint(1, 1, -1));
+	mesh->addVertex(ofPoint(1, -1, 1));
+	mesh->addVertex(ofPoint(1, -1, -1));
+
+	mesh->addVertex(ofPoint(-1, 1, 1));
+	mesh->addVertex(ofPoint(-1, 1, -1));
+	mesh->addVertex(ofPoint(-1, -1, 1));
+	mesh->addVertex(ofPoint(-1, -1, -1));
+
+	mesh->addVertex(ofPoint(0, (1 + heightOfRoof), (1 - heightOfRoof*heightOfRoof)));
+	mesh->addVertex(ofPoint(0, (1 + heightOfRoof), -(1 - heightOfRoof*heightOfRoof)));
+	mesh->addVertex(ofPoint(0, -(1 + heightOfRoof), (1 - heightOfRoof*heightOfRoof)));
+	mesh->addVertex(ofPoint(0, -(1 + heightOfRoof), -(1 - heightOfRoof*heightOfRoof)));
+
+	mesh->addVertex(ofPoint((1 + heightOfRoof), (1 - heightOfRoof*heightOfRoof), 0));
+	mesh->addVertex(ofPoint((1 + heightOfRoof), -(1 - heightOfRoof*heightOfRoof), 0));
+	mesh->addVertex(ofPoint(-(1 + heightOfRoof), (1 - heightOfRoof*heightOfRoof), 0));
+	mesh->addVertex(ofPoint(-(1 + heightOfRoof), -(1 - heightOfRoof*heightOfRoof), 0));
+
+	mesh->addVertex(ofPoint((1 - heightOfRoof*heightOfRoof), 0, (1 + heightOfRoof)));
+	mesh->addVertex(ofPoint((1 - heightOfRoof*heightOfRoof), 0, -(1 + heightOfRoof)));
+	mesh->addVertex(ofPoint(-(1 - heightOfRoof*heightOfRoof), 0, (1 + heightOfRoof)));
+	mesh->addVertex(ofPoint(-(1 - heightOfRoof*heightOfRoof), 0, -(1 + heightOfRoof)));
+
+	//Do the fucking dodecahedron
+
+	return mesh;
 }
 
 ofMesh * Shapes::createIcosahedron()
 {
-    throw std::runtime_error("Not yet implemented");
+	ofMesh* mesh = new ofMesh();
+	double phi = ((sqrt(5) + 1) / 2.0);
+
+	//See https://en.wikipedia.org/wiki/Regular_icosahedron#/media/File:Icosahedron-golden-rectangles.svg
+	// But flipped horizontally
+
+	//Long on z rectangle
+	mesh->addVertex(ofPoint(0, 1, phi));  //0
+	mesh->addVertex(ofPoint(0, 1, -phi)); //1
+	mesh->addVertex(ofPoint(0, -1, phi)); //2
+	mesh->addVertex(ofPoint(0, -1, -phi));//3
+
+	//Long on y rectangle
+	mesh->addVertex(ofPoint(1, phi, 0));   //4
+	mesh->addVertex(ofPoint(1, -phi, 0));  //5
+	mesh->addVertex(ofPoint(-1, phi, 0));  //6
+	mesh->addVertex(ofPoint(-1, -phi, 0)); //7
+
+	//Long on x renctangle
+	mesh->addVertex(ofPoint(phi, 0, 1));   //8
+	mesh->addVertex(ofPoint(-phi, 0, 1));  //9
+	mesh->addVertex(ofPoint(phi, 0, -1));  //10
+	mesh->addVertex(ofPoint(-phi, 0, -1)); //11
+
+	//Do the fucking isocahedron
+
+	//Using the long on X rectangle edge
+	mesh->addTriangle(8, 10, 4);
+	mesh->addTriangle(8, 10, 5);
+	mesh->addTriangle(9, 11, 6);
+	mesh->addTriangle(9, 11, 7);
+
+	//Using the long on Y rectangle edge
+	mesh->addTriangle(4, 6, 0);
+	mesh->addTriangle(4, 6, 1);
+	mesh->addTriangle(5, 7, 2);
+	mesh->addTriangle(5, 7, 3);
+
+	//Using the long on Y rectangle edge
+	mesh->addTriangle(0, 2,8);
+	mesh->addTriangle(0, 2,9);
+	mesh->addTriangle(1, 3,10);
+	mesh->addTriangle(1, 3,11);
+
+	//Corners
+	mesh->addTriangle(0, 4, 8);
+	mesh->addTriangle(0, 6, 9);
+	mesh->addTriangle(1, 4, 10);
+	mesh->addTriangle(1, 6, 11);
+ 
+	mesh->addTriangle(2, 5, 8);
+	mesh->addTriangle(2, 7, 9);
+	mesh->addTriangle(3, 5, 10);
+	mesh->addTriangle(3, 7, 11);
+
+
+
+	return mesh;
+
 }
 
 ofMesh* Shapes::createCube()
@@ -113,7 +201,7 @@ ofMesh* Shapes::createCube()
 
 ofMesh* Shapes::createSphere()
 {
-    throw std::runtime_error("Not yet implemented");
+	throw std::runtime_error("Not yet implemented");
 }
 
 
