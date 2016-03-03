@@ -1,5 +1,7 @@
 #include "ofApp.h"
 
+
+
 void ofApp::FileOpenCallback(string param){
 
     std::ifstream input( param, std::ios::binary );
@@ -8,12 +10,18 @@ void ofApp::FileOpenCallback(string param){
     input.close();
 
     Image * newImage = new Image(imageName.substr(1));
-    //newImage->X = 0;
-    //newImage->Y = 0;
-    //newImage->Width = 300;
-    //newImage->Height = 300;
-    //newImage->Name = imageName.substr(1);
     visibleImages.insert(visibleImages.end(), *newImage);
+}
+
+void ofApp::PrintScreenTakenCallback(string param){
+    printScreenTakenCallback(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, param);
+}
+
+void ofApp::printScreenTakenCallback(int x, int y, int width, int height, string param){
+    ofImage screenImg;
+    screenImg.allocate(width, height, OF_IMAGE_COLOR);
+    screenImg.grabScreen(x,y,width,height);
+    screenImg.saveImage(param + ".png");
 }
 
 void ofApp::saveFile(string path, std::ifstream & file){
@@ -24,6 +32,29 @@ void ofApp::saveFile(string path, std::ifstream & file){
      std::istreambuf_iterator<char>( ),
      std::ostreambuf_iterator<char>(output));
     output.close();
+
+}
+
+void ofApp::PrintScreenSectionCallback(string arg){
+    mouseWatcher->ShouldShowSelectionZone(true);
+    isMakingScreenshotSection = true;
+    mouseUpDelegates[0].bind(this, &ofApp::takeScreenshotSection);
+}
+
+void ofApp::takeScreenshotSection(int x, int y){
+    int startX = mouseWatcher->TopLeftPoint()->x;
+    int startY = mouseWatcher->TopLeftPoint()->y;
+    int endX = mouseWatcher->BottomRightPoint()->x;
+    int endY = mouseWatcher->BottomRightPoint()->y;
+    mouseWatcher->ShouldShowSelectionZone(false);
+    for (int i=0; i<12; i++) {
+        if(mouseDownDelegates[i] == MouseActionDelegate(this, &ofApp::takeScreenshotSection)){
+            mouseDownDelegates[i].clear();
+            break;
+        }
+    }
+
+    printScreenTakenCallback(startX, startY, endX - startX, endY - startY, Gui->RequestSaveFilePath("captureDEcran") + "captureDEcran");
 }
 
 //--------------------------------------------------------------
@@ -35,7 +66,21 @@ void ofApp::setup()
     mesh = shape.createCube();
     Gui = new GUI();
     Gui->AddImageOpenedListener(std::bind(&ofApp::FileOpenCallback, this, std::placeholders::_1));
+    Gui->AddPrintscreenTakenListener(std::bind(&ofApp::PrintScreenTakenCallback, this, std::placeholders::_1));
+    Gui->AddPrintscreenSelectionListener(std::bind(&ofApp::PrintScreenSectionCallback, this, std::placeholders::_1));
     mouseWatcher = new MouseWatcher();
+    //mousePressed.bind(&ofApp::someMouseHandler, this);
+
+}
+
+void ofApp::beginSelectionZoneDraw(int x, int y){
+    bool a = true;
+    for (int i=0; i<12; i++) {
+        if(mouseDownDelegates[i] == MouseActionDelegate(this, &ofApp::beginSelectionZoneDraw)){
+            mouseDownDelegates[i].clear();
+            break;
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -55,6 +100,7 @@ void ofApp::draw()
 	ofPopMatrix();
 
     Gui->Draw();
+    mouseWatcher->Draw();
 
     for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end(); i++){
         //Image * image = new Image((*i).Name);
@@ -110,6 +156,7 @@ void ofApp::mouseDragged(int x, int y, int button)
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button)
 {
+
     if(button == 0){
         for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end() && selectedImage == nullptr; i++){
             if((*i).IsPointWithinBounds(x, y)){
@@ -121,6 +168,16 @@ void ofApp::mousePressed(int x, int y, int button)
         isRecordingMouseMouvements = true;
         mouseWatcher->Record(x, y);
     }
+
+    for (int i=0; i<12; i++) {
+            if (!mouseDownDelegates[i]) {
+                printf("Delegate is empty\n");
+            } else {
+                // Invocation generates optimal assembly code.
+                mouseDownDelegates[i](x, y);
+            };
+        }
+
 }
 
 //--------------------------------------------------------------
@@ -133,7 +190,17 @@ void ofApp::mouseReleased(int x, int y, int button)
     if(button == 0){
         isRecordingMouseMouvements = false;
         mouseWatcher->StopRecording();
+        mouseWatcher->ShouldShowSelectionZone(false);
     }
+
+    for (int i=0; i<12; i++) {
+            if (!mouseUpDelegates[i]) {
+                printf("Delegate is empty\n");
+            } else {
+                // Invocation generates optimal assembly code.
+                mouseUpDelegates[i](x, y);
+            };
+        }
 }
 
 //--------------------------------------------------------------

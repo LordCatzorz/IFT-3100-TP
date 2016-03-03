@@ -10,19 +10,28 @@ public:
     void StopRecording();
     void PauseRecording();
     void ResumeRecording();
+    void Draw();
+    void ShouldShowSelectionZone(bool shouldShow);
     ofVec3f * CurretVector();
     ofPoint * TopLeftPoint();
     ofPoint * TopRightPoint();
     ofPoint * BottomLeftPoint();
     ofPoint * BottomRightPoint();
 private:
-    bool isRecording = false;
-    bool isPaused = false;
+    bool    isRecording = false,
+            isPaused = false,
+            shouldDrawSelectionZone = false;
 
-    int coordX1 = -1;
-    int coordY1 = -1;
-    int coordX2 = -1;
-    int coordY2 = -1;
+    int coordX1 = 0,
+        coordY1 = 0,
+        coordX2 = 0,
+        coordY2 = 0,
+        selectionBarsSize = 5;
+
+    ofRectangle selectionZoneTHBar,
+                selectionZoneBHBar,
+                selectionZoneLVBar,
+                selectionZoneRVBar;
 
     ofPoint lastRecordedPoint;
     ofVec3f currectVector;

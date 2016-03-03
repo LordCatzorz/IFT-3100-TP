@@ -1,18 +1,24 @@
 #pragma once
 
+#include <stdio.h>
+#include <fstream>
+#include <iterator>
+#include <algorithm>
 #include "ofMain.h"
 #include "Shapes.h"
 #include "GUI.h"
 #include "MouseWatcher.h"
 #include "Image.h"
-//#include "Primitives.h"
-#include <fstream>
-#include <iterator>
-#include <algorithm>
+#include "../DelegatesLib/FastDelegate.h"
 
+using namespace fastdelegate;
 class ofApp : public ofBaseApp{
 
 	public:
+
+
+        const static int SCREEN_WIDTH = 512, SCREEN_HEIGHT = 512;
+
 		void setup();
 		void update();
 		void draw();
@@ -30,7 +36,20 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
         ofMesh* mesh;
         void FileOpenCallback(string param);
+        void PrintScreenTakenCallback(string param);
+        void printScreenTakenCallback(int x, int y, int width, int height, string param);
+        void PrintScreenSectionCallback(string arg);
     private:
+
+        typedef FastDelegate2<int, int> MouseActionDelegate;
+        MouseActionDelegate mouseDownDelegates[12];
+        MouseActionDelegate mouseUpDelegates[12];
+
+        void beginSelectionZoneDraw(int x, int y);
+        void endSelectionZoneDraw(int x, int y);
+
+        void takeScreenshotSection(int x, int y);
+
         GUI* Gui;
         MouseWatcher * mouseWatcher;
         std::vector<Image> visibleImages;
@@ -38,4 +57,6 @@ class ofApp : public ofBaseApp{
         void saveFile(string path, std::ifstream & file);
 
         bool isRecordingMouseMouvements = false;
+        bool isMakingScreenshotSection = false;
+
 };

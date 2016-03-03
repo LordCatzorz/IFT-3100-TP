@@ -39,6 +39,26 @@ void MouseWatcher::ResumeRecording(){
     isPaused = false;
 }
 
+void MouseWatcher::Draw(){
+    if(shouldDrawSelectionZone){
+        ofSetColor(ofColor::grey);
+
+        selectionZoneTHBar.set(TopLeftPoint()->x, TopLeftPoint()->y, TopRightPoint()->x - TopLeftPoint()->x, selectionBarsSize);
+        selectionZoneBHBar.set(TopLeftPoint()->x, BottomLeftPoint()->y - selectionBarsSize, TopRightPoint()->x - TopLeftPoint()->x, selectionBarsSize);
+        selectionZoneLVBar.set(TopLeftPoint()->x, TopLeftPoint()->y, selectionBarsSize, BottomLeftPoint()->y - TopLeftPoint()->y);
+        selectionZoneRVBar.set(TopRightPoint()->x - selectionBarsSize, TopRightPoint()->y, selectionBarsSize, BottomRightPoint()->y - TopRightPoint()->y);
+
+        ofRect(selectionZoneTHBar);
+        ofRect(selectionZoneBHBar);
+        ofRect(selectionZoneLVBar);
+        ofRect(selectionZoneRVBar);
+    }
+}
+
+void MouseWatcher::ShouldShowSelectionZone(bool shouldShow){
+    shouldDrawSelectionZone = shouldShow;
+}
+
 ofVec3f * MouseWatcher::CurretVector(){
     return &currectVector;
 }
