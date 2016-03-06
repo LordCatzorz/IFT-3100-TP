@@ -142,5 +142,5 @@ bool Image::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
 }
 
 double Image::dotProduct(const ofPoint & point1, const ofPoint & point2){
-    
+	return 0;
 }

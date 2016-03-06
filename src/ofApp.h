@@ -60,7 +60,8 @@ class ofApp : public ofBaseApp{
 
         bool isRecordingMouseMouvements = false;
         bool isMakingScreenshotSection = false;
+
         
         GUI::ActionType actionMode = GUI::ActionType::Select;
-
+		int iteration;
 };

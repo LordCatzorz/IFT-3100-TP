@@ -99,34 +99,87 @@ ofMesh * Shapes::createOctahedron()
 ofMesh * Shapes::createDodecahedron()
 {
 	ofMesh* mesh = new ofMesh();
-	double heightOfRoof = (sqrt(5) - 1) / 2.0;
+	double heightOfRoof = (sqrt(5) - 1) / 2.0; //0.618
+	double size1 = (1 + heightOfRoof); // 1.618
+	double size2 = (1 - heightOfRoof*heightOfRoof); //0.618
 
-	mesh->addVertex(ofPoint(1, 1, 1));
-	mesh->addVertex(ofPoint(1, 1, -1));
-	mesh->addVertex(ofPoint(1, -1, 1));
-	mesh->addVertex(ofPoint(1, -1, -1));
+	mesh->addVertex(ofPoint(0, size1, size2));  //0
+	mesh->addVertex(ofPoint(0, size1, -size2)); //1
 
-	mesh->addVertex(ofPoint(-1, 1, 1));
-	mesh->addVertex(ofPoint(-1, 1, -1));
-	mesh->addVertex(ofPoint(-1, -1, 1));
-	mesh->addVertex(ofPoint(-1, -1, -1));
+	mesh->addVertex(ofPoint(1, 1, 1));			//2
+	mesh->addVertex(ofPoint(1, 1, -1));			//3
+	mesh->addVertex(ofPoint(-1, 1, 1));			//4
+	mesh->addVertex(ofPoint(-1, 1, -1));		//5
 
-	mesh->addVertex(ofPoint(0, (1 + heightOfRoof), (1 - heightOfRoof*heightOfRoof)));
-	mesh->addVertex(ofPoint(0, (1 + heightOfRoof), -(1 - heightOfRoof*heightOfRoof)));
-	mesh->addVertex(ofPoint(0, -(1 + heightOfRoof), (1 - heightOfRoof*heightOfRoof)));
-	mesh->addVertex(ofPoint(0, -(1 + heightOfRoof), -(1 - heightOfRoof*heightOfRoof)));
+	mesh->addVertex(ofPoint(size1, size2, 0));	//6
+	mesh->addVertex(ofPoint(-size1, size2, 0));	//7
 
-	mesh->addVertex(ofPoint((1 + heightOfRoof), (1 - heightOfRoof*heightOfRoof), 0));
-	mesh->addVertex(ofPoint((1 + heightOfRoof), -(1 - heightOfRoof*heightOfRoof), 0));
-	mesh->addVertex(ofPoint(-(1 + heightOfRoof), (1 - heightOfRoof*heightOfRoof), 0));
-	mesh->addVertex(ofPoint(-(1 + heightOfRoof), -(1 - heightOfRoof*heightOfRoof), 0));
+	mesh->addVertex(ofPoint(size2, 0, size1));	 //8
+	mesh->addVertex(ofPoint(size2, 0, -size1));	 //9
+	mesh->addVertex(ofPoint(-size2, 0, size1));	 //10
+	mesh->addVertex(ofPoint(-size2, 0, -size1)); //11
 
-	mesh->addVertex(ofPoint((1 - heightOfRoof*heightOfRoof), 0, (1 + heightOfRoof)));
-	mesh->addVertex(ofPoint((1 - heightOfRoof*heightOfRoof), 0, -(1 + heightOfRoof)));
-	mesh->addVertex(ofPoint(-(1 - heightOfRoof*heightOfRoof), 0, (1 + heightOfRoof)));
-	mesh->addVertex(ofPoint(-(1 - heightOfRoof*heightOfRoof), 0, -(1 + heightOfRoof)));
+	mesh->addVertex(ofPoint(size1, -size2, 0));	 //12
+	mesh->addVertex(ofPoint(-size1, -size2, 0)); //13
+
+	mesh->addVertex(ofPoint(1, -1, 1));			 //14
+	mesh->addVertex(ofPoint(1, -1, -1));		 //15
+	mesh->addVertex(ofPoint(-1, -1, 1));		 //16
+	mesh->addVertex(ofPoint(-1, -1, -1));		 //17
+
+	mesh->addVertex(ofPoint(0, -size1, size2));	 //18
+	mesh->addVertex(ofPoint(0, -size1, -size2)); //19
 
 	//Do the fucking dodecahedron
+
+	//Face 0, vertices 0,1,3,6,2
+	mesh->addTriangle(0, 1, 6);
+	mesh->addTriangle(0, 2, 6);
+	mesh->addTriangle(3, 1, 6);
+	//Face 1, vertices 0,1,5,7,4
+	mesh->addTriangle(0, 1, 7);
+	mesh->addTriangle(0, 4, 7);
+	mesh->addTriangle(5, 1, 7);
+	//Face 2, vertices 1,5,11,9,3
+	mesh->addTriangle(1, 5, 9);
+	mesh->addTriangle(1, 3, 9);
+	mesh->addTriangle(11, 5, 9);
+	//Face 3, vertices 0,4,10,8,2
+	mesh->addTriangle(0, 4, 8);
+	mesh->addTriangle(0, 2, 8);
+	mesh->addTriangle(10, 4, 8);
+	//Face 4, vertices 2,6,12,14,8
+	mesh->addTriangle(2, 6, 14);
+	mesh->addTriangle(2, 8, 14);
+	mesh->addTriangle(12, 6, 14);
+	//Face 5, vertices 6,3,9,15,12
+	mesh->addTriangle(6, 3, 15);
+	mesh->addTriangle(6, 12, 15);
+	mesh->addTriangle(9, 3, 15);
+	//Face 6, vertices 5,11,17,13,7
+	mesh->addTriangle(5, 11, 13);
+	mesh->addTriangle(5, 7, 13);
+	mesh->addTriangle(17, 11, 13);
+	//Face 7, vertices 7,4,10,16,13  
+	mesh->addTriangle(7, 4, 16);
+	mesh->addTriangle(7, 13, 16);
+	mesh->addTriangle(10, 4, 16);
+	//Face 8, vertices 19,17,11,9,15
+	mesh->addTriangle(19, 17, 9);
+	mesh->addTriangle(19, 15, 9);
+	mesh->addTriangle(11, 17, 9);
+	//Face 9, vertices 18,16,10,8,14
+	mesh->addTriangle(18, 16, 8);
+	mesh->addTriangle(18, 14, 8);
+	mesh->addTriangle(10, 16, 8);
+	//Face 10, vertices 18,19,15,12,14
+	mesh->addTriangle(18, 19, 12);
+	mesh->addTriangle(18, 14, 12);
+	mesh->addTriangle(15, 19, 12);
+	//Face 11, vertices 18,19,17,13,16
+	mesh->addTriangle(18, 19, 13);
+	mesh->addTriangle(18, 16, 13);
+	mesh->addTriangle(17, 19, 13);
 
 	return mesh;
 }
@@ -156,8 +209,6 @@ ofMesh * Shapes::createIcosahedron()
 	mesh->addVertex(ofPoint(-phi, 0, 1));  //9
 	mesh->addVertex(ofPoint(phi, 0, -1));  //10
 	mesh->addVertex(ofPoint(-phi, 0, -1)); //11
-
-	//Do the fucking isocahedron
 
 	//Using the long on X rectangle edge
 	mesh->addTriangle(8, 10, 4);

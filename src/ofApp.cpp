@@ -1,7 +1,5 @@
 #include "ofApp.h"
 
-
-
 void ofApp::FileOpenCallback(string param){
 
     std::ifstream input( param, std::ios::binary );
@@ -17,48 +15,57 @@ void ofApp::FileOpenCallback(string param){
 
 void ofApp::PrintScreenTakenCallback(string param){
     printScreenTakenCallback(0, 0, ofGetWidth(), ofGetHeight(), param);
+    string imageName = param.substr(param.find_last_of("/"));
+	Image * newImage = new Image(imageName.substr(1));
+    visibleShapes.insert(visibleShapes.end(), newImage);
 }
 
-void ofApp::printScreenTakenCallback(int x, int y, int width, int height, string param){
-    ofImage screenImg;
-    screenImg.allocate(width, height, OF_IMAGE_COLOR);
-    screenImg.grabScreen(x,y,width,height);
-    screenImg.saveImage(param + ".png");
+void ofApp::printScreenTakenCallback(int x, int y, int width, int height, string param)
+{
+	ofImage screenImg;
+	screenImg.allocate(width, height, OF_IMAGE_COLOR);
+	screenImg.grabScreen(x, y, width, height);
+	screenImg.saveImage(param + ".png");
 }
 
-void ofApp::saveFile(string path, std::ifstream & file){
-    std::ofstream output(path, std::ios::binary );
+void ofApp::saveFile(string path, std::ifstream & file)
+{
+	std::ofstream output(path, std::ios::binary);
 
-    std::copy(
-     std::istreambuf_iterator<char>(file),
-     std::istreambuf_iterator<char>( ),
-     std::ostreambuf_iterator<char>(output));
-    output.close();
+	std::copy(
+		std::istreambuf_iterator<char>(file),
+		std::istreambuf_iterator<char>(),
+		std::ostreambuf_iterator<char>(output));
+	output.close();
 
 }
 
-void ofApp::PrintScreenSectionCallback(string arg){
-    mouseWatcher->ShouldShowSelectionZone(true);
-    isMakingScreenshotSection = true;
-    mouseUpDelegates[0].bind(this, &ofApp::takeScreenshotSection);
+void ofApp::PrintScreenSectionCallback(string arg)
+{
+	mouseWatcher->ShouldShowSelectionZone(true);
+	isMakingScreenshotSection = true;
+	mouseUpDelegates[0].bind(this, &ofApp::takeScreenshotSection);
 }
 
-void ofApp::takeScreenshotSection(int x, int y){
-    int startX = mouseWatcher->TopLeftPoint()->x;
-    int startY = mouseWatcher->TopLeftPoint()->y;
-    int endX = mouseWatcher->BottomRightPoint()->x;
-    int endY = mouseWatcher->BottomRightPoint()->y;
-    mouseWatcher->ShouldShowSelectionZone(false);
-    for (int i=0; i<12; i++) {
-        if(mouseUpDelegates[i] == MouseActionDelegate(this, &ofApp::takeScreenshotSection)){
-            mouseUpDelegates[i].clear();
-            break;
-        }
-    }
+void ofApp::takeScreenshotSection(int x, int y)
+{
+	int startX = mouseWatcher->TopLeftPoint()->x;
+	int startY = mouseWatcher->TopLeftPoint()->y;
+	int endX = mouseWatcher->BottomRightPoint()->x;
+	int endY = mouseWatcher->BottomRightPoint()->y;
+	mouseWatcher->ShouldShowSelectionZone(false);
+	for (int i = 0; i < 12; i++)
+	{
+		if (mouseUpDelegates[i] == MouseActionDelegate(this, &ofApp::takeScreenshotSection))
+		{
+			mouseUpDelegates[i].clear();
+			break;
+		}
+	}
 
-    ofLog() << "startX: " << startX << " startY: " << startY << " endX - startX: " << endX - startX << " endY - startY: " << endY - startY;
+	ofLog() << "startX: " << startX << " startY: " << startY << " endX - startX: " << endX - startX << " endY - startY: " << endY - startY;
 
-    printScreenTakenCallback(0, 0, ofGetWindowWidth(), ofGetWindowHeight(), Gui->RequestSaveFilePath("captureDEcran") + "captureDEcran");
+	printScreenTakenCallback(0, 0, ofGetWindowWidth(), ofGetWindowHeight(), Gui->RequestSaveFilePath("captureDEcran") + "captureDEcran");
 }
 
 void ofApp::ModeChangeCallback(GUI::ActionType newMode){
@@ -82,14 +89,17 @@ void ofApp::setup()
 
 }
 
-void ofApp::beginSelectionZoneDraw(int x, int y){
-    bool a = true;
-    for (int i=0; i<12; i++) {
-        if(mouseDownDelegates[i] == MouseActionDelegate(this, &ofApp::beginSelectionZoneDraw)){
-            mouseDownDelegates[i].clear();
-            break;
-        }
-    }
+void ofApp::beginSelectionZoneDraw(int x, int y)
+{
+	bool a = true;
+	for (int i = 0; i < 12; i++)
+	{
+		if (mouseDownDelegates[i] == MouseActionDelegate(this, &ofApp::beginSelectionZoneDraw))
+		{
+			mouseDownDelegates[i].clear();
+			break;
+		}
+	}
 }
 
 //--------------------------------------------------------------
@@ -101,11 +111,71 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+
+	ofPushMatrix();
+	ofTranslate(400, 400);
+	ofScale(200, 200);
+	ofRotateY(iteration++);
+	ofColor colours[20] = {
+		ofColor::red,			//0
+		ofColor::orange,		//1
+		ofColor::yellow,		//2
+		ofColor::green,			//3
+		ofColor::blue,			//4
+		ofColor::violet,		//5
+		ofColor::magenta,		//6
+		ofColor::darkRed,		//7
+		ofColor::darkGreen,		//8
+		ofColor::darkBlue,		//9
+		ofColor::darkTurquoise,	//10
+		ofColor::darkViolet,	//11
+		ofColor::darkMagenta,	//12
+		ofColor::gold,			//13
+		ofColor::lightGreen,	//14
+		ofColor::lightBlue,		//15
+		ofColor::lightPink,		//16
+		ofColor::white,			//17
+		ofColor::grey,			//18
+		ofColor::black			//19
+	};
+	for (size_t i = 0; i < mesh->getUniqueFaces().size()/3; i++)
+	{
+		for (size_t j = 0; j < 3; j++)
+		{
+			ofMeshFace face = mesh->getUniqueFaces().at(i*3+j);
+
+			ofSetColor(colours[i]);
+
+			ofDrawTriangle(face.getVertex(0), face.getVertex(1), face.getVertex(2));
+		}
+	}
+	for (size_t i = 0; i < mesh->getVertices().size(); i++)
+	{
+		ofVec3f vertex = mesh->getVertex(i);
+		ofSetColor(colours[i]);
+		ofDrawSphere(vertex, 0.1);
+	}
+	//mesh->drawFaces();
+	ofPopMatrix();
+
 	Gui->Draw();
-    mouseWatcher->Draw();
-    for(vector<Shape * >::iterator i = visibleShapes.begin(); i != visibleShapes.end(); i++){
+	mouseWatcher->Draw();
+    for (vector<Shape * >::iterator i = visibleShapes.begin(); i != visibleShapes.end(); i++)
+	{
+		//Image * image = new Image((*i).Name);
+		//image->load((*i).Name);
+		//image->draw((*i).X, (*i).Y);
+		//(*i).Width = image->getWidth();
+		//(*i).Height = image->getHeight();
         (*i)->Draw();
-    }
+	}
+
+	/*ofSetColor(ofColor::black);
+	if(isRecordingMouseMouvements)
+		ofDrawRectangle(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
+						mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x,
+						mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);*/
+
 }
 
 //--------------------------------------------------------------
@@ -208,13 +278,13 @@ void ofApp::mouseReleased(int x, int y, int button)
 //--------------------------------------------------------------
 void ofApp::mouseEntered(int x, int y)
 {
-    mouseWatcher->ResumeRecording();
+	mouseWatcher->ResumeRecording();
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseExited(int x, int y)
 {
-    mouseWatcher->PauseRecording();
+	mouseWatcher->PauseRecording();
 }
 
 //--------------------------------------------------------------
