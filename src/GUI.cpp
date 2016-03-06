@@ -8,7 +8,7 @@ GUI::GUI()
     printscreen.addListener(this, &GUI::openFilePrintscreenCallback);
     selectionToggle.addListener(this, &GUI::selectionToggleCallback);
     editToggle.addListener(this, &GUI::editToggleCallback);
-	importObjFile.addListener(this, &GUI::objFileImportedCallback);
+    importObjFile.addListener(this, &GUI::importObjFileCallBack);
     gui.setSize(200, 500);
     gui.setup();
     gui.add(openFileBtn.setup("Ouvir une image"));
