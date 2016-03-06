@@ -11,6 +11,7 @@
 #include "MouseWatcher.h"
 #include "Image.h"
 #include "../DelegatesLib/FastDelegate.h"
+#include "ofxAssimpModelLoader.h"
 
 using namespace fastdelegate;
 class ofApp : public ofBaseApp{
@@ -41,6 +42,7 @@ class ofApp : public ofBaseApp{
         void printScreenTakenCallback(int x, int y, int width, int height, string param);
         void PrintScreenSectionCallback(string arg);
         void ModeChangeCallback(GUI::ActionType newMode);
+		void ImportObjFileCallback(string param);
     private:
 
         typedef FastDelegate2<int, int> MouseActionDelegate;
@@ -61,6 +63,7 @@ class ofApp : public ofBaseApp{
         bool isRecordingMouseMouvements = false;
         bool isMakingScreenshotSection = false;
 
+		ofxAssimpModelLoader* importedModel;
         
         GUI::ActionType actionMode = GUI::ActionType::Select;
 		int iteration;

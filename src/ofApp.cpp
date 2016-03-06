@@ -71,6 +71,11 @@ void ofApp::ModeChangeCallback(GUI::ActionType newMode){
     actionMode = newMode;
 }
 
+void ofApp::ImportObjFileCallback(string param)
+{
+	importedModel->loadModel(param);
+}
+
 //--------------------------------------------------------------
 void ofApp::setup()
 {
@@ -78,11 +83,13 @@ void ofApp::setup()
     ofSetFrameRate(24);
     Shapes shape = Shapes();
     mesh = shape.createIcosahedron();
+	importedModel = new ofxAssimpModelLoader();
     Gui = new GUI();
     Gui->AddImageOpenedListener(std::bind(&ofApp::FileOpenCallback, this, std::placeholders::_1));
     Gui->AddPrintscreenTakenListener(std::bind(&ofApp::PrintScreenTakenCallback, this, std::placeholders::_1));
     Gui->AddPrintscreenSelectionListener(std::bind(&ofApp::PrintScreenSectionCallback, this, std::placeholders::_1));
     Gui->AddModeChangedListener(std::bind(&ofApp::ModeChangeCallback, this, std::placeholders::_1));
+	Gui->AddObjFileImportedListener(std::bind(&ofApp::ImportObjFileCallback, this, std::placeholders::_1));
     mouseWatcher = new MouseWatcher();
     //mousePressed.bind(&ofApp::someMouseHandler, this);
 
@@ -156,6 +163,11 @@ void ofApp::draw()
 	}
 	//mesh->drawFaces();
 	ofPopMatrix();
+	ofPushMatrix();
+	ofTranslate(300, 300);
+	importedModel->draw(OF_MESH_FILL);
+	ofPopMatrix();
+
 	ofDisableDepthTest();
 	Gui->Draw();
 	mouseWatcher->Draw();
