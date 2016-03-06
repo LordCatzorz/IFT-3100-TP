@@ -55,7 +55,7 @@ class ofApp : public ofBaseApp{
         GUI* Gui;
         MouseWatcher * mouseWatcher;
         std::vector<Shape*> visibleShapes;
-        Shape * selectedShape;
+        std::vector<Shape*> selectedShapes;
         void saveFile(string path, std::ifstream & file);
 
         bool isRecordingMouseMouvements = false;
