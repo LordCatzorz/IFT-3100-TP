@@ -12,6 +12,7 @@
 class GUI
 {
 public:
+    enum ActionType {Select, Edit};
     GUI();
     void Draw();
     void Show();
@@ -19,6 +20,7 @@ public:
     void AddImageOpenedListener(std::function<void(std::string)> fnc);
     void AddPrintscreenSelectionListener(std::function<void(std::string)> fnc);
     void AddPrintscreenTakenListener(std::function<void(std::string)> fnc);
+    void AddModeChangedListener(std::function<void(GUI::ActionType)> fnc);
     string RequestSaveFilePath(string defaultName);
 private:
 
@@ -27,15 +29,20 @@ private:
 	ofxButton openFileBtn;
     ofxButton printscreenSection;
     ofxButton printscreen;
-	ofxPanel gui;
+    ofxToggle selectionToggle, editToggle;
+    ofxPanel gui;
+
 	void openFileBtnCallback();
     void openFilePrintscreenCallback();
+    void selectionToggleCallback(bool & inval);
+    void editToggleCallback(bool & inval);
     void callScreenSectionCallback();
     ofFileDialogResult requestUsrFile();
     ofFileDialogResult saveUsrFile(string defaultName);
     std::function<void(std::string)> imageOpenCallback;
     std::function<void(std::string)> printScreenSelectionCallback;
     std::function<void(std::string)> printScreenTakenCallback;
+    std::function<void(GUI::ActionType)> modeChangedCallback;
 };
 
 #endif // GUI_H

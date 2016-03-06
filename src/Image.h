@@ -2,10 +2,11 @@
 #define IMAGE_H
 
 #include "ofMain.h"
+#include "Shape.h"
 #include <math.h>
 #include <stdlib.h>
 
-class Image
+class Image: public Shape
 {
 public:
     Image(string imageName);

@@ -4,7 +4,8 @@
 Image::Image(string imageName)
 {
     imgName = imageName;
-    image.load(imgName);
+    image.load(imgName);    
+    image.allocate(image.getWidth(), image.getHeight(), OF_IMAGE_COLOR);
 
     topLeftPoint.x = 0;
     topLeftPoint.y = 0;
@@ -52,7 +53,7 @@ void Image::ShowBorders(bool shouldShow){
 }
 //double rotVal = 0;
 void Image::Draw(){
-
+    ofSetColor(ofColor::white);
 
     ofPushMatrix();
     ofTranslate(xOffset, yOffset);

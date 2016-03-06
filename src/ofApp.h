@@ -5,6 +5,7 @@
 #include <iterator>
 #include <algorithm>
 #include "ofMain.h"
+#include "Shape.h"
 #include "Shapes.h"
 #include "GUI.h"
 #include "MouseWatcher.h"
@@ -39,6 +40,7 @@ class ofApp : public ofBaseApp{
         void PrintScreenTakenCallback(string param);
         void printScreenTakenCallback(int x, int y, int width, int height, string param);
         void PrintScreenSectionCallback(string arg);
+        void ModeChangeCallback(GUI::ActionType newMode);
     private:
 
         typedef FastDelegate2<int, int> MouseActionDelegate;
@@ -52,11 +54,13 @@ class ofApp : public ofBaseApp{
 
         GUI* Gui;
         MouseWatcher * mouseWatcher;
-        std::vector<Image> visibleImages;
-        Image * selectedImage;
+        std::vector<Shape*> visibleShapes;
+        Shape * selectedShape;
         void saveFile(string path, std::ifstream & file);
 
         bool isRecordingMouseMouvements = false;
         bool isMakingScreenshotSection = false;
+        
+        GUI::ActionType actionMode = GUI::ActionType::Select;
 
 };

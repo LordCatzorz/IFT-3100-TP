@@ -10,8 +10,10 @@ void ofApp::FileOpenCallback(string param){
     input.close();
 
     Image * newImage = new Image(imageName.substr(1));
-    visibleImages.insert(visibleImages.end(), *newImage);
+    newImage->AffectVector((int)(newImage->TopRightPoint()->x /2), (int)(newImage->BottomLeftPoint()->y /2), new ofVec3f(100, 100));
+    visibleShapes.insert(visibleShapes.end(), newImage);
 }
+
 
 void ofApp::PrintScreenTakenCallback(string param){
     printScreenTakenCallback(0, 0, ofGetWidth(), ofGetHeight(), param);
@@ -59,6 +61,10 @@ void ofApp::takeScreenshotSection(int x, int y){
     printScreenTakenCallback(0, 0, ofGetWindowWidth(), ofGetWindowHeight(), Gui->RequestSaveFilePath("captureDEcran") + "captureDEcran");
 }
 
+void ofApp::ModeChangeCallback(GUI::ActionType newMode){
+    actionMode = newMode;
+}
+
 //--------------------------------------------------------------
 void ofApp::setup()
 {
@@ -70,6 +76,7 @@ void ofApp::setup()
     Gui->AddImageOpenedListener(std::bind(&ofApp::FileOpenCallback, this, std::placeholders::_1));
     Gui->AddPrintscreenTakenListener(std::bind(&ofApp::PrintScreenTakenCallback, this, std::placeholders::_1));
     Gui->AddPrintscreenSelectionListener(std::bind(&ofApp::PrintScreenSectionCallback, this, std::placeholders::_1));
+    Gui->AddModeChangedListener(std::bind(&ofApp::ModeChangeCallback, this, std::placeholders::_1));
     mouseWatcher = new MouseWatcher();
     //mousePressed.bind(&ofApp::someMouseHandler, this);
 
@@ -91,43 +98,14 @@ void ofApp::update()
 
 }
 
-int xE1 = -1, yE1 = -1, xE2 = -1, yE2 = -1;
-
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	ofPushMatrix();
-	ofTranslate(100, 100);
-	ofScale(15, 15);
-	ofSetColor(ofColor::aqua);
-	mesh->draw();
-	ofPopMatrix();
-
-    Gui->Draw();
+	Gui->Draw();
     mouseWatcher->Draw();
-    for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end(); i++){
-        //Image * image = new Image((*i).Name);
-        //image->load((*i).Name);
-        //image->draw((*i).X, (*i).Y);
-        //(*i).Width = image->getWidth();
-        //(*i).Height = image->getHeight();
-        (*i).Draw();
+    for(vector<Shape * >::iterator i = visibleShapes.begin(); i != visibleShapes.end(); i++){
+        (*i)->Draw();
     }
-
-    if(xE1 >= 0){
-        ofFill();
-        ofSetColor(ofColor::red);
-        ofEllipse(xE1, yE1, 50, 50);
-        ofSetColor(ofColor::black);
-        ofEllipse(xE2, yE2, 50, 50);
-        ofSetColor(ofColor::white);
-    }
-
-    /*ofSetColor(ofColor::black);
-    if(isRecordingMouseMouvements)
-        ofDrawRectangle(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
-                        mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x,
-                        mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);*/
 }
 
 //--------------------------------------------------------------
@@ -145,26 +123,29 @@ void ofApp::keyReleased(int key)
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y)
 {
-    for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end() && selectedImage == nullptr; i++){
-        if((*i).IsPointWithinBounds(x, y)){
-            (*i).ShowBorders(true);
+    for(vector<Shape * >::iterator i = visibleShapes.begin(); i != visibleShapes.end() && selectedShape == nullptr; i++){
+        if((*i)->IsPointWithinBounds(x, y)){
+            (*i)->ShowBorders(true);
         }else{
-            (*i).ShowBorders(false);
+            (*i)->ShowBorders(false);
         }
     }
 }
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button)
 {
-    if(button == 0 || button == 2){
-        isRecordingMouseMouvements = true;
-        mouseWatcher->Record(x, y);
+    isRecordingMouseMouvements = true;
+    mouseWatcher->Record(x, y);
 
-        if(selectedImage != nullptr){
-            xE2 = x - selectedImage->TopLeftPoint()->x;
-            yE2 = y - selectedImage->TopLeftPoint()->y;
-            selectedImage->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2);
+    if(actionMode == GUI::Edit){
+        if(button == 0 || button == 2){
+
+            if(selectedShape != nullptr){
+                selectedShape->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2);
+            }
         }
+    }else{//
+
     }
 }
 
@@ -172,13 +153,13 @@ void ofApp::mouseDragged(int x, int y, int button)
 void ofApp::mousePressed(int x, int y, int button)
 {
 
+    if(actionMode == GUI::Select)
+        mouseWatcher->ShouldShowSelectionZone(true);
     if(button == 0 || button == 2){
-        xE1 = x;
-        yE1 = y;
-        for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end() && selectedImage == nullptr; i++){
-            if((*i).IsPointWithinBounds(x, y)){
-                selectedImage = &(*i);
-                selectedImage->ShowBorders(true);
+        for(vector<Shape * >::iterator i = visibleShapes.begin(); i != visibleShapes.end() && selectedShape == nullptr; i++){
+            if((*i)->IsPointWithinBounds(x, y)){
+                selectedShape = (*i);
+                selectedShape->ShowBorders(true);
             }
         }
 
@@ -201,17 +182,15 @@ void ofApp::mousePressed(int x, int y, int button)
 void ofApp::mouseReleased(int x, int y, int button)
 {
 
-    xE1 = yE1 = xE2 = yE2 = -1;
-    if(selectedImage != nullptr)
-        selectedImage->ShowBorders(false);
-    selectedImage = nullptr;
+    if(selectedShape != nullptr)
+        selectedShape->ShowBorders(false);
+    selectedShape = nullptr;
     if(button == 0){
         isRecordingMouseMouvements = false;
         mouseWatcher->StopRecording();
-        mouseWatcher->ShouldShowSelectionZone(false);
     }else if(button == 2){
-        for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end() && selectedImage == nullptr; i++){
-            (*i).AffectVector(x, y, mouseWatcher->CurretVector(), false);
+        for(vector<Shape * >::iterator i = visibleShapes.begin(); i != visibleShapes.end() && selectedShape == nullptr; i++){
+            (*i)->AffectVector(x, y, mouseWatcher->CurretVector(), false);
         }
     }
 
@@ -219,10 +198,11 @@ void ofApp::mouseReleased(int x, int y, int button)
             if (!mouseUpDelegates[i]) {
                 printf("Delegate is empty\n");
             } else {
-                // Invocation generates optimal assembly code.
                 mouseUpDelegates[i](x, y);
             };
         }
+
+    mouseWatcher->ShouldShowSelectionZone(false);
 }
 
 //--------------------------------------------------------------

@@ -5,10 +5,17 @@ GUI::GUI()
     openFileBtn.addListener(this, &GUI::openFileBtnCallback);
     printscreenSection.addListener(this, &GUI::callScreenSectionCallback);
     printscreen.addListener(this, &GUI::openFilePrintscreenCallback);
+    selectionToggle.addListener(this, &GUI::selectionToggleCallback);
+    editToggle.addListener(this, &GUI::editToggleCallback);
+    gui.setSize(200, 500);
     gui.setup();
     gui.add(openFileBtn.setup("Ouvir une image"));
     gui.add(printscreenSection.setup("Capturer une zone de l'écran"));
     gui.add(printscreen.setup("Capturer l'écran"));
+    gui.add(selectionToggle.setup("Séléction", true));
+    gui.add(editToggle.setup("Éditer", false));
+    editToggle = false;
+
     xPos = gui.getPosition().x;
     yPos = gui.getPosition().y;
 }
@@ -26,6 +33,11 @@ void GUI::AddPrintscreenSelectionListener(std::function<void(std::string)> fnc){
 void GUI::AddPrintscreenTakenListener(std::function<void(std::string)> fnc){
 
     printScreenTakenCallback = fnc;
+}
+
+void GUI::AddModeChangedListener(std::function<void(GUI::ActionType)> fnc){
+
+    modeChangedCallback = fnc;
 }
 
 string GUI::RequestSaveFilePath(string defaultName){
@@ -64,6 +76,18 @@ void GUI::openFilePrintscreenCallback(){
 void GUI::callScreenSectionCallback(){
 
     printScreenSelectionCallback("");
+}
+
+void GUI::selectionToggleCallback(bool & inval){
+    editToggle = !inval;
+    modeChangedCallback(inval ? GUI::ActionType::Select : GUI::ActionType::Edit);
+}
+
+void GUI::editToggleCallback(bool & inval){
+    selectionToggle = !inval;
+    modeChangedCallback(inval ? GUI::ActionType::Edit : GUI::ActionType::Select);
+   // else
+    //    editToggle = true;
 }
 
 ofFileDialogResult GUI::requestUsrFile(){
