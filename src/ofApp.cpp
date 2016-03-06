@@ -3,7 +3,9 @@
 void ofApp::FileOpenCallback(string param){
 
     std::ifstream input( param, std::ios::binary );
-    string imageName = param.substr(param.find_last_of("/"));
+
+	std::replace(param.begin(), param.end(), '\\', '/');
+	string imageName = param.substr(param.find_last_of("/"));
     saveFile("./data" + imageName, input);
     input.close();
 
@@ -72,10 +74,10 @@ void ofApp::ModeChangeCallback(GUI::ActionType newMode){
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-    //ofEnableDepthTest();
+    ofEnableDepthTest();
     ofSetFrameRate(24);
     Shapes shape = Shapes();
-    mesh = shape.createCube();
+    mesh = shape.createIcosahedron();
     Gui = new GUI();
     Gui->AddImageOpenedListener(std::bind(&ofApp::FileOpenCallback, this, std::placeholders::_1));
     Gui->AddPrintscreenTakenListener(std::bind(&ofApp::PrintScreenTakenCallback, this, std::placeholders::_1));
@@ -108,7 +110,7 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-
+	ofEnableDepthTest();
 	ofPushMatrix();
 	ofTranslate(400, 400);
 	ofScale(200, 200);
@@ -135,16 +137,16 @@ void ofApp::draw()
 		ofColor::grey,			//18
 		ofColor::black			//19
 	};
-	for (size_t i = 0; i < mesh->getUniqueFaces().size()/3; i++)
+	for (size_t i = 0; i < mesh->getUniqueFaces().size(); i++)
 	{
-		for (size_t j = 0; j < 3; j++)
-		{
-			ofMeshFace face = mesh->getUniqueFaces().at(i*3+j);
+		/*for (size_t j = 0; j < 3; j++)
+		{*/
+			ofMeshFace face = mesh->getUniqueFaces().at(i/**3+j*/);
 
 			ofSetColor(colours[i]);
 
 			ofDrawTriangle(face.getVertex(0), face.getVertex(1), face.getVertex(2));
-		}
+		/*}*/
 	}
 	for (size_t i = 0; i < mesh->getVertices().size(); i++)
 	{
@@ -154,7 +156,7 @@ void ofApp::draw()
 	}
 	//mesh->drawFaces();
 	ofPopMatrix();
-
+	ofDisableDepthTest();
 	Gui->Draw();
 	mouseWatcher->Draw();
     for (vector<Shape * >::iterator i = visibleShapes.begin(); i != visibleShapes.end(); i++)
