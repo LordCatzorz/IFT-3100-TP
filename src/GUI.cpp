@@ -2,6 +2,7 @@
 
 GUI::GUI()
 {
+    ofDisableDepthTest();
     openFileBtn.addListener(this, &GUI::openFileBtnCallback);
     printscreenSection.addListener(this, &GUI::callScreenSectionCallback);
     printscreen.addListener(this, &GUI::openFilePrintscreenCallback);
@@ -18,6 +19,7 @@ GUI::GUI()
 
     xPos = gui.getPosition().x;
     yPos = gui.getPosition().y;
+    ofEnableDepthTest();
 }
 
 void GUI::AddImageOpenedListener(std::function<void(std::string)> fnc){
@@ -46,7 +48,9 @@ string GUI::RequestSaveFilePath(string defaultName){
 }
 
 void GUI::Draw(){
+    ofDisableDepthTest();
     gui.draw();
+    ofEnableDepthTest();
 }
 
 void GUI::Show(){

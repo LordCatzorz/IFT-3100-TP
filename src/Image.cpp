@@ -62,6 +62,7 @@ void Image::Draw(){
     //ofRotate(55.9712);
     ofRotate(angleOffset);
 
+    image.allocate(topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y, OF_IMAGE_COLOR);
     image.draw(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y);
 
     if(shouldShowBorders){

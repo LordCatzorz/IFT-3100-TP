@@ -15,17 +15,14 @@ void ofApp::FileOpenCallback(string param){
 
 void ofApp::PrintScreenTakenCallback(string param){
     printScreenTakenCallback(0, 0, ofGetWidth(), ofGetHeight(), param);
-    string imageName = param.substr(param.find_last_of("/"));
-	Image * newImage = new Image(imageName.substr(1));
-    visibleShapes.insert(visibleShapes.end(), newImage);
 }
 
 void ofApp::printScreenTakenCallback(int x, int y, int width, int height, string param)
 {
-	ofImage screenImg;
+    ofImage screenImg;
 	screenImg.allocate(width, height, OF_IMAGE_COLOR);
 	screenImg.grabScreen(x, y, width, height);
-	screenImg.saveImage(param + ".png");
+    screenImg.saveImage(param + ".png");
 }
 
 void ofApp::saveFile(string path, std::ifstream & file)
