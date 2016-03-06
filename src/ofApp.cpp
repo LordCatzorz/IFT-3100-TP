@@ -14,7 +14,7 @@ void ofApp::FileOpenCallback(string param){
 }
 
 void ofApp::PrintScreenTakenCallback(string param){
-    printScreenTakenCallback(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, param);
+    printScreenTakenCallback(0, 0, ofGetWidth(), ofGetHeight(), param);
 }
 
 void ofApp::printScreenTakenCallback(int x, int y, int width, int height, string param){
@@ -48,13 +48,15 @@ void ofApp::takeScreenshotSection(int x, int y){
     int endY = mouseWatcher->BottomRightPoint()->y;
     mouseWatcher->ShouldShowSelectionZone(false);
     for (int i=0; i<12; i++) {
-        if(mouseDownDelegates[i] == MouseActionDelegate(this, &ofApp::takeScreenshotSection)){
-            mouseDownDelegates[i].clear();
+        if(mouseUpDelegates[i] == MouseActionDelegate(this, &ofApp::takeScreenshotSection)){
+            mouseUpDelegates[i].clear();
             break;
         }
     }
 
-    printScreenTakenCallback(startX, startY, endX - startX, endY - startY, Gui->RequestSaveFilePath("captureDEcran") + "captureDEcran");
+    ofLog() << "startX: " << startX << " startY: " << startY << " endX - startX: " << endX - startX << " endY - startY: " << endY - startY;
+
+    printScreenTakenCallback(0, 0, ofGetWindowWidth(), ofGetWindowHeight(), Gui->RequestSaveFilePath("captureDEcran") + "captureDEcran");
 }
 
 //--------------------------------------------------------------
@@ -89,6 +91,8 @@ void ofApp::update()
 
 }
 
+int xE1 = -1, yE1 = -1, xE2 = -1, yE2 = -1;
+
 //--------------------------------------------------------------
 void ofApp::draw()
 {
@@ -101,7 +105,6 @@ void ofApp::draw()
 
     Gui->Draw();
     mouseWatcher->Draw();
-
     for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end(); i++){
         //Image * image = new Image((*i).Name);
         //image->load((*i).Name);
@@ -109,6 +112,15 @@ void ofApp::draw()
         //(*i).Width = image->getWidth();
         //(*i).Height = image->getHeight();
         (*i).Draw();
+    }
+
+    if(xE1 >= 0){
+        ofFill();
+        ofSetColor(ofColor::red);
+        ofEllipse(xE1, yE1, 50, 50);
+        ofSetColor(ofColor::black);
+        ofEllipse(xE2, yE2, 50, 50);
+        ofSetColor(ofColor::white);
     }
 
     /*ofSetColor(ofColor::black);
@@ -144,12 +156,15 @@ void ofApp::mouseMoved(int x, int y)
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button)
 {
-    if(button == 0){
+    if(button == 0 || button == 2){
         isRecordingMouseMouvements = true;
         mouseWatcher->Record(x, y);
 
-        if(selectedImage != nullptr)
-            selectedImage->AffectVector(x, y, mouseWatcher->CurretVector());
+        if(selectedImage != nullptr){
+            xE2 = x - selectedImage->TopLeftPoint()->x;
+            yE2 = y - selectedImage->TopLeftPoint()->y;
+            selectedImage->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2);
+        }
     }
 }
 
@@ -157,7 +172,9 @@ void ofApp::mouseDragged(int x, int y, int button)
 void ofApp::mousePressed(int x, int y, int button)
 {
 
-    if(button == 0){
+    if(button == 0 || button == 2){
+        xE1 = x;
+        yE1 = y;
         for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end() && selectedImage == nullptr; i++){
             if((*i).IsPointWithinBounds(x, y)){
                 selectedImage = &(*i);
@@ -184,6 +201,7 @@ void ofApp::mousePressed(int x, int y, int button)
 void ofApp::mouseReleased(int x, int y, int button)
 {
 
+    xE1 = yE1 = xE2 = yE2 = -1;
     if(selectedImage != nullptr)
         selectedImage->ShowBorders(false);
     selectedImage = nullptr;
@@ -191,6 +209,10 @@ void ofApp::mouseReleased(int x, int y, int button)
         isRecordingMouseMouvements = false;
         mouseWatcher->StopRecording();
         mouseWatcher->ShouldShowSelectionZone(false);
+    }else if(button == 2){
+        for(vector<Image>::iterator i = visibleImages.begin(); i != visibleImages.end() && selectedImage == nullptr; i++){
+            (*i).AffectVector(x, y, mouseWatcher->CurretVector(), false);
+        }
     }
 
     for (int i=0; i<12; i++) {

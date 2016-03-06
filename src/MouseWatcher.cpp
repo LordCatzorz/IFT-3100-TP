@@ -65,21 +65,21 @@ ofVec3f * MouseWatcher::CurretVector(){
 
 ofPoint * MouseWatcher::TopLeftPoint(){
 
-    topLeftPoint.set(coordX1 <= coordX2 ? coordX1 : coordX2, coordY1 <= coordY2 ? coordY1 : coordY2);
+    topLeftPoint.set((coordX1 <= coordX2 ? coordX1 : coordX2) + (shouldDrawSelectionZone ? selectionBarsSize : 0), (coordY1 <= coordY2 ? coordY1 : coordY2) + (shouldDrawSelectionZone ? selectionBarsSize : 0));
 
     return &topLeftPoint;
 }
 
 ofPoint * MouseWatcher::TopRightPoint(){
 
-    topRightPoint.set(coordX1 <= coordX2 ? coordX2 : coordX1, coordY1 <= coordY2 ? coordY1 : coordY2);
+    topRightPoint.set(coordX1 <= coordX2 ? coordX2 : coordX1, (coordY1 <= coordY2 ? coordY1 : coordY2) + (shouldDrawSelectionZone ? selectionBarsSize : 0));
 
     return &topRightPoint;
 }
 
 ofPoint * MouseWatcher::BottomLeftPoint(){
 
-    bottomLeftPoint.set(coordX1 <= coordX2 ? coordX1 : coordX2, coordY1 <= coordY2 ? coordY2 : coordY1);
+    bottomLeftPoint.set((coordX1 <= coordX2 ? coordX1 : coordX2) + (shouldDrawSelectionZone ? selectionBarsSize : 0), coordY1 <= coordY2 ? coordY2 : coordY1);
 
     return &bottomLeftPoint;
 }

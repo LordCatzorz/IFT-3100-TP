@@ -17,7 +17,7 @@ class ofApp : public ofBaseApp{
 	public:
 
 
-        const static int SCREEN_WIDTH = 512, SCREEN_HEIGHT = 512;
+        const static int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 1024;
 
 		void setup();
 		void update();

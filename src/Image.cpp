@@ -1,4 +1,5 @@
 #include "Image.h"
+#include <cmath>
 
 Image::Image(string imageName)
 {
@@ -30,12 +31,38 @@ string Image::GetImageName(){
     return imgName;
 }
 
+ofPoint * Image::TopLeftPoint(){
+    return &topLeftPoint;
+}
+
+ofPoint * Image::TopRightPoint(){
+    return &topRightPoint;
+}
+
+ofPoint * Image::BottomLeftPoint(){
+    return &bottomLeftPoint;
+}
+
+ofPoint * Image::BottomRightPoint(){
+    return &bottomRightPoint;
+}
+
 void Image::ShowBorders(bool shouldShow){
     shouldShowBorders = shouldShow;
 }
-
+//double rotVal = 0;
 void Image::Draw(){
+
+
+    ofPushMatrix();
+    ofTranslate(xOffset, yOffset);
+    //rotVal += 0.1;
+
+    //ofRotate(55.9712);
+    ofRotate(angleOffset);
+
     image.draw(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y);
+
     if(shouldShowBorders){
         ofFill();
         ofSetColor(ofColor::grey);
@@ -44,39 +71,55 @@ void Image::Draw(){
         ofDrawRectangle(verticalBorder1);
         ofDrawRectangle(verticalBorder2);
     }
+    ofPopMatrix();
 }
 
 bool Image::IsPointWithinBounds(int x, int y){//TODO: this doesn't account for a rotated rectangle
     return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));//x >= topLeftPoint.x && x <= topRightPoint.x && y >= topRightPoint.y && y <= bottomRightPoint.y;
 }
 
-void Image::AffectVector(int x, int y, ofVec3f * actionVector){
+void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
 
-    //Verify if the user is trying to resize; TODO: this doesn't account for rotated rectangle
-    if(isPointInsideRectangle(x, y, horizontalBorder1)){
-        topLeftPoint.y += actionVector->y;
-        topRightPoint.y += actionVector->y;
-    }else if(isPointInsideRectangle(x, y, horizontalBorder2)){
-        bottomLeftPoint.y += actionVector->y;
-        bottomRightPoint.y += actionVector->y;
-    }else if(isPointInsideRectangle(x, y, verticalBorder1)){
-        topLeftPoint.x += actionVector->x;
-        bottomLeftPoint.x += actionVector->x;
-    }else if(isPointInsideRectangle(x, y, verticalBorder2)){
-        topRightPoint.x += actionVector->x;
-        bottomRightPoint.x += actionVector->x;
-    }else{//Not trying to resize
-        topLeftPoint.x += actionVector->x;
-        topRightPoint.x += actionVector->x;
-        bottomLeftPoint.x += actionVector->x;
-        bottomRightPoint.x += actionVector->x;
 
-        topLeftPoint.y += actionVector->y;
-        topRightPoint.y += actionVector->y;
-        bottomLeftPoint.y += actionVector->y;
-        bottomRightPoint.y += actionVector->y;
+    if(isRotation){
+        //angleXOffset = x - xOffset - topLeftPoint.x; angleYOffset = y - yOffset - topLeftPoint.y;
+        double side = (double)(x - xOffset - topLeftPoint.x);
+        double adj = (double)(y - yOffset - topLeftPoint.y);
+
+        angleOffset = atan((adj / side)) * 180/M_PI;
+
+        if(referenceAngleOffset <= 0)
+            referenceAngleOffset = angleOffset;
+
+        angleOffset -= referenceAngleOffset;
+
+        if(side < 0){
+            angleOffset += 180;
+        }
+
+        ofLog() << "side: " << side <<  " adj: " << adj << " final angle: " << angleOffset;
+
+        //ofLog() << "width: " << angleXOffset <<  " height: " << angleYOffset << " angleOffset: " << (angleOffset* 180/M_PI);
+    }else{
+        referenceAngleOffset = 0;
+        //Verify if the user is trying to resize; TODO: this doesn't account for rotated rectangle
+        if(isPointInsideRectangle(x, y, horizontalBorder1)){
+            topLeftPoint.y += actionVector->y;
+            topRightPoint.y += actionVector->y;
+        }else if(isPointInsideRectangle(x, y, horizontalBorder2)){
+            bottomLeftPoint.y += actionVector->y;
+            bottomRightPoint.y += actionVector->y;
+        }else if(isPointInsideRectangle(x, y, verticalBorder1)){
+            topLeftPoint.x += actionVector->x;
+            bottomLeftPoint.x += actionVector->x;
+        }else if(isPointInsideRectangle(x, y, verticalBorder2)){
+            topRightPoint.x += actionVector->x;
+            bottomRightPoint.x += actionVector->x;
+        }else{//Not trying to resize
+            xOffset += actionVector->x; yOffset += actionVector->y;
+        }
+        refreshBorders();
     }
-    refreshBorders();
 }
 
 void Image::refreshBorders(){
@@ -87,5 +130,16 @@ void Image::refreshBorders(){
 }
 
 bool Image::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){//TODO: make this account for
-    return x >= rectangle.getX() && x <= rectangle.getX() + rectangle.getWidth() && y >= rectangle.getY() && y <= rectangle.getY() + rectangle.getHeight();
+
+    double angleRad = (360 - angleOffset) * M_PI/180;
+    double px = cos(angleRad) * (x - xOffset) - sin(angleRad) * (y - yOffset) + xOffset;
+    double py = sin(angleRad) * (x - xOffset) + cos(angleRad) * (y - yOffset) + yOffset;
+
+    return px - xOffset >= rectangle.getX() && px - xOffset <= rectangle.getX() + rectangle.getWidth() &&
+            py - yOffset >= rectangle.getY() && py - yOffset <= rectangle.getY() + rectangle.getHeight();
+
+}
+
+double Image::dotProduct(const ofPoint & point1, const ofPoint & point2){
+    
 }

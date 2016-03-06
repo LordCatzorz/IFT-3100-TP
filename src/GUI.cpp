@@ -50,8 +50,8 @@ void GUI::Hide(){
 
 void GUI::openFileBtnCallback(){
     ofFileDialogResult result = requestUsrFile();
-
-    imageOpenCallback(result.filePath);
+    if(result.bSuccess)
+        imageOpenCallback(result.filePath);
 }
 
 void GUI::openFilePrintscreenCallback(){
