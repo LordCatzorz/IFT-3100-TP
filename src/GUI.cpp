@@ -8,6 +8,7 @@ GUI::GUI()
     printscreen.addListener(this, &GUI::openFilePrintscreenCallback);
     selectionToggle.addListener(this, &GUI::selectionToggleCallback);
     editToggle.addListener(this, &GUI::editToggleCallback);
+	importObjFile.addListener(this, &GUI::objFileImportedCallback);
     gui.setSize(200, 500);
     gui.setup();
     gui.add(openFileBtn.setup("Ouvir une image"));
@@ -15,6 +16,7 @@ GUI::GUI()
     gui.add(printscreen.setup("Capturer l'écran"));
     gui.add(selectionToggle.setup("Séléction", true));
     gui.add(editToggle.setup("Éditer", false));
+	gui.add(importObjFile.setup("Importer un OBJ"));
     editToggle = false;
 
     xPos = gui.getPosition().x;
@@ -43,6 +45,11 @@ void GUI::AddModeChangedListener(std::function<void(GUI::ActionType)> fnc)
 {
 
 	modeChangedCallback = fnc;
+}
+
+void GUI::AddObjFileImportedListener(std::function<void(std::string)> fnc)
+{
+	objFileImportedCallback = fnc;
 }
 
 string GUI::RequestSaveFilePath(string defaultName)
@@ -93,6 +100,15 @@ void GUI::callScreenSectionCallback()
 {
 
 	printScreenSelectionCallback("");
+}
+
+void GUI::importObjFileCallBack()
+{
+	ofFileDialogResult result = requestUsrFile();
+	if (result.bSuccess)
+	{
+		objFileImportedCallback(result.filePath);
+	}
 }
 
 void GUI::selectionToggleCallback(bool & inval)
