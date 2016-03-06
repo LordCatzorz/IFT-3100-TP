@@ -58,5 +58,6 @@ class ofApp : public ofBaseApp{
 
         bool isRecordingMouseMouvements = false;
         bool isMakingScreenshotSection = false;
+		int iteration;
 
 };
