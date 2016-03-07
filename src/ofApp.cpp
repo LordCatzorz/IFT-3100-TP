@@ -79,6 +79,7 @@ void ofApp::ImportObjFileCallback(string param)
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+	this->renderer = new Renderer();
     ofEnableDepthTest();
     ofSetFrameRate(24);
     Shapes shape = Shapes();
@@ -111,12 +112,13 @@ void ofApp::beginSelectionZoneDraw(int x, int y)
 //--------------------------------------------------------------
 void ofApp::update()
 {
-
+	this->renderer->Update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+	this->renderer->Draw();
 	ofEnableDepthTest();
 	ofPushMatrix();
 	ofTranslate(400, 400);
