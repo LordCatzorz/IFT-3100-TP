@@ -53,6 +53,7 @@ void Image::ShowBorders(bool shouldShow){
 }
 //double rotVal = 0;
 void Image::Draw(){
+    ofDisableDepthTest();
     ofSetColor(ofColor::white);
 
     ofPushMatrix();
@@ -65,19 +66,42 @@ void Image::Draw(){
     image.allocate(topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y, OF_IMAGE_COLOR);
     image.draw(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y);
 
+
     if(shouldShowBorders){
+        ofLog() << "Drawing borders: YES";
         ofFill();
         ofSetColor(ofColor::grey);
         ofDrawRectangle(horizontalBorder1);
         ofDrawRectangle(horizontalBorder2);
         ofDrawRectangle(verticalBorder1);
         ofDrawRectangle(verticalBorder2);
+    }else{
+        ofLog() << "Drawing borders: NO";
     }
     ofPopMatrix();
+    ofEnableDepthTest();
 }
 
-bool Image::IsPointWithinBounds(int x, int y){//TODO: this doesn't account for a rotated rectangle
-    return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));//x >= topLeftPoint.x && x <= topRightPoint.x && y >= topRightPoint.y && y <= bottomRightPoint.y;
+bool Image::IsPointWithinBounds(int x, int y){
+    return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
+}
+
+bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wont work if the selection rectangle goes trough inside teh shape and parallel to 2 sides of the shape
+    ofRectangle * selectionRect = new ofRectangle(x1, y1, x2 - x1, y2 - y1);
+    ofRectangle * currentRect = new ofRectangle(topLeftPoint, bottomRightPoint);
+
+    bool output = isPointInsideRectangle(x1, y1, *currentRect) ||
+            isPointInsideRectangle(x1, y2, *currentRect) ||
+            isPointInsideRectangle(x2, y2, *currentRect) ||
+            isPointInsideRectangle(x2, y1, *currentRect) ||
+
+            isPointInsideRectangle(topLeftPoint.x, topLeftPoint.y, *selectionRect) ||
+            isPointInsideRectangle(bottomLeftPoint.x, bottomLeftPoint.y, *selectionRect) ||
+            isPointInsideRectangle(bottomRightPoint.x, bottomRightPoint.y, *selectionRect) ||
+            isPointInsideRectangle(topRightPoint.x, topRightPoint.y, *selectionRect);
+    delete selectionRect;
+    delete currentRect;
+    return output;
 }
 
 void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
@@ -104,7 +128,6 @@ void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
         //ofLog() << "width: " << angleXOffset <<  " height: " << angleYOffset << " angleOffset: " << (angleOffset* 180/M_PI);
     }else{
         referenceAngleOffset = 0;
-        //Verify if the user is trying to resize; TODO: this doesn't account for rotated rectangle
         if(isPointInsideRectangle(x, y, horizontalBorder1)){
             topLeftPoint.y += actionVector->y;
             topRightPoint.y += actionVector->y;
@@ -131,14 +154,14 @@ void Image::refreshBorders(){
     verticalBorder2.set(topRightPoint.x - borderSize, topRightPoint.y, borderSize, bottomRightPoint.y - topRightPoint.y);
 }
 
-bool Image::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){//TODO: make this account for
+bool Image::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
 
-    double angleRad = (360 - angleOffset) * M_PI/180;
-    double px = cos(angleRad) * (x - xOffset) - sin(angleRad) * (y - yOffset) + xOffset;
-    double py = sin(angleRad) * (x - xOffset) + cos(angleRad) * (y - yOffset) + yOffset;
-
-    return px - xOffset >= rectangle.getX() && px - xOffset <= rectangle.getX() + rectangle.getWidth() &&
-            py - yOffset >= rectangle.getY() && py - yOffset <= rectangle.getY() + rectangle.getHeight();
+    ofPoint * traslated = new ofPoint();
+    Shape::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, traslated);
+    bool output = traslated->x>= rectangle.getX() && traslated->x <= rectangle.getX() + rectangle.getWidth() &&
+            traslated->y>= rectangle.getY() && traslated->y <= rectangle.getY() + rectangle.getHeight();
+    delete traslated;
+    return output;
 
 }
 

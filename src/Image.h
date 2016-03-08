@@ -14,16 +14,17 @@ class Image: public Shape
 {
 public:
 	Image(string imageName);
-	void SetImageName(string imageName);
-	string GetImageName();
-	ofPoint * TopLeftPoint();
-	ofPoint * TopRightPoint();
-	ofPoint * BottomLeftPoint();
-	ofPoint * BottomRightPoint();
-	bool IsPointWithinBounds(int x, int y);
-	void AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
-	void ShowBorders(bool shouldShow);
-	void Draw();
+    void        SetImageName(string imageName);
+    string      GetImageName();
+    ofPoint *   TopLeftPoint();
+    ofPoint *   TopRightPoint();
+    ofPoint *   BottomLeftPoint();
+    ofPoint *   BottomRightPoint();
+    bool        IsPointWithinBounds(int x, int y);
+    bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2);
+    void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
+    void        ShowBorders(bool shouldShow);
+    void        Draw();
 private:
 
 	int         borderSize = 10, xOffset = 0, yOffset = 0;
@@ -32,18 +33,19 @@ private:
 	string      imgName;
 	ofImage     image;
 	ofRectangle horizontalBorder1,
-		horizontalBorder2,
-		verticalBorder1,
-		verticalBorder2;
+                horizontalBorder2,
+                verticalBorder1,
+                verticalBorder2;
 	ofPoint     topLeftPoint,
-		topRightPoint,
-		bottomLeftPoint,
-		bottomRightPoint;
+                topRightPoint,
+                bottomLeftPoint,
+                bottomRightPoint;
 
 	void        refreshBorders();
 	bool        isPointInsideRectangle(int x, int y, const ofRectangle & rectangle);
+    bool        valueInRange(int value, int min, int max){ return (value >= min) && (value <= max); };
+    double      dotProduct(const ofPoint & point1, const ofPoint & point2);
 
-	double      dotProduct(const ofPoint & point1, const ofPoint & point2);
 };
 
 #endif // IMAGE_H

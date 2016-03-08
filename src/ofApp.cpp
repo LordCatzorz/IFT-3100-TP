@@ -117,7 +117,7 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-	ofEnableDepthTest();
+    ofEnableDepthTest();
 	ofPushMatrix();
 	ofTranslate(400, 400);
 	ofScale(200, 200);
@@ -225,13 +225,10 @@ void ofApp::mouseDragged(int x, int y, int button)
         }
     }else{//
         for(vector<Shape * >::iterator i = visibleShapes.begin(); i != visibleShapes.end(); i++){
-            if(mouseWatcher->TopLeftPoint()->x < (*i)->BottomRightPoint()->x &&
-               mouseWatcher->BottomRightPoint()->x < (*i)->TopLeftPoint()->x &&
-               mouseWatcher->TopLeftPoint()->y < (*i)->BottomRightPoint()->y &&
-               mouseWatcher->BottomRightPoint()->y < (*i)->TopLeftPoint()->y){
-                (*i)->ShowBorders(true);
-                selectedShapes.push_back((*i));
-            }//mouseWatcher
+            if((*i)->DoesRectangleOverlap(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
+                                          mouseWatcher->BottomRightPoint()->x, mouseWatcher->BottomRightPoint()->y)){
+               (*i)-> ShowBorders(true);
+            }
         }
     }
 }
