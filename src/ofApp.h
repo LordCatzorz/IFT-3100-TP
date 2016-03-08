@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include "Renderer.h"
 #include <fstream>
 #include <iterator>
 #include <algorithm>
@@ -67,4 +68,6 @@ class ofApp : public ofBaseApp{
         
         GUI::ActionType actionMode = GUI::ActionType::Select;
 		int iteration;
+
+		Renderer* renderer;
 };
