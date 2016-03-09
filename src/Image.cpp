@@ -48,8 +48,12 @@ ofPoint * Image::BottomRightPoint(){
     return &bottomRightPoint;
 }
 
-void Image::ShowBorders(bool shouldShow){
-    shouldShowBorders = shouldShow;
+void Image::SetSelected(bool isSelected){
+    shouldShowBorders = isSelected;
+}
+
+bool Image::GetSelected(){
+    return shouldShowBorders;
 }
 //double rotVal = 0;
 void Image::Draw(){
@@ -87,20 +91,40 @@ bool Image::IsPointWithinBounds(int x, int y){
 }
 
 bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wont work if the selection rectangle goes trough inside teh shape and parallel to 2 sides of the shape
-    ofRectangle * selectionRect = new ofRectangle(x1, y1, x2 - x1, y2 - y1);
-    ofRectangle * currentRect = new ofRectangle(topLeftPoint, bottomRightPoint);
+    bool output = false;
 
-    bool output = isPointInsideRectangle(x1, y1, *currentRect) ||
-            isPointInsideRectangle(x1, y2, *currentRect) ||
-            isPointInsideRectangle(x2, y2, *currentRect) ||
-            isPointInsideRectangle(x2, y1, *currentRect) ||
+    ofPoint * p1 = new ofPoint();
+    ofPoint * p2 = new ofPoint();
+    ofPoint * p3 = new ofPoint();
+    ofPoint * p4 = new ofPoint();
 
-            isPointInsideRectangle(topLeftPoint.x, topLeftPoint.y, *selectionRect) ||
-            isPointInsideRectangle(bottomLeftPoint.x, bottomLeftPoint.y, *selectionRect) ||
-            isPointInsideRectangle(bottomRightPoint.x, bottomRightPoint.y, *selectionRect) ||
-            isPointInsideRectangle(topRightPoint.x, topRightPoint.y, *selectionRect);
-    delete selectionRect;
-    delete currentRect;
+    ofRectangle * boundingBox = new ofRectangle(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y);
+
+
+    Shape::translatePoint((x1 - xOffset), (y1 - yOffset), 360 - angleOffset, p1);
+    Shape::translatePoint((x2 - xOffset), (y1 - yOffset), 360 - angleOffset, p2);
+    Shape::translatePoint((x1 - xOffset), (y2 - yOffset), 360 - angleOffset, p3);
+    Shape::translatePoint((x2 - xOffset), (y2 - yOffset), 360 - angleOffset, p4);
+
+    output = Shape::DoEdgesIntersect(*p1, *p2, topLeftPoint, topRightPoint) ||
+            Shape::DoEdgesIntersect(*p1, *p2, topLeftPoint, bottomLeftPoint) ||
+            Shape::DoEdgesIntersect(*p1, *p2, bottomLeftPoint, bottomRightPoint) ||
+            Shape::DoEdgesIntersect(*p1, *p2, topRightPoint, bottomRightPoint) ||
+
+            Shape::DoEdgesIntersect(*p3, *p4, topLeftPoint, topRightPoint) ||
+            Shape::DoEdgesIntersect(*p3, *p4, topLeftPoint, bottomLeftPoint) ||
+            Shape::DoEdgesIntersect(*p3, *p4, bottomLeftPoint, bottomRightPoint) ||
+            Shape::DoEdgesIntersect(*p3, *p4, topRightPoint, bottomRightPoint) ||
+
+            isPointInsideRectangle(x1, y1, *boundingBox) ||
+            isPointInsideRectangle(x2, y2, *boundingBox);
+
+    delete p1;
+    delete p2;
+    delete p3;
+    delete p4;
+    delete boundingBox;
+
     return output;
 }
 
@@ -161,6 +185,7 @@ bool Image::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
     bool output = traslated->x>= rectangle.getX() && traslated->x <= rectangle.getX() + rectangle.getWidth() &&
             traslated->y>= rectangle.getY() && traslated->y <= rectangle.getY() + rectangle.getHeight();
     delete traslated;
+
     return output;
 
 }
