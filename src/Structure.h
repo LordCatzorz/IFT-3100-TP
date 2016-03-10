@@ -25,6 +25,8 @@ public:
 	size_t GetElementsCount() const;
 	size_t GetChildrenCount() const;
 
+	void Draw();
+
 private:
 	std::vector<Shape*>* elements;
 	Structure* parent;
@@ -38,7 +40,7 @@ private:
 	//virtual bool IsPointWithinBounds(int x, int y) override;
 	////virtual void AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false) override;
 	//virtual void ShowBorders(bool shouldShow) override;
-	//virtual void Draw() override;
+	
 };
 
 

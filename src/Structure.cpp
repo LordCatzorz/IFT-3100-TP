@@ -35,16 +35,24 @@
 //	throw std::runtime_error("Not yet implemented");
 //}
 //
-//void Structure::Draw()
-//{
-//	throw std::runtime_error("Not yet implemented");
-//}
+void Structure::Draw()
+{
+	for each (Shape* shape in *this->elements)
+	{
+		shape->Draw();
+	}
+	for each (Structure* structure in *this->children)
+	{
+		structure->Draw();
+	}
+}
 
 Structure::Structure()
 {
 	this->children = new std::vector<Structure*>();
 	this->elements = new std::vector<Shape*>();
 	this->parent = NULL;
+	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Created structure at adresse: " << this << " with parent structure NULL";
 }
 
 Structure::Structure(Structure* _parent)
@@ -52,21 +60,24 @@ Structure::Structure(Structure* _parent)
 	this->children = new std::vector<Structure*>();
 	this->elements = new std::vector<Shape*>();
 	this->parent = _parent;
+	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Created structure at adresse: " << this << " with parent structure " << _parent;
 }
 
 Structure::~Structure()
 {
-	for (size_t i = this->GetChildrenCount(); i >= 0; i--)
+	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Deleting structure at adresse: " << this;
+	for (size_t i = 0; i < this->GetChildrenCount(); i++)
 	{
 		this->RemoveChild(i);
 	}
 	this->children->clear();
 
-	for (size_t i = this->GetElementsCount(); i >= 0; i--)
+	for (size_t i = 0; i < this->GetElementsCount(); i++)
 	{
 		this->RemoveElement(i);
 	}
 	this->elements->clear();
+	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Deleted structure at adresse: " << this;
 }
 
 std::vector<Shape*>* Structure::GetElements()
@@ -76,7 +87,14 @@ std::vector<Shape*>* Structure::GetElements()
 
 Shape * Structure::GetElement(size_t _position)
 {
-	return this->elements->at(_position);
+	if (_position < this->GetElementsCount())
+	{
+		return this->elements->at(_position);
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
 bool Structure::AddElement(Shape * _newElement)
@@ -89,8 +107,8 @@ bool Structure::RemoveElement(size_t _position)
 {
 	if (_position < this->GetElementsCount())
 	{
-		delete this->elements->at(_position);
-		this->elements->at(_position) = NULL;
+		delete this->elements->operator[](_position);
+		this->elements->operator[](_position) = NULL;
 		this->elements->erase(this->elements->begin() + _position);
 		return true;
 	}
@@ -109,7 +127,14 @@ std::vector<Structure*>* Structure::GetChildren()
 
 Structure * Structure::GetChild(size_t _position)
 {
-	return this->children->at(_position);
+	if (_position < this->GetChildrenCount())
+	{
+		return this->children->at(_position);
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
 Structure * Structure::CreateNewChild()
@@ -123,8 +148,8 @@ bool Structure::RemoveChild(size_t _position)
 {
 	if (_position < this->GetChildrenCount())
 	{
-		delete this->children->at(_position);
-		this->children->at(_position) = NULL;
+		delete (*(this->children))[_position];
+		//(*(this->children))[_position] = NULL;
 		this->children->erase(this->children->begin() + _position);
 		return true;
 	}

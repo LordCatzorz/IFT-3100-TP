@@ -1,22 +1,23 @@
 #pragma once
 #include "ofMain.h"
 
-class Shapes
+static class Shapes
 {
 public:
 
-    Shapes();
-    ~Shapes();
-    ofMesh* createTetrahedron();
-    ofMesh* createHexahedron();
-    ofMesh* createOctahedron();
-    ofMesh* createDodecahedron();
-    ofMesh* createIcosahedron();
+	Shapes();
+	~Shapes();
+	static ofMesh* createTetrahedron();
+	static ofMesh* createHexahedron();
+	static ofMesh* createOctahedron();
+	static ofMesh* createDodecahedron();
+	static ofMesh* createIcosahedron();
 
-    ofMesh* createCube();
+	static ofMesh* createCube();
 
-    ofMesh* createSphere();
+	static ofMesh* createSphere();
 
 private:
+
 
 };

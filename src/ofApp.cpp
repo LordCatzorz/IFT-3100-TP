@@ -80,6 +80,7 @@ void ofApp::ImportObjFileCallback(string param)
 void ofApp::setup()
 {
 	this->renderer = new Renderer();
+	this->renderer->Setup();
     ofEnableDepthTest();
     ofSetFrameRate(24);
     Shapes shape = Shapes();

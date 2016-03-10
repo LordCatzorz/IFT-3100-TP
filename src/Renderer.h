@@ -13,4 +13,8 @@ public:
 	void Draw();
 private:
 	Structure* sceneStructure;
+	float oscillate(float time, float amplitude, float period, float shift, float offset)
+	{
+		return amplitude * sin((time - shift) * 2 * PI / period) + offset;
+	}
 };

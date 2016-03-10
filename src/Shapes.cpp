@@ -247,12 +247,13 @@ ofMesh * Shapes::createIcosahedron()
 
 ofMesh* Shapes::createCube()
 {
-	return this->createHexahedron();
+	return createHexahedron();
 }
 
 ofMesh* Shapes::createSphere()
 {
 	throw std::runtime_error("Not yet implemented");
 }
+
 
 
