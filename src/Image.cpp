@@ -98,6 +98,11 @@ bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wo
     ofPoint * p3 = new ofPoint();
     ofPoint * p4 = new ofPoint();
 
+    ofPoint * p5 = new ofPoint();
+    ofPoint * p6 = new ofPoint();
+
+    Shape::translatePoint(topLeftPoint.x, topLeftPoint.y, angleOffset - 360, p5);
+
     ofRectangle * boundingBox = new ofRectangle(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y);
 
 
@@ -105,6 +110,8 @@ bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wo
     Shape::translatePoint((x2 - xOffset), (y1 - yOffset), 360 - angleOffset, p2);
     Shape::translatePoint((x1 - xOffset), (y2 - yOffset), 360 - angleOffset, p3);
     Shape::translatePoint((x2 - xOffset), (y2 - yOffset), 360 - angleOffset, p4);
+
+    ofRectangle * selectionBox = new ofRectangle(x1, y1, x2 - x1, y2 - y1);
 
     output = Shape::DoEdgesIntersect(*p1, *p2, topLeftPoint, topRightPoint) ||
             Shape::DoEdgesIntersect(*p1, *p2, topLeftPoint, bottomLeftPoint) ||
@@ -117,13 +124,20 @@ bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wo
             Shape::DoEdgesIntersect(*p3, *p4, topRightPoint, bottomRightPoint) ||
 
             isPointInsideRectangle(x1, y1, *boundingBox) ||
-            isPointInsideRectangle(x2, y2, *boundingBox);
+            isPointInsideRectangle(x2, y2, *boundingBox) ||
+
+            (p5->x>= selectionBox->x && p5->x <= selectionBox->x + selectionBox->width &&
+            p5->y>= selectionBox->y && p5->y <= selectionBox->y + selectionBox->height);
+
+            /*isPointInsideRectangle(p5->x - xOffset - xOffset, p5->y - yOffset - yOffset, *selectionBox) ||
+            isPointInsideRectangle(bottomRightPoint.x, bottomRightPoint.y, *selectionBox);*/
 
     delete p1;
     delete p2;
     delete p3;
     delete p4;
     delete boundingBox;
+    delete selectionBox;
 
     return output;
 }

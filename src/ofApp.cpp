@@ -41,9 +41,12 @@ void ofApp::saveFile(string path, std::ifstream & file)
 
 void ofApp::PrintScreenSectionCallback(string arg)
 {
+    mouseWatcher->AddMouseUpDelegate(MouseWatcher::MouseActionDelegate(this, &ofApp::takeScreenshotSection));
 	mouseWatcher->ShouldShowSelectionZone(true);
 	isMakingScreenshotSection = true;
-	mouseUpDelegates[0].bind(this, &ofApp::takeScreenshotSection);
+
+
+    //mouseUpDelegates[0].bind(this, &ofApp::takeScreenshotSection);
 }
 
 void ofApp::takeScreenshotSection(int x, int y)
@@ -53,14 +56,15 @@ void ofApp::takeScreenshotSection(int x, int y)
 	int endX = mouseWatcher->BottomRightPoint()->x;
 	int endY = mouseWatcher->BottomRightPoint()->y;
 	mouseWatcher->ShouldShowSelectionZone(false);
-	for (int i = 0; i < 12; i++)
+    mouseWatcher->RemoveMouseUpDelegate(MouseWatcher::MouseActionDelegate(this, &ofApp::takeScreenshotSection));
+    /*for (int i = 0; i < 12; i++)
 	{
 		if (mouseUpDelegates[i] == MouseActionDelegate(this, &ofApp::takeScreenshotSection))
 		{
 			mouseUpDelegates[i].clear();
 			break;
 		}
-	}
+    }*/
 
 	ofLog() << "startX: " << startX << " startY: " << startY << " endX - startX: " << endX - startX << " endY - startY: " << endY - startY;
 
@@ -74,6 +78,11 @@ void ofApp::ModeChangeCallback(GUI::ActionType newMode){
 void ofApp::ImportObjFileCallback(string param)
 {
 	importedModel->loadModel(param);
+}
+
+
+void ofApp::someFunction(int x, int y){
+
 }
 
 //--------------------------------------------------------------
@@ -96,17 +105,18 @@ void ofApp::setup()
 
 }
 
+
 void ofApp::beginSelectionZoneDraw(int x, int y)
 {
 	bool a = true;
-	for (int i = 0; i < 12; i++)
+    /*for (int i = 0; i < 12; i++)
 	{
 		if (mouseDownDelegates[i] == MouseActionDelegate(this, &ofApp::beginSelectionZoneDraw))
 		{
 			mouseDownDelegates[i].clear();
 			break;
 		}
-	}
+    }*/
 }
 
 //--------------------------------------------------------------
@@ -205,7 +215,7 @@ void ofApp::mouseMoved(int x, int y)
 void ofApp::mouseDragged(int x, int y, int button)
 {
     isRecordingMouseMouvements = true;
-    mouseWatcher->Record(x, y);
+    mouseWatcher->Record(x, y, MouseWatcher::Drag);
 
     if(actionMode == GUI::Edit){
         if(button == 0 || button == 2){
@@ -234,6 +244,7 @@ void ofApp::mouseDragged(int x, int y, int button)
 void ofApp::mousePressed(int x, int y, int button)
 {
 
+    mouseWatcher->AddMouseDownDelegate(MouseWatcher::MouseActionDelegate(this, &ofApp::someFunction));
     /*bool clickedOnEmptySpace = true;
     for(vector<Shape * >::iterator i = visibleShapes.begin(); i != visibleShapes.end() && clickedOnEmptySpace; i++){
         if((*i)->IsPointWithinBounds(x, y)){
@@ -260,17 +271,17 @@ void ofApp::mousePressed(int x, int y, int button)
 
      if(button == 0 || button == 2){
         isRecordingMouseMouvements = true;
-        mouseWatcher->Record(x, y);
+        mouseWatcher->Record(x, y, MouseWatcher::Down);
     }
 
-    for (int i=0; i<12; i++) {
+    /*for (int i=0; i<12; i++) {
             if (!mouseDownDelegates[i]) {
                 printf("Delegate is empty\n");
             } else {
                 // Invocation generates optimal assembly code.
                 mouseDownDelegates[i](x, y);
             };
-        }
+        }*/
 
 }
 
@@ -284,6 +295,7 @@ void ofApp::mouseReleased(int x, int y, int button)
     selectedShapes.clear();
     if(button == 0){
         isRecordingMouseMouvements = false;
+        mouseWatcher->Record(x, y, MouseWatcher::Up);
         mouseWatcher->StopRecording();
         for(vector<Shape * >::iterator i = visibleShapes.begin(); i != visibleShapes.end(); i++){
             if((*i)->GetSelected()){
@@ -296,13 +308,13 @@ void ofApp::mouseReleased(int x, int y, int button)
         }
     }
 
-    for (int i=0; i<12; i++) {
+    /*for (int i=0; i<12; i++) {
             if (!mouseUpDelegates[i]) {
                 printf("Delegate is empty\n");
             } else {
                 mouseUpDelegates[i](x, y);
             };
-        }
+        }*/
 
     mouseWatcher->ShouldShowSelectionZone(false);
 }

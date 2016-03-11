@@ -44,11 +44,14 @@ class ofApp : public ofBaseApp{
         void PrintScreenSectionCallback(string arg);
         void ModeChangeCallback(GUI::ActionType newMode);
 		void ImportObjFileCallback(string param);
+
+
+        void someFunction(int x, int y);
     private:
 
-        typedef FastDelegate2<int, int> MouseActionDelegate;
-        MouseActionDelegate mouseDownDelegates[12];
-        MouseActionDelegate mouseUpDelegates[12];
+        //typedef FastDelegate2<int, int> MouseActionDelegate;
+        //MouseActionDelegate mouseDownDelegates[12];
+        //MouseActionDelegate mouseUpDelegates[12];
 
         void beginSelectionZoneDraw(int x, int y);
         void endSelectionZoneDraw(int x, int y);
