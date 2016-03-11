@@ -1,7 +1,9 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 #include "ofMain.h"
-
+#ifdef _WIN32
+#define M_PI PI
+#endif
 class Shape
 {
 public:
@@ -15,6 +17,8 @@ public:
     virtual void        SetSelected(bool isSelected) = 0;
     virtual bool        GetSelected() = 0;
     virtual void        Draw() = 0;
+
+
 protected:
     static ofPoint * translatePoint(int x, int y, double angleInDegrees, ofPoint * translated){
         double angleRad = angleInDegrees * M_PI/180;
@@ -22,6 +26,8 @@ protected:
         double py = sin(angleRad) * x + cos(angleRad) * y;
 
         translated->set(px, py);
+
+		return  translated;
     };
 
     /** Source: http://content.gpwiki.org/index.php/Polygon_Collision

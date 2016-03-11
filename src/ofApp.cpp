@@ -89,11 +89,12 @@ void ofApp::someFunction(int x, int y){
 void ofApp::setup()
 {
 	this->renderer = new Renderer();
+	this->renderer->Setup();
     ofEnableDepthTest();
     ofSetFrameRate(24);
-    Shapes shape = Shapes();
-    mesh = shape.createIcosahedron();
-	importedModel = new ofxAssimpModelLoader();
+ //   Shapes shape = Shapes();
+	//primitive3d = new ofSpherePrimitive(1, 12);//shape.createIcosahedron();
+	//importedModel = new ofxAssimpModelLoader();
     Gui = new GUI();
     Gui->AddImageOpenedListener(std::bind(&ofApp::FileOpenCallback, this, std::placeholders::_1));
     Gui->AddPrintscreenTakenListener(std::bind(&ofApp::PrintScreenTakenCallback, this, std::placeholders::_1));
@@ -122,63 +123,65 @@ void ofApp::beginSelectionZoneDraw(int x, int y)
 //--------------------------------------------------------------
 void ofApp::update()
 {
-    //this->renderer->Update();
+    this->renderer->Update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-  //this->renderer->Draw();
 	ofEnableDepthTest();
-	ofPushMatrix();
-	ofTranslate(400, 400);
-	ofScale(200, 200);
-	ofRotateY(iteration++);
-	ofColor colours[20] = {
-		ofColor::red,			//0
-		ofColor::orange,		//1
-		ofColor::yellow,		//2
-		ofColor::green,			//3
-		ofColor::blue,			//4
-		ofColor::violet,		//5
-		ofColor::magenta,		//6
-		ofColor::darkRed,		//7
-		ofColor::darkGreen,		//8
-		ofColor::darkBlue,		//9
-		ofColor::darkTurquoise,	//10
-		ofColor::darkViolet,	//11
-		ofColor::darkMagenta,	//12
-		ofColor::gold,			//13
-		ofColor::lightGreen,	//14
-		ofColor::lightBlue,		//15
-		ofColor::lightPink,		//16
-		ofColor::white,			//17
-		ofColor::grey,			//18
-		ofColor::black			//19
-	};
-	for (size_t i = 0; i < mesh->getUniqueFaces().size(); i++)
-	{
-		/*for (size_t j = 0; j < 3; j++)
-		{*/
-			ofMeshFace face = mesh->getUniqueFaces().at(i/**3+j*/);
 
-			ofSetColor(colours[i]);
+	this->renderer->Draw();
 
-			ofDrawTriangle(face.getVertex(0), face.getVertex(1), face.getVertex(2));
-		/*}*/
-	}
-	for (size_t i = 0; i < mesh->getVertices().size(); i++)
-	{
-		ofVec3f vertex = mesh->getVertex(i);
-		ofSetColor(colours[i]);
-		ofDrawSphere(vertex, 0.1);
-	}
-	//mesh->drawFaces();
-	ofPopMatrix();
-	ofPushMatrix();
-	ofTranslate(300, 300);
-	importedModel->draw(OF_MESH_FILL);
-	ofPopMatrix();
+	//ofPushMatrix();
+	//ofTranslate(400, 400);
+	//ofScale(200, 200);
+	//ofRotateY(iteration++);
+	//ofColor colours[20] = {
+	//	ofColor::red,			//0
+	//	ofColor::orange,		//1
+	//	ofColor::yellow,		//2
+	//	ofColor::green,			//3
+	//	ofColor::blue,			//4
+	//	ofColor::violet,		//5
+	//	ofColor::magenta,		//6
+	//	ofColor::darkRed,		//7
+	//	ofColor::darkGreen,		//8
+	//	ofColor::darkBlue,		//9
+	//	ofColor::darkTurquoise,	//10
+	//	ofColor::darkViolet,	//11
+	//	ofColor::darkMagenta,	//12
+	//	ofColor::gold,			//13
+	//	ofColor::lightGreen,	//14
+	//	ofColor::lightBlue,		//15
+	//	ofColor::lightPink,		//16
+	//	ofColor::white,			//17
+	//	ofColor::grey,			//18
+	//	ofColor::black			//19
+	//};
+	//for (size_t i = 0; i < mesh->getUniqueFaces().size(); i++)
+	//{
+	//	/*for (size_t j = 0; j < 3; j++)
+	//	{*/
+	//		ofMeshFace face = mesh->getUniqueFaces().at(i/**3+j*/);
+
+	//		ofSetColor(colours[i]);
+
+	//		ofDrawTriangle(face.getVertex(0), face.getVertex(1), face.getVertex(2));
+	//	/*}*/
+	//}
+	//for (size_t i = 0; i < mesh->getVertices().size(); i++)
+	//{
+	//	ofVec3f vertex = mesh->getVertex(i);
+	//	ofSetColor(colours[i]);
+	//	ofDrawSphere(vertex, 0.1);
+	//}
+	////mesh->drawFaces();
+	//ofPopMatrix();
+	//ofPushMatrix();
+	//ofTranslate(300, 300);
+	//importedModel->draw(OF_MESH_FILL);
+	//ofPopMatrix();
 
 	ofDisableDepthTest();
 	Gui->Draw();
