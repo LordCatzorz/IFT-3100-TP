@@ -18,8 +18,6 @@ using namespace fastdelegate;
 class ofApp : public ofBaseApp{
 
 	public:
-
-
         const static int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 1024;
 
 		void setup();
@@ -37,7 +35,7 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-        ofMesh* mesh;
+        of3dPrimitive* primitive3d;
         void FileOpenCallback(string param);
         void PrintScreenTakenCallback(string param);
         void printScreenTakenCallback(int x, int y, int width, int height, string param);
