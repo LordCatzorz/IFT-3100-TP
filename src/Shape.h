@@ -7,19 +7,32 @@
 class Shape
 {
 public:
-    virtual ofPoint *   TopLeftPoint() = 0;
-    virtual ofPoint *   TopRightPoint() = 0;
-    virtual ofPoint *   BottomLeftPoint() = 0;
-    virtual ofPoint *   BottomRightPoint() = 0;
     virtual bool        IsPointWithinBounds(int x, int y) = 0;
     virtual bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2) = 0;
     virtual void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false) = 0;
-    virtual void        SetSelected(bool isSelected) = 0;
-    virtual bool        GetSelected() = 0;
     virtual void        Draw() = 0;
 
+    ofPoint * TopLeftPoint(){return &topLeftPoint;}
+    ofPoint * TopRightPoint(){return &topRightPoint;}
+    ofPoint * BottomLeftPoint(){return &bottomLeftPoint;}
+    ofPoint * BottomRightPoint(){return &bottomRightPoint;}
+    void SetSelected(bool isSelected){ shouldShowBorders = isSelected;}
+    bool GetSelected(){return shouldShowBorders;}
 
 protected:
+
+    int         borderSize = 10, xOffset = 0, yOffset = 0;
+    double      angleOffset = 0, referenceAngleOffset = 0;
+    bool        shouldShowBorders = false;
+    ofRectangle horizontalBorder1,
+                horizontalBorder2,
+                verticalBorder1,
+                verticalBorder2;
+    ofPoint     topLeftPoint,
+                topRightPoint,
+                bottomLeftPoint,
+                bottomRightPoint;
+
     static ofPoint * translatePoint(int x, int y, double angleInDegrees, ofPoint * translated){
         double angleRad = angleInDegrees * M_PI/180;
         double px = cos(angleRad) * x - sin(angleRad) * y;

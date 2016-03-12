@@ -32,29 +32,6 @@ string Image::GetImageName(){
     return imgName;
 }
 
-ofPoint * Image::TopLeftPoint(){
-    return &topLeftPoint;
-}
-
-ofPoint * Image::TopRightPoint(){
-    return &topRightPoint;
-}
-
-ofPoint * Image::BottomLeftPoint(){
-    return &bottomLeftPoint;
-}
-
-ofPoint * Image::BottomRightPoint(){
-    return &bottomRightPoint;
-}
-
-void Image::SetSelected(bool isSelected){
-    shouldShowBorders = isSelected;
-}
-
-bool Image::GetSelected(){
-    return shouldShowBorders;
-}
 double rotVal = 0;
 void Image::Draw(){
     ofDisableDepthTest();

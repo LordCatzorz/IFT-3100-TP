@@ -16,31 +16,14 @@ public:
 	Image(string imageName);
     void        SetImageName(string imageName);
     string      GetImageName();
-    ofPoint *   TopLeftPoint();
-    ofPoint *   TopRightPoint();
-    ofPoint *   BottomLeftPoint();
-    ofPoint *   BottomRightPoint();
     bool        IsPointWithinBounds(int x, int y);
     bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2);
     void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
-    void        SetSelected(bool isSelected);
-    bool        GetSelected();
     void        Draw();
 private:
 
-	int         borderSize = 10, xOffset = 0, yOffset = 0;
-	double      angleOffset = 0, referenceAngleOffset = 0;
-	bool        shouldShowBorders = false;
-	string      imgName;
-	ofImage     image;
-	ofRectangle horizontalBorder1,
-                horizontalBorder2,
-                verticalBorder1,
-                verticalBorder2;
-	ofPoint     topLeftPoint,
-                topRightPoint,
-                bottomLeftPoint,
-                bottomRightPoint;
+    string      imgName;
+    ofImage     image;
 
 	void        refreshBorders();
 	bool        isPointInsideRectangle(int x, int y, const ofRectangle & rectangle);
