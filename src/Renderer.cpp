@@ -36,12 +36,12 @@ void Renderer::Setup()
 	light->setDiffuseColor(ofColor(255, 255, 255));
 	light->setSpecularColor(ofColor(191, 191, 191));
 	light->setPointLight();
-	this->sceneStructure->shadersManager->AddLight(light);
+    this->sceneStructure->shadersManager->AddLight(light);
 
 	ofShader* colorFillShader = new ofShader();
 	this->sceneStructure->shadersManager->AddShader(colorFillShader);
 	colorFillShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
-	this->sceneStructure->AddElement(Shapes::createCube());
+    this->sceneStructure->AddElement(Shapes::createCube());
 
 	reset();
     //ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
