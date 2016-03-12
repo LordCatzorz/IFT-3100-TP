@@ -40,8 +40,8 @@ void Renderer::Setup()
 
 	ofShader* colorFillShader = new ofShader();
 	this->sceneStructure->shadersManager->AddShader(colorFillShader);
-    colorFillShader->load("shader/v330/PhongVS.glsl", "shader/v330/PhongFS.glsl");
-    this->sceneStructure->AddElement(Shapes::createCube());
+	colorFillShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
+	this->sceneStructure->AddElement(Shapes::createCube());
 
 	reset();
     //ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
@@ -49,29 +49,32 @@ void Renderer::Setup()
 
 void Renderer::Update()
 {
-    ofShader* shader = this->sceneStructure->shadersManager->GetShader(0);
+	ofPushMatrix();
+	ofShader* shader = this->sceneStructure->shadersManager->GetShader(0);
 	shader->begin();
-	shader->setUniform3f("colorAmbient", 0.1f, 0.1f, 0.1f);
+	shader->setUniform3f("colorAmbient", 0.9f, 0.1f, 0.1f);
 	shader->setUniform3f("colorDiffuse", 0.0f, 0.5f, 0.5f);
 	shader->setUniform3f("colorSpecular", 1.0f, 1.0f, 0.0f);
 	shader->setUniform3f("color", 1.0f, 1.0f, 0.0f);
-	shader->setUniform1f("brightness", 400.0f);
+	shader->setUniform1f("brightness", 800.0f);
 	shader->end();
 
 	ofLight* light = this->sceneStructure->shadersManager->GetLight(0);
-	light->setGlobalPosition(
-		ofMap(ofGetMouseX() / (float) framebufferWidth, 0.0f, 1.0f, -framebufferWidth / 2.0, framebufferWidth / 2.0),
-		ofMap(ofGetMouseY() / (float) framebufferHeight, 0.0f, 1.0f, -framebufferHeight / 2.0, framebufferHeight / 2.0),
+	light->setGlobalPosition(500,
+		500,
 		-zOffset * 1.5f);
+	ofPopMatrix();
 }
 
 void Renderer::Draw()
 {
+	ofPushMatrix();
 	this->sceneStructure->Draw();
     mouseWatcher->Draw();
     Gui->Draw();
     for(Shape * toShow : visibleShapes)
         toShow->Draw();
+	ofPopMatrix();
 }
 
 void Renderer::FileOpenCallback(string param){
