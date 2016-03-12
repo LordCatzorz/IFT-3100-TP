@@ -6,9 +6,25 @@ void Structure::Draw()
 	ofLight* light = this->shadersManager->GetLight(0);
 	ofShader* shader = this->shadersManager->GetShader(0);
 
-	ofPushMatrix();
+    ofPushMatrix();
+    ofTranslate(300, 300);
+    ofEnableLighting();
+
+        light->setPointLight();
+        light->setAttenuation(0.5f);
+        light->setPosition(ofVec3f(500,500,-500));
+    light->enable();
+    ofFill();
+            ofSetColor(180);
+            ofDrawBox(100);
+    light->disable();
+
+    ofDisableLighting();
+    ofPopMatrix();
+
+    /*ofPushMatrix();
 	// afficher un repère visuel pour les lumières
-	light->draw();
+    light->draw();
 	ofPopMatrix();
 
 	ofPushMatrix();
@@ -16,8 +32,8 @@ void Structure::Draw()
 	ofTranslate(300, 300);
 	ofRotateY(iteration++);
 
-	ofEnableLighting();
-	light->enable();
+    ofEnableLighting();
+    light->enable();
 
 	shader->begin();
 	ofPushMatrix();
@@ -28,28 +44,28 @@ void Structure::Draw()
 	}
 	ofPopMatrix();
 	shader->end();
-	light->disable();
-	ofDisableLighting();
-	ofPopMatrix();
+    light->disable();
+    ofDisableLighting();
+    ofPopMatrix();
 
 	ofPushMatrix();
 
 	ofTranslate(600, 600);
 	ofRotateY(iteration);
 
-	ofEnableLighting();
-	light->enable();
+    ofEnableLighting();
+    light->enable();
 
 	shader->begin();
 	ofPushMatrix();
 	ofScale(100, 100, 100);
-	ofDrawBox(1, 1, 1);
+    ofDrawBox(1, 1, 1);
 	ofPopMatrix();
 	shader->end();
-	light->disable();
+    light->disable();
 	ofDisableLighting();
-	ofPopMatrix();
-	//ofPushMatrix();
+    ofPopMatrix();*/
+    //ofPushMatrix();
 	//// position
 	////ofTranslate(this->shadersManager->GetLight(0)->getPosition());
 
