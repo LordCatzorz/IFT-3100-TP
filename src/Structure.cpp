@@ -6,21 +6,40 @@ void Structure::Draw()
 	ofLight* light = this->shadersManager->GetLight(0);
 	ofShader* shader = this->shadersManager->GetShader(0);
 
-    ofPushMatrix();
-    ofTranslate(300, 300);
     ofEnableLighting();
 
-        light->setPointLight();
-        light->setAttenuation(0.5f);
-        light->setPosition(ofVec3f(500,500,-500));
-    light->enable();
+    light->setPointLight();
+    light->setAttenuation(0.5f);
+    light->setPosition(ofVec3f(500,500,-500));
+light->enable();
+
+    ofPushMatrix();
+    ofTranslate(300, 300);
+
+
     ofFill();
             ofSetColor(180);
             ofDrawBox(100);
+
+
+            ofPopMatrix();
+
+
+
+            shader->begin();
+            ofPushMatrix();
+            ofTranslate(600, 600);
+            ofRotateY(iteration++);
+            ofScale(100,100,100);
+            for (of3dPrimitive* shape : *(this->elements))
+            {
+                shape->draw();
+            }
+            ofPopMatrix();
+            shader->end();
     light->disable();
 
     ofDisableLighting();
-    ofPopMatrix();
 
     /*ofPushMatrix();
 	// afficher un repère visuel pour les lumières
