@@ -263,62 +263,62 @@ of3dPrimitive* Shapes::createSphere()
 //Based on https://github.com/ofZach/ofxMeshUtils/blob/master/src/ofxMeshUtils.cpp#L32-L58
 void Shapes::calculateNormals(of3dPrimitive* _3dprimitive)
 {
-	ofMesh* mesh = _3dprimitive->getMeshPtr();
-	//mesh->addNormals(mesh->getFaceNormals(true));
-	for (int i = 0; i < mesh->getVertices().size(); i++)
-	{
-		mesh->addNormal(ofPoint(0, 0, 0));
-	}
+    ofMesh* mesh = _3dprimitive->getMeshPtr();
+    //mesh->addNormals(mesh->getFaceNormals(true));
+    for (int i = 0; i < mesh->getVertices().size(); i++)
+    {
+        mesh->addNormal(ofPoint(0, 0, 0));
+    }
 
-	for (int i = 0; i < mesh->getIndices().size(); i += 3)
-	{
-		const int indexA = mesh->getIndices()[i];
-		const int indexB = mesh->getIndices()[i + 1];
-		const int indexC = mesh->getIndices()[i + 2];
+    for (int i = 0; i < mesh->getIndices().size(); i += 3)
+    {
+        const int indexA = mesh->getIndices()[i];
+        const int indexB = mesh->getIndices()[i + 1];
+        const int indexC = mesh->getIndices()[i + 2];
 
 
-		/*ofVec3f vertex1 = mesh->getVertices()[indexA];
-		ofVec3f vertex2 = mesh->getVertices()[indexB];
-		ofVec3f vertex3 = mesh->getVertices()[indexC];
-		ofVec3f vertexCentre = (vertex1 + vertex2 + vertex3) / 3;
+        /*ofVec3f vertex1 = mesh->getVertices()[indexA];
+        ofVec3f vertex2 = mesh->getVertices()[indexB];
+        ofVec3f vertex3 = mesh->getVertices()[indexC];
+        ofVec3f vertexCentre = (vertex1 + vertex2 + vertex3) / 3;
 */
-		ofVec3f edge1 = mesh->getVertices()[indexA] - mesh->getVertices()[indexB];
-		ofVec3f edge2 = mesh->getVertices()[indexC] - mesh->getVertices()[indexB];
-		ofVec3f normal = edge2.cross(edge1);
+        ofVec3f edge1 = mesh->getVertices()[indexA] - mesh->getVertices()[indexB];
+        ofVec3f edge2 = mesh->getVertices()[indexC] - mesh->getVertices()[indexB];
+        ofVec3f normal = edge2.cross(edge1);
 
-		/*float additiveDistance = (vertexCentre.operator+(normal.scale(0.01f))).distance(ofVec3f(0));
-		float sustractiveDistance = (vertexCentre.operator-(normal.scale(0.01f))).distance(ofVec3f(0));
-		/*if (additiveDistance < sustractiveDistance )
-		{
-			normal = -normal;
-		}*/
-		// depending on your clockwise / winding order, you might want to reverse the e2 / e1 above if your normals are flipped. 
+        /*float additiveDistance = (vertexCentre.operator+(normal.scale(0.01f))).distance(ofVec3f(0));
+        float sustractiveDistance = (vertexCentre.operator-(normal.scale(0.01f))).distance(ofVec3f(0));
+        /*if (additiveDistance < sustractiveDistance )
+        {
+            normal = -normal;
+        }*/
+        // depending on your clockwise / winding order, you might want to reverse the e2 / e1 above if your normals are flipped.
 
-		mesh->getNormals()[indexA] += normal;
-		mesh->getNormals()[indexB] += normal;
-		mesh->getNormals()[indexC] += normal;
-	}
+        mesh->getNormals()[indexA] += normal;
+        mesh->getNormals()[indexB] += normal;
+        mesh->getNormals()[indexC] += normal;
+    }
 
-	for (int i = 0; i < mesh->getNormals().size(); i++)
-	{
-		mesh->getNormals()[i].normalize();
-	}
+    for (int i = 0; i < mesh->getNormals().size(); i++)
+    {
+        mesh->getNormals()[i].normalize();
+    }
 
-	/*for each (ofMeshFace face in mesh->getUniqueFaces())
-	{
-		ofVec3f edge1 = face.getVertex(0) - face.getVertex(1);
-		ofVec3f edge2 = face.getVertex(1) - face.getVertex(1);
-		ofVec3f normal = edge2.cross(edge1);
-		float additiveDistance = (face.getVertex(0) - normal.scale(0.01f)).distance(ofVec3f(0));
-		float sustractiveDistance = (face.getVertex(0) - normal.scale(0.01f)).distance(ofVec3f(0));
-		if (additiveDistance < sustractiveDistance)
-		{
-			normal = -normal;
-		}
-		face.setNormal(0, face.getNormal(0) + normal);
-		face.setNormal(1, face.getNormal(1) + normal);
-		face.setNormal(2, face.getNormal(2) + normal);
-	}*/
+    /*for each (ofMeshFace face in mesh->getUniqueFaces())
+    {
+        ofVec3f edge1 = face.getVertex(0) - face.getVertex(1);
+        ofVec3f edge2 = face.getVertex(1) - face.getVertex(1);
+        ofVec3f normal = edge2.cross(edge1);
+        float additiveDistance = (face.getVertex(0) - normal.scale(0.01f)).distance(ofVec3f(0));
+        float sustractiveDistance = (face.getVertex(0) - normal.scale(0.01f)).distance(ofVec3f(0));
+        if (additiveDistance < sustractiveDistance)
+        {
+            normal = -normal;
+        }
+        face.setNormal(0, face.getNormal(0) + normal);
+        face.setNormal(1, face.getNormal(1) + normal);
+        face.setNormal(2, face.getNormal(2) + normal);
+    }*/
 }
 
 

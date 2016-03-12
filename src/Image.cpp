@@ -55,7 +55,7 @@ void Image::SetSelected(bool isSelected){
 bool Image::GetSelected(){
     return shouldShowBorders;
 }
-//double rotVal = 0;
+double rotVal = 0;
 void Image::Draw(){
     ofDisableDepthTest();
     ofSetColor(ofColor::white);
@@ -72,7 +72,6 @@ void Image::Draw(){
 
 
     if(shouldShowBorders){
-        ofLog() << "Drawing borders: YES";
         ofFill();
         ofSetColor(ofColor::grey);
         ofDrawRectangle(horizontalBorder1);
@@ -80,7 +79,6 @@ void Image::Draw(){
         ofDrawRectangle(verticalBorder1);
         ofDrawRectangle(verticalBorder2);
     }else{
-        ofLog() << "Drawing borders: NO";
     }
     ofPopMatrix();
     ofEnableDepthTest();
@@ -142,30 +140,35 @@ bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wo
     return output;
 }
 
+double prevAngle = 0;
 void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
 
 
     if(isRotation){
-        //angleXOffset = x - xOffset - topLeftPoint.x; angleYOffset = y - yOffset - topLeftPoint.y;
         double side = (double)(x - xOffset - topLeftPoint.x);
         double adj = (double)(y - yOffset - topLeftPoint.y);
 
-        angleOffset = atan((adj / side)) * 180/M_PI;
+        double currentAngle = atan((adj / side)) * 180/M_PI;
 
-        if(referenceAngleOffset <= 0)
-            referenceAngleOffset = angleOffset;
 
-        angleOffset -= referenceAngleOffset;
-
-        if(side < 0){
-            angleOffset += 180;
+        if(referenceAngleOffset <= 0){
+            referenceAngleOffset = currentAngle;
+            if(side < 0){
+                referenceAngleOffset += 180;
+            }
+            angleOffset -= referenceAngleOffset;
         }
 
-        ofLog() << "side: " << side <<  " adj: " << adj << " final angle: " << angleOffset;
+        if(side < 0){
+            currentAngle = currentAngle - 180;
+        }
+        angleOffset += currentAngle - prevAngle;
 
-        //ofLog() << "width: " << angleXOffset <<  " height: " << angleYOffset << " angleOffset: " << (angleOffset* 180/M_PI);
+        prevAngle = currentAngle;
+
+        angleOffset = fmod(angleOffset, 360);
     }else{
-        referenceAngleOffset = 0;
+        prevAngle = referenceAngleOffset = 0;
         if(isPointInsideRectangle(x, y, horizontalBorder1)){
             topLeftPoint.y += actionVector->y;
             topRightPoint.y += actionVector->y;

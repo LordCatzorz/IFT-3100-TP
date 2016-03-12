@@ -77,6 +77,21 @@ void GUI::Hide()
 	gui.setPosition(-1000, -1000);
 }
 
+void GUI::SetCurrentMode(ActionType newMode)
+{
+    editToggle = newMode == GUI::Edit;
+    selectionToggle = newMode == GUI::Select;
+}
+
+GUI::ActionType GUI::GetCurrentMode()
+{
+    if(selectionToggle == true){
+        return GUI::Select;
+    }else{
+        return GUI::Edit;
+    }
+}
+
 void GUI::openFileBtnCallback()
 {
 	ofFileDialogResult result = requestUsrFile();
@@ -99,7 +114,7 @@ void GUI::openFilePrintscreenCallback()
 void GUI::callScreenSectionCallback()
 {
 
-	printScreenSelectionCallback("");
+    printScreenSelectionCallback("");
 }
 
 void GUI::importObjFileCallBack()

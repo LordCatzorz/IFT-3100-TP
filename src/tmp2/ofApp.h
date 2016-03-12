@@ -17,31 +17,31 @@
 using namespace fastdelegate;
 class ofApp : public ofBaseApp{
 
-    public:
+	public:
         const static int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 1024;
 
-        void setup();
-        void update();
-        void draw();
+		void setup();
+		void update();
+		void draw();
 
-        void keyPressed(int key);
-        void keyReleased(int key);
-        void mouseMoved(int x, int y );
-        void mouseDragged(int x, int y, int button);
-        void mousePressed(int x, int y, int button);
-        void mouseReleased(int x, int y, int button);
-        void mouseEntered(int x, int y);
-        void mouseExited(int x, int y);
-        void windowResized(int w, int h);
-        void dragEvent(ofDragInfo dragInfo);
-        void gotMessage(ofMessage msg);
+		void keyPressed(int key);
+		void keyReleased(int key);
+		void mouseMoved(int x, int y );
+		void mouseDragged(int x, int y, int button);
+		void mousePressed(int x, int y, int button);
+		void mouseReleased(int x, int y, int button);
+		void mouseEntered(int x, int y);
+		void mouseExited(int x, int y);
+		void windowResized(int w, int h);
+		void dragEvent(ofDragInfo dragInfo);
+		void gotMessage(ofMessage msg);
         of3dPrimitive* primitive3d;
         /*void FileOpenCallback(string param);
         void PrintScreenTakenCallback(string param);
         void printScreenTakenCallback(int x, int y, int width, int height, string param);
         void PrintScreenSectionCallback(string arg);
         void ModeChangeCallback(GUI::ActionType newMode);
-        void ImportObjFileCallback(string param);
+		void ImportObjFileCallback(string param);
 
 
         void someFunction(int x, int y);*/
@@ -65,10 +65,10 @@ class ofApp : public ofBaseApp{
         bool isRecordingMouseMouvements = false;
         bool isMakingScreenshotSection = false;*/
 
-        ofxAssimpModelLoader* importedModel;
-
+		ofxAssimpModelLoader* importedModel;
+        
         //GUI::ActionType actionMode = GUI::ActionType::Select;
-        int iteration;
+		int iteration;
 
-        Renderer* renderer;
+        //Renderer* renderer;
 };

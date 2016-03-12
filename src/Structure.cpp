@@ -23,7 +23,7 @@ void Structure::Draw()
 	ofScale(200, 200);
 	ofRotateY(iteration++);
 	shadersManager->GetShader(0)->begin();
-	for each (of3dPrimitive* shape in *this->elements)
+    for (of3dPrimitive* shape : *(this->elements))
 	{
 		ofEnableLighting();
 		ofSetColor(ofColor::orange);
@@ -55,7 +55,7 @@ void Structure::Draw()
 			ofLine(v.x, v.y, v.z, v.x + n.x*0.1f, v.y + n.y*0.1f, v.z + n.z*0.1f);
 		}
 	}
-	for each (Structure* structure in *this->children)
+    for(Structure* structure : *(this->children))
 	{
 		structure->Draw();
 	}

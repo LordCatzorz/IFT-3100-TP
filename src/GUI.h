@@ -17,6 +17,8 @@ public:
     void Draw();
     void Show();
     void Hide();
+    void SetCurrentMode(ActionType newMode);
+    ActionType GetCurrentMode();
     void AddImageOpenedListener(std::function<void(std::string)> fnc);
     void AddPrintscreenSelectionListener(std::function<void(std::string)> fnc);
     void AddPrintscreenTakenListener(std::function<void(std::string)> fnc);

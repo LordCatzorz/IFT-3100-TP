@@ -1,7 +1,7 @@
 #pragma once
 #include "ofMain.h"
 
-static class Shapes
+class Shapes
 {
 public:
 
@@ -19,6 +19,6 @@ public:
 
 private:
 
-	static void calculateNormals(of3dPrimitive* _3dprimitive);
+    static void calculateNormals(of3dPrimitive* _3dprimitive);
 
 };
