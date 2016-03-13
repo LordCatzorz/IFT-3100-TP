@@ -43,16 +43,6 @@ ofVec3f Object3D::GetCentre()
 	return (this->topLeftFrontPoint + this->bottomRightBackPoint)*0.5;
 }
 
-
-void Object3D::SetSelected(bool isSelected)
-{
-	this->shouldShowBorders = isSelected;
-}
-
-bool Object3D::GetSelected()
-{
-	return this->shouldShowBorders;
-}
 void Object3D::Draw()
 {
 	setBondingCube();

@@ -138,7 +138,7 @@ namespace Shapes2d
 		return false;
 	}
 
-	bool Rectangle::IsPointWithinBounds(int x, int y)
+	bool Rectangle::IsPointWithinBounds(float x, float y)
 	{
 		return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
 	}

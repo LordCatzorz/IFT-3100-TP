@@ -23,8 +23,6 @@ public:
 	void AddTranslation(ofVec3f _draggedPixelVector);
 	void AddRotation(ofVec3f _draggedPixelVector, int _axis);
 	void AddScale(bool _zoomIn);
-	void SetSelected(bool isSelected);
-	bool GetSelected();
 	void Draw();
 	bool IsPointWithinBounds(float x, float y);
 private:

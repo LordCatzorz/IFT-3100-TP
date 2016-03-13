@@ -207,7 +207,7 @@ void Renderer::ModeChangeCallback(GUI::ActionType newMode)
 
 void Renderer::mouseDownHandler(int x, int y, int button)
 {
-	/*bool clickedOnSelectedShape = false;
+	bool clickedOnSelectedShape = false;
 	for (Shape* selected : selectedShapes)
 	{
 		if (selected->IsPointWithinBounds(x, y))
@@ -227,7 +227,7 @@ void Renderer::mouseDownHandler(int x, int y, int button)
 				break;
 			}
 		}
-	}*/
+	}
 }
 void Renderer::mouseUpHandler(int x, int y, int button)
 {
@@ -245,7 +245,7 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 }
 void Renderer::mouseClickHandler(int x, int y, int button)
 {
-	/*clearSelectedShapes();
+	clearSelectedShapes();
 	for (Shape* visible : visibleShapes)
 	{
 		if (visible->IsPointWithinBounds(x, y))
@@ -254,7 +254,7 @@ void Renderer::mouseClickHandler(int x, int y, int button)
 			visible->SetSelected(true);
 			break;
 		}
-	}*/
+	}
 }
 void Renderer::mouseDragHandler(int x, int y, int button)
 {

@@ -11,8 +11,6 @@ public:
 	ofPoint * TopRightPoint() { return &topRightPoint; }
 	ofPoint * BottomLeftPoint() { return &bottomLeftPoint; }
 	ofPoint * BottomRightPoint() { return &bottomRightPoint; }
-	void SetSelected(bool isSelected) { shouldShowBorders = isSelected; }
-	bool GetSelected() { return shouldShowBorders; }
 
 	virtual bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2) = 0;
 	virtual void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false) = 0;
@@ -22,7 +20,6 @@ protected:
 
 	int         borderSize = 10, xOffset = 0, yOffset = 0;
 	double      angleOffset = 0, referenceAngleOffset = 0, previousAngle = 0;
-	bool        shouldShowBorders = false;
 	ofRectangle horizontalBorder1,
 		horizontalBorder2,
 		verticalBorder1,

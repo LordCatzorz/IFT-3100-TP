@@ -139,7 +139,7 @@ namespace Shapes2d
 		return false;
 	}
 
-	bool Triangle::IsPointWithinBounds(int x, int y)
+	bool Triangle::IsPointWithinBounds(float x, float y)
 	{
 		return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
 	}
