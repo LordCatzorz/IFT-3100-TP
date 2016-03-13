@@ -6,11 +6,11 @@
 #endif
 
 #include "ofMain.h"
-#include "Shape.h"
+#include "Shape2D.h"
 #include <math.h>
 #include <stdlib.h>
 
-class Image: public Shape
+class Image: public Shape2D
 {
 public:
 	Image(string imageName);
@@ -20,7 +20,7 @@ public:
     ofPoint *   TopRightPoint();
     ofPoint *   BottomLeftPoint();
     ofPoint *   BottomRightPoint();
-    bool        IsPointWithinBounds(int x, int y);
+    bool        IsPointWithinBounds(float x, float y);
     bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2);
     void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
     void        SetSelected(bool isSelected);

@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+Shape2D* downCast2D;
+Shape3D* downCast3D;
 
 
 Renderer::Renderer()
@@ -222,13 +224,19 @@ void Renderer::mouseDownHandler(int x, int y, int button)
 			}
 		}
 	}
-
 }
 void Renderer::mouseUpHandler(int x, int y, int button)
 {
 	for (Shape* selected : selectedShapes)
 	{
-		selected->AffectVector(x, y, mouseWatcher->CurretVector(), false);
+		if (downCast2D = dynamic_cast<Shape2D*>(selected))
+		{
+			downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), false);
+		}
+		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
+		{
+			//TODO::Implement;
+		}
 	}
 }
 void Renderer::mouseClickHandler(int x, int y, int button)
@@ -250,7 +258,16 @@ void Renderer::mouseDragHandler(int x, int y, int button)
 	{
 	case GUI::Edit:
 		for (Shape * selected : selectedShapes)
-			selected->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2);
+		{
+			if (downCast2D = dynamic_cast<Shape2D*>(selected))
+			{
+				downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2);
+			}
+			else if (downCast3D = dynamic_cast<Shape3D*>(selected))
+			{
+				//TODO::Implement;
+			}
+		}
 		break;
 	default:
 		break;

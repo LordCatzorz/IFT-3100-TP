@@ -8,7 +8,7 @@
 #include "Shape.h"
 class Structure;
 
-class Object3D : public Shape3D, public ofMatrix4x4, public Shape
+class Object3D : public Shape3D, public ofMatrix4x4
 {
 public:
 	Object3D();
@@ -26,27 +26,7 @@ public:
 	void SetSelected(bool isSelected);
 	bool GetSelected();
 	void Draw();
-
-	//// Inherited via Shape
-	ofPoint * TopLeftPoint();
-
-	ofPoint * TopRightPoint();
-
-	ofPoint * BottomLeftPoint();
-
-	ofPoint * BottomRightPoint();
-
-	bool IsPointWithinBounds(int x, int y);
-
-	bool DoesRectangleOverlap(int x1, int y1, int x2, int y2);
-
-	void AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
-
-	//void SetSelected(bool isSelected);
-
-	//bool GetSelected();
-
-	//void Draw();
+	bool IsPointWithinBounds(float x, float y);
 private:
 	ofPoint getScreenPosition(ofVec3f _point);
 	ofPoint getWorldPosition(ofVec3f _point);
@@ -74,8 +54,6 @@ private:
 		bottomLeftPoint,
 		bottomRightPoint;
 
-
-	bool        isPointInsideRectangle(int x, int y, const ofRectangle & rectangle);
 
 	Structure* parent;
 

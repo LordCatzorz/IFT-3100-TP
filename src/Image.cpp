@@ -84,7 +84,7 @@ void Image::Draw(){
     ofEnableDepthTest();
 }
 
-bool Image::IsPointWithinBounds(int x, int y){
+bool Image::IsPointWithinBounds(float x, float y){
     return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
 }
 
@@ -99,27 +99,27 @@ bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wo
     ofPoint * p5 = new ofPoint();
     ofPoint * p6 = new ofPoint();
 
-    Shape::translatePoint(topLeftPoint.x, topLeftPoint.y, angleOffset - 360, p5);
+    Shape2D::translatePoint(topLeftPoint.x, topLeftPoint.y, angleOffset - 360, p5);
 
     ofRectangle * boundingBox = new ofRectangle(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y);
 
 
-    Shape::translatePoint((x1 - xOffset), (y1 - yOffset), 360 - angleOffset, p1);
-    Shape::translatePoint((x2 - xOffset), (y1 - yOffset), 360 - angleOffset, p2);
-    Shape::translatePoint((x1 - xOffset), (y2 - yOffset), 360 - angleOffset, p3);
-    Shape::translatePoint((x2 - xOffset), (y2 - yOffset), 360 - angleOffset, p4);
+    Shape2D::translatePoint((x1 - xOffset), (y1 - yOffset), 360 - angleOffset, p1);
+    Shape2D::translatePoint((x2 - xOffset), (y1 - yOffset), 360 - angleOffset, p2);
+    Shape2D::translatePoint((x1 - xOffset), (y2 - yOffset), 360 - angleOffset, p3);
+    Shape2D::translatePoint((x2 - xOffset), (y2 - yOffset), 360 - angleOffset, p4);
 
     ofRectangle * selectionBox = new ofRectangle(x1, y1, x2 - x1, y2 - y1);
 
-    output = Shape::DoEdgesIntersect(*p1, *p2, topLeftPoint, topRightPoint) ||
-            Shape::DoEdgesIntersect(*p1, *p2, topLeftPoint, bottomLeftPoint) ||
-            Shape::DoEdgesIntersect(*p1, *p2, bottomLeftPoint, bottomRightPoint) ||
-            Shape::DoEdgesIntersect(*p1, *p2, topRightPoint, bottomRightPoint) ||
+    output = Shape2D::DoEdgesIntersect(*p1, *p2, topLeftPoint, topRightPoint) ||
+            Shape2D::DoEdgesIntersect(*p1, *p2, topLeftPoint, bottomLeftPoint) ||
+            Shape2D::DoEdgesIntersect(*p1, *p2, bottomLeftPoint, bottomRightPoint) ||
+            Shape2D::DoEdgesIntersect(*p1, *p2, topRightPoint, bottomRightPoint) ||
 
-            Shape::DoEdgesIntersect(*p3, *p4, topLeftPoint, topRightPoint) ||
-            Shape::DoEdgesIntersect(*p3, *p4, topLeftPoint, bottomLeftPoint) ||
-            Shape::DoEdgesIntersect(*p3, *p4, bottomLeftPoint, bottomRightPoint) ||
-            Shape::DoEdgesIntersect(*p3, *p4, topRightPoint, bottomRightPoint) ||
+            Shape2D::DoEdgesIntersect(*p3, *p4, topLeftPoint, topRightPoint) ||
+            Shape2D::DoEdgesIntersect(*p3, *p4, topLeftPoint, bottomLeftPoint) ||
+            Shape2D::DoEdgesIntersect(*p3, *p4, bottomLeftPoint, bottomRightPoint) ||
+            Shape2D::DoEdgesIntersect(*p3, *p4, topRightPoint, bottomRightPoint) ||
 
             isPointInsideRectangle(x1, y1, *boundingBox) ||
             isPointInsideRectangle(x2, y2, *boundingBox) ||
@@ -198,7 +198,7 @@ void Image::refreshBorders(){
 bool Image::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
 
     ofPoint * translated = new ofPoint();
-    Shape::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, translated);
+    Shape2D::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, translated);
     bool output = translated->x>= rectangle.getX() && translated->x <= rectangle.getX() + rectangle.getWidth() &&
             translated->y>= rectangle.getY() && translated->y <= rectangle.getY() + rectangle.getHeight();
     delete translated;

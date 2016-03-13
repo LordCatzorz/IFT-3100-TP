@@ -43,163 +43,6 @@ ofVec3f Object3D::GetCentre()
 	return (this->topLeftFrontPoint + this->bottomRightBackPoint)*0.5;
 }
 
-ofPoint * Object3D::TopLeftPoint()
-{
-	setBondingCube();
-	return &topLeftPoint;
-}
-
-ofPoint * Object3D::TopRightPoint()
-{
-	setBondingCube();
-	return &topRightPoint;
-}
-
-ofPoint * Object3D::BottomLeftPoint()
-{
-	setBondingCube();
-	return &bottomLeftPoint;;
-}
-
-ofPoint * Object3D::BottomRightPoint()
-{
-	setBondingCube();
-	return &bottomRightPoint;
-}
-
-bool Object3D::IsPointWithinBounds(int x, int y)
-{
-	setBondingCube();
-	return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
-}
-
-bool Object3D::DoesRectangleOverlap(int x1, int y1, int x2, int y2)
-{//TODO: this wont work if the selection rectangle goes trough inside teh shape and parallel to 2 sides of the shape
-	setBondingCube();
-	bool output = false;
-
-	ofPoint * p1 = new ofPoint();
-	ofPoint * p2 = new ofPoint();
-	ofPoint * p3 = new ofPoint();
-	ofPoint * p4 = new ofPoint();
-
-	ofPoint * p5 = new ofPoint();
-	ofPoint * p6 = new ofPoint();
-
-	Shape::translatePoint(topLeftPoint.x, topLeftPoint.y, angleOffset - 360, p5);
-
-	ofRectangle * boundingBox = new ofRectangle(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y);
-
-
-	Shape::translatePoint((x1 - xOffset), (y1 - yOffset), 360 - angleOffset, p1);
-	Shape::translatePoint((x2 - xOffset), (y1 - yOffset), 360 - angleOffset, p2);
-	Shape::translatePoint((x1 - xOffset), (y2 - yOffset), 360 - angleOffset, p3);
-	Shape::translatePoint((x2 - xOffset), (y2 - yOffset), 360 - angleOffset, p4);
-
-	ofRectangle * selectionBox = new ofRectangle(x1, y1, x2 - x1, y2 - y1);
-
-	output = Shape::DoEdgesIntersect(*p1, *p2, topLeftPoint, topRightPoint) ||
-		Shape::DoEdgesIntersect(*p1, *p2, topLeftPoint, bottomLeftPoint) ||
-		Shape::DoEdgesIntersect(*p1, *p2, bottomLeftPoint, bottomRightPoint) ||
-		Shape::DoEdgesIntersect(*p1, *p2, topRightPoint, bottomRightPoint) ||
-
-		Shape::DoEdgesIntersect(*p3, *p4, topLeftPoint, topRightPoint) ||
-		Shape::DoEdgesIntersect(*p3, *p4, topLeftPoint, bottomLeftPoint) ||
-		Shape::DoEdgesIntersect(*p3, *p4, bottomLeftPoint, bottomRightPoint) ||
-		Shape::DoEdgesIntersect(*p3, *p4, topRightPoint, bottomRightPoint) ||
-
-		isPointInsideRectangle(x1, y1, *boundingBox) ||
-		isPointInsideRectangle(x2, y2, *boundingBox) ||
-
-		(p5->x >= selectionBox->x && p5->x <= selectionBox->x + selectionBox->width &&
-			p5->y >= selectionBox->y && p5->y <= selectionBox->y + selectionBox->height);
-
-	/*isPointInsideRectangle(p5->x - xOffset - xOffset, p5->y - yOffset - yOffset, *selectionBox) ||
-	isPointInsideRectangle(bottomRightPoint.x, bottomRightPoint.y, *selectionBox);*/
-
-	delete p1;
-	delete p2;
-	delete p3;
-	delete p4;
-	delete boundingBox;
-	delete selectionBox;
-
-	return output;
-}
-
-void Object3D::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation)
-{
-	setBondingCube();
-	if (isRotation)
-	{
-		double side = (double) (x - xOffset - topLeftPoint.x);
-		double adj = (double) (y - yOffset - topLeftPoint.y);
-
-		double currentAngle = atan((adj / side)) * 180 / M_PI;
-
-
-		if (referenceAngleOffset <= 0)
-		{
-			referenceAngleOffset = currentAngle;
-			if (side < 0)
-			{
-				referenceAngleOffset += 180;
-			}
-			angleOffset -= referenceAngleOffset;
-		}
-
-		if (side < 0)
-		{
-			currentAngle = currentAngle - 180;
-		}
-		angleOffset += currentAngle - prevAngle;
-
-		prevAngle = currentAngle;
-
-		angleOffset = fmod(angleOffset, 360);
-		//this->glRotate(angleOffset, 0, 0, 1);
-	}
-	else
-	{
-		prevAngle = referenceAngleOffset = 0;
-		if (isPointInsideRectangle(x, y, horizontalBorder1))
-		{
-			topLeftPoint.y += actionVector->y;
-			topRightPoint.y += actionVector->y;
-		}
-		else if (isPointInsideRectangle(x, y, horizontalBorder2))
-		{
-			bottomLeftPoint.y += actionVector->y;
-			bottomRightPoint.y += actionVector->y;
-		}
-		else if (isPointInsideRectangle(x, y, verticalBorder1))
-		{
-			topLeftPoint.x += actionVector->x;
-			bottomLeftPoint.x += actionVector->x;
-		}
-		else if (isPointInsideRectangle(x, y, verticalBorder2))
-		{
-			topRightPoint.x += actionVector->x;
-			bottomRightPoint.x += actionVector->x;
-		}
-		else
-		{//Not trying to resize
-
-			ofVec3f translation;
-			ofQuaternion rotation;
-			ofVec3f scale;
-			ofQuaternion so;
-			this->getFinalTransformationMatrix().decompose(translation, rotation, scale, so);
-			xOffset += actionVector->x;
-			yOffset += actionVector->y;
-			translation += getWorldPosition(ofVec2f(xOffset, yOffset));
-			this->setTranslation(translation);
-			//this->glTranslate(xOffset, yOffset, 0);
-		}
-		refreshBorders();
-	}
-}
-
 
 void Object3D::SetSelected(bool isSelected)
 {
@@ -242,16 +85,11 @@ void Object3D::Draw()
 	}
 }
 
-bool Object3D::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle)
+bool Object3D::IsPointWithinBounds(float x, float y)
 {
-	ofPoint * translated = new ofPoint();
-	Shape::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, translated);
-	bool output = translated->x >= rectangle.getX() && translated->x <= rectangle.getX() + rectangle.getWidth() &&
-		translated->y >= rectangle.getY() && translated->y <= rectangle.getY() + rectangle.getHeight();
-	delete translated;
-
-	return output;
+	return (x > this->topLeftPoint.x && x < this->bottomRightPoint.x && y >this->topLeftPoint.y && x < this->bottomRightPoint.y);
 }
+
 
 ofMatrix4x4 Object3D::getFinalTransformationMatrix()
 {

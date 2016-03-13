@@ -1,7 +1,6 @@
 #pragma once
-#include "ofMain.h"
-
-class Shape3D 
+#include "Shape.h"
+class Shape3D : public Shape
 {
 public:
 	virtual void AddTranslation(ofVec3f _draggedPixelVector) = 0;
