@@ -50,14 +50,19 @@ void Object3D::Draw()
 	float f;
 	ofVec3f v;
 	rotation.getRotate(f, v);
-
 	ofTranslate(translation);
 	ofScale(scale.x, scale.y, scale.z);
 	ofRotate(f, v.x, v.y, v.z);
-
+	
 	//ofRotate(rot)
 	ofSetColor(255);
 	this->object->draw();
+	ofSetColor(0);
+	ofScale(1.001, 1.001, 1.001);
+	ofDisableLighting();
+	this->parent->shadersManager->DisableShaders();
+	this->object->drawWireframe();
+	this->parent->shadersManager->EnableShaders();
 	ofPopMatrix();
 	if (shouldShowBorders)
 	{

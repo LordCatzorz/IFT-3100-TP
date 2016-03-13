@@ -68,3 +68,19 @@ ofLight * ShadersManager::GetLight(int _position)
 		return NULL;
 	}
 }
+
+void ShadersManager::EnableShaders()
+{
+	for (int i = 0; i < this->shaders->size(); i++)
+	{
+		this->shaders->operator[](i)->begin();
+	}
+}
+
+void ShadersManager::DisableShaders()
+{
+	for (int i = 0; i < this->shaders->size(); i++)
+	{
+		this->shaders->operator[](i)->end();
+	}
+}

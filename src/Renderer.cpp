@@ -67,12 +67,12 @@ void Renderer::TestZoomOut()
 
 void Renderer::TestRotateZ()
 {
-	this->sceneStructure->GetElement(0)->AddRotation(ofVec3f(25, 10, 0), 2);
+	this->sceneStructure->GetElement(0)->AddRotation(ofVec3f(25, 10, 0), 1);
 }
 
 void Renderer::TestRotateZ2()
 {
-	this->sceneStructure->GetElement(0)->AddRotation(ofVec3f(-25, 10), 2);
+	this->sceneStructure->GetElement(0)->AddRotation(ofVec3f(25, 10), 2);
 }
 
 void Renderer::Setup()
@@ -98,12 +98,12 @@ void Renderer::Setup()
 	ofShader* colorFillShader = new ofShader();
 	this->sceneStructure->shadersManager->AddShader(colorFillShader);
 	colorFillShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
-    Object3D* obj = new Object3D(Shapes::createCube()->getMeshPtr());//TODO: reenable
-    obj->glTranslate(500, 500, 0);
-    obj->glScale(200, 200, 200);
-    obj->glRotate(45, 0, 1, 0.5);
-    this->visibleShapes.push_back(obj);
-    this->sceneStructure->AddElement(obj);
+	Object3D* obj = new Object3D(Shapes::createDodecahedron()->getMeshPtr());
+	obj->glTranslate(500, 500, 0);
+	obj->glScale(200, 200, 200);
+	//obj->glRotate(45, 0, 0, -0.5);
+	this->visibleShapes.push_back(obj);
+	this->sceneStructure->AddElement(obj);
 
     reset();
     //ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
@@ -111,7 +111,7 @@ void Renderer::Setup()
 
 void Renderer::Update()
 {
-	((Object3D*)(this->sceneStructure->GetElement(0)))->glRotate(1, 0, 1, 0);
+	//((Object3D*)(this->sceneStructure->GetElement(0)))->glRotate(1, 0, 1, 0);
 	ofPushMatrix();
 	ofShader* shader = this->sceneStructure->shadersManager->GetShader(0);
 	shader->begin();

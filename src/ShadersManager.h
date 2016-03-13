@@ -16,6 +16,9 @@ public:
 	ofShader* GetShader(int _position);
 	ofLight* GetLight(int _position);
 
+	void EnableShaders();
+	void DisableShaders();
+
 private:
 	std::vector<ofLight*>* lights;
 	std::vector<ofShader*>* shaders;
