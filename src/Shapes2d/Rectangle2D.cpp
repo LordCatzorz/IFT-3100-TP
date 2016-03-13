@@ -1,16 +1,16 @@
-#include "Triangle.h"
+#include "Rectangle2D.h"
 
 
-    Triangle2D::Triangle2D()
-    {
+Rectangle2D::Rectangle2D()
+{
     topLeftPoint.set(INT_MIN, INT_MIN);
     topRightPoint.set(INT_MIN, INT_MIN);
     bottomLeftPoint.set(INT_MIN, INT_MIN);
     bottomRightPoint.set(INT_MIN, INT_MIN);
-    }
+   }
 
-void Triangle2D::drawShape(){
-    ofDrawTriangle(point1, point2, point3);
+void Rectangle2D::drawShape(){
+    ofDrawRectangle(point1, point2.x - point1.x, point4.y - point2.y);
     /*ofDisableDepthTest();
     ofPushMatrix();
     if(parentShape != nullptr)
@@ -19,8 +19,8 @@ void Triangle2D::drawShape(){
         ofTranslate(xOffset, yOffset);
     ofRotate(angleOffset);
     ofFill();
-    ofSetColor(drawColor);
-    ofDrawTriangle(point1, point2, point3);
+    ofSetColor(0);
+    ofDrawRectangle(point1, point2.x - point1.x, point4.y - point2.y);
     if(shouldShowBorders){
         ofFill();
         ofSetColor(ofColor::grey);
@@ -30,14 +30,12 @@ void Triangle2D::drawShape(){
         ofDrawRectangle(verticalBorder2);
     }else{
     }
-    for(Shape * child : children)
-        child->Draw();
     ofPopMatrix();
 
     ofEnableDepthTest();*/
 }
 
-void Triangle2D::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
+void Rectangle2D::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
 
 
     if(isRotation){
@@ -79,19 +77,14 @@ void Triangle2D::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotat
             bottomRightPoint.x += actionVector->x;
         }else{//Not trying to resize
             xOffset += actionVector->x; yOffset += actionVector->y;
-            for(Shape2D * child : children){
-                child->AffectVector(x, y, actionVector, isRotation);
-            }
         }
 
         refreshBorders();
         refreshPoints();
-
     }
-
 }
 
-void Triangle2D::Create(int x1, int y1, int width, int height){
+void Rectangle2D::Create(int x1, int y1, int width, int height){
 
     xOffset = x1;
     yOffset = y1;
@@ -104,34 +97,40 @@ void Triangle2D::Create(int x1, int y1, int width, int height){
     }else{
 
         point1.x = 0;
-        point1.y = height;
-
-        point2.x = (int)(width / 2);
+        point1.y = 0;
+        point2.x = width;
         point2.y = 0;
-
-        point3.x = width;
+        point3.x = 0;
         point3.y = height;
+        point4.x = width;
+        point4.y = height;
 
         topLeftPoint.set(0, 0);
-        topRightPoint.set(point3.x > point1.x ? point3.x : point1.x, 0);
-        bottomLeftPoint.set(0, point3.y > point1.y ? point3.y : point1.y);
-        bottomRightPoint.set(point3.x > point1.x ? point3.x : point1.x, point3.y > point1.y ? point3.y : point1.y);
+        topRightPoint.set(point4.x > point1.x ? point4.x : point1.x, 0);
+        bottomLeftPoint.set(0, point4.y > point1.y ? point4.y : point1.y);
+        bottomRightPoint.set(point4.x > point1.x ? point4.x : point1.x, point4.y > point1.y ? point4.y : point1.y);
     }
     refreshBorders();
 }
 
-bool Triangle2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2){
+bool Rectangle2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2){
     return false;
 }
 
-bool Triangle2D::IsPointWithinBounds(int x, int y){
+bool Rectangle2D::IsPointWithinBounds(int x, int y){
     return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
 }
 
-bool Triangle2D::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
+bool Rectangle2D::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
 
     ofPoint * traslated = new ofPoint();
-    Shape2D::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, traslated);
+
+    if(parentShape != nullptr)
+        ofTranslate(parentXOffset, parentYOffset);
+    else
+       Shape2D::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, traslated);
+
+
     bool output = traslated->x>= rectangle.getX() && traslated->x <= rectangle.getX() + rectangle.getWidth() &&
             traslated->y>= rectangle.getY() && traslated->y <= rectangle.getY() + rectangle.getHeight();
     delete traslated;
@@ -140,12 +139,11 @@ bool Triangle2D::isPointInsideRectangle(int x, int y, const ofRectangle & rectan
 
 }
 
-void Triangle2D::refreshPoints(){
+void Rectangle2D::refreshPoints(){
 
-    point1.set(bottomLeftPoint.x, bottomLeftPoint.y);
-    point2.set(bottomLeftPoint.x + (int)((bottomRightPoint.x - bottomLeftPoint.x) / 2), topLeftPoint.y);
-    point3.set(bottomRightPoint.x, bottomRightPoint.y);
-
+    point1.set(topLeftPoint.x, topLeftPoint.y);
+    point2.set(topRightPoint.x, topRightPoint.y);
+    point3.set(bottomLeftPoint.x, bottomLeftPoint.y);
+    point4.set(bottomRightPoint.x, bottomRightPoint.y);
 }
-
 

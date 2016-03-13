@@ -27,6 +27,8 @@ public:
     void AddCreateTriangleListener(std::function<void(std::string)> fnc);
     void AddCreateRectangleListener(std::function<void(std::string)> fnc);
     void AddCreateEllipseListener(std::function<void(std::string)> fnc);
+    void AddAssociateShapesListener(std::function<void(std::string)> fnc);
+    void AddDissociateShapesListener(std::function<void(std::string)> fnc);
     string RequestSaveFilePath(string defaultName);
 private:
 
@@ -39,6 +41,8 @@ private:
     ofxButton drawTriangle;
     ofxButton drawRectangle;
     ofxButton drawEllipse;
+    ofxButton associateShapes;
+    ofxButton dissociateShapes;
     ofxToggle selectionToggle, editToggle;
     ofxPanel gui;
 
@@ -51,6 +55,8 @@ private:
     void createTriangleCaller();
     void createRectangleCaller();
     void createEllipseCaller();
+    void associateShapesCaller();
+    void dissociateShapesCaller();
     ofFileDialogResult requestUsrFile();
     ofFileDialogResult saveUsrFile(string defaultName);
     std::function<void(std::string)> imageOpenCallback;
@@ -60,6 +66,8 @@ private:
     std::function<void(std::string)> createTriangleCallback;
     std::function<void(std::string)> createRectangleCallback;
     std::function<void(std::string)> createEllipseCallback;
+    std::function<void(std::string)> associateShapesCallback;
+    std::function<void(std::string)> dissociateShapesCallback;
     std::function<void(GUI::ActionType)> modeChangedCallback;
 	
 };

@@ -192,6 +192,7 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
+
 	if (key == 'w')
 	{
 		this->renderer->TestMoveUp();
@@ -229,12 +230,13 @@ void ofApp::keyPressed(int key)
 		this->renderer->TestMoveDiag();
 	}
 
-
+    this->renderer->KeyDown(key);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key)
 {
+    this->renderer->KeyUp(key);
 }
 
 //--------------------------------------------------------------

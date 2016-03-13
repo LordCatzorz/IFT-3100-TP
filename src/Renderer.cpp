@@ -13,10 +13,11 @@ Renderer::Renderer()
     Gui->AddPrintscreenTakenListener(std::bind(&Renderer::PrintScreenTakenCallback, this, std::placeholders::_1));
     Gui->AddPrintscreenSelectionListener(std::bind(&Renderer::PrintScreenSectionCallback, this, std::placeholders::_1));
     //Gui->AddObjFileImportedListener(std::bind(&ofApp::ImportObjFileCallback, this, std::placeholders::_1));
-    Gui->AddModeChangedListener(std::bind(&Renderer::ModeChangeCallback, this, std::placeholders::_1));
+    //Gui->AddModeChangedListener(std::bind(&Renderer::ModeChangeCallback, this, std::placeholders::_1));
     Gui->AddCreateTriangleListener(std::bind(&Renderer::drawTriangleManager, this, std::placeholders::_1));
     Gui->AddCreateRectangleListener(std::bind(&Renderer::drawRectangleManager, this, std::placeholders::_1));
     Gui->AddCreateEllipseListener(std::bind(&Renderer::drawEllipseManager, this, std::placeholders::_1));
+    Gui->AddAssociateShapesListener(std::bind(&Renderer::AssociateShapesCallback, this, std::placeholders::_1));
 
 }
 
@@ -97,12 +98,12 @@ void Renderer::Setup()
 	ofShader* colorFillShader = new ofShader();
 	this->sceneStructure->shadersManager->AddShader(colorFillShader);
 	colorFillShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
-	Object3D* obj = new Object3D(Shapes::createCube()->getMeshPtr());
-	obj->glTranslate(500, 500, 0);
-	obj->glScale(200, 200, 200);
-	obj->glRotate(45, 0, 1, 0.5);
-	this->visibleShapes.push_back(obj);
-	this->sceneStructure->AddElement(obj);
+    Object3D* obj = new Object3D(Shapes::createCube()->getMeshPtr());//TODO: reenable
+    obj->glTranslate(500, 500, 0);
+    obj->glScale(200, 200, 200);
+    obj->glRotate(45, 0, 1, 0.5);
+    this->visibleShapes.push_back(obj);
+    this->sceneStructure->AddElement(obj);
 
     reset();
     //ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
@@ -131,11 +132,17 @@ void Renderer::Update()
 void Renderer::Draw()
 {
 	ofPushMatrix();
-	this->sceneStructure->Draw();
+    this->sceneStructure->Draw();
 	mouseWatcher->Draw();
 	Gui->Draw();
-	for (Shape * toShow : visibleShapes)
-		toShow->Draw();
+    Gui->Draw();
+    for(Shape * toShow : visibleShapes){
+        if (downCast2D = dynamic_cast<Shape2D*>(toShow))
+        {
+            if(downCast2D->GetParent() == nullptr)
+                downCast2D->Draw();
+        }
+    }
 	ofPopMatrix();
 }
 
@@ -148,9 +155,9 @@ void Renderer::FileOpenCallback(string param)
 	saveFile("./data" + imageName, input);
 	input.close();
 
-	Image * newImage = new Image(imageName.substr(1));
-	newImage->AffectVector((int) (newImage->TopRightPoint()->x / 2), (int) (newImage->BottomLeftPoint()->y / 2), new ofVec3f(100, 100));
-	visibleShapes.push_back(newImage);
+    /*Image * newImage = new Image(imageName.substr(1));
+    newImage->AffectVector((int)(newImage->TopRightPoint()->x /2), (int)(newImage->BottomLeftPoint()->y /2), new ofVec3f(100, 100));
+    addVisibleShape(newImage);*/
 }
 
 void Renderer::PrintScreenTakenCallback(string param)
@@ -163,13 +170,57 @@ void Renderer::PrintScreenSectionCallback(string arg)
 	mouseWatcher->AddMouseUpDelegate(screenshotSectionDelegate);
 }
 
-void Renderer::screenSectionSectionWorker(int x, int y, int button)
-{
+void Renderer::AssociateShapesCallback(string arg){
+    if(selectedShapes.size() <= 1)
+        return;
+    Shape2D* parent;
+    if (parent = dynamic_cast<Shape2D*>(selectedShapes.front()))
+    {
+        std::vector<Shape*>::iterator itr = selectedShapes.begin();
+        itr++;
+        for(itr; itr != selectedShapes.end(); ++itr){
+            Shape2D* child;
+            if (child = dynamic_cast<Shape2D*>(*itr)){
+                parent->AddChild(child);
+            }
+        }
+        clearSelectedShapes();
+    }
+    //Shape * parent = selectedShapes.front();
 
-	ScreenshotManager::TakeScreenshot(Gui->RequestSaveFilePath("captureDEcran"), mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
-		x - mouseWatcher->TopLeftPoint()->x, y - mouseWatcher->TopLeftPoint()->y);
-	mouseWatcher->RemoveMouseUpDelegate(screenshotSectionDelegate);
-	mouseWatcher->SetShowSelectionZone(Gui->GetCurrentMode() == GUI::Select);
+}
+
+void Renderer::KeyDown(int key){
+    if(pressedKeys.size() == 0)
+        pressedKeys.push_back(key);
+    else{
+        bool isInArray = false;
+        for(int pkey : pressedKeys)
+            if(pkey == key){
+                isInArray = true;
+                break;
+            }
+        if(!isInArray)
+            pressedKeys.push_back(key);
+    }
+}
+
+void Renderer::KeyUp(int key){
+    for(std::vector<int>::iterator itr = pressedKeys.begin(); itr != pressedKeys.end(); itr++){
+        if((*itr) == key){
+            pressedKeys.erase(itr);
+            break;
+        }
+    }
+}
+
+void Renderer::screenSectionSectionWorker(int x, int y, int button){
+
+    ScreenshotManager::TakeScreenshot(Gui->RequestSaveFilePath("captureDEcran"), mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
+                                      x - mouseWatcher->TopLeftPoint()->x, y - mouseWatcher->TopLeftPoint()->y);
+    mouseWatcher->RemoveMouseUpDelegate(screenshotSectionDelegate);
+    //mouseWatcher->SetShowSelectionZone(Gui->GetCurrentMode() == GUI::Select);
+
 }
 
 void Renderer::SetMouseRecorder(MouseWatcher * mouseRecorder)
@@ -179,6 +230,39 @@ void Renderer::SetMouseRecorder(MouseWatcher * mouseRecorder)
 	mouseWatcher->AddMouseUpDelegate(mouseUpDelegate);
 	mouseWatcher->AddMouseClickDelegate(mouseClickDelegate);
 	mouseWatcher->AddMouseDragDelegate(mouseDragDelegate);
+}
+
+void Renderer::addVisibleShape(Shape * toAdd){
+    bool isInArray = false;
+    for(std::vector<Shape*>::iterator itr = visibleShapes.begin(); itr != visibleShapes.end() && !isInArray; itr++){
+        isInArray = toAdd == (*itr);
+    }
+    if(!isInArray)
+        visibleShapes.push_back(toAdd);
+}
+void Renderer::removeVisibleShape(Shape * toAdd){
+    for(std::vector<Shape*>::iterator itr = visibleShapes.end(); itr != visibleShapes.begin(); itr--){
+        if(*itr == toAdd){
+            visibleShapes.erase(itr);
+            break;
+        }
+    }
+}
+void Renderer::addSelectedShape(Shape * toAdd){
+    bool isInArray = false;
+    for(std::vector<Shape*>::iterator itr = selectedShapes.begin(); itr != selectedShapes.end() && !isInArray; itr++){
+        isInArray = toAdd == (*itr);
+    }
+    if(!isInArray)
+        selectedShapes.push_back(toAdd);
+}
+void Renderer::removeSelectedShape(Shape * toAdd){
+    for(std::vector<Shape*>::iterator itr = selectedShapes.end(); itr != selectedShapes.begin(); itr--){
+        if(*itr == toAdd){
+            selectedShapes.erase(itr);
+            break;
+        }
+    }
 }
 
 void Renderer::reset()
@@ -200,34 +284,32 @@ void Renderer::reset()
 	ofLog() << "<reset>";
 }
 
-void Renderer::ModeChangeCallback(GUI::ActionType newMode)
+
+/*void Renderer::ModeChangeCallback(GUI::ActionType newMode)
 {
 	mouseWatcher->SetShowSelectionZone(newMode == GUI::Select);
-}
+}*/
 
 void Renderer::mouseDownHandler(int x, int y, int button)
 {
-	/*bool clickedOnSelectedShape = false;
-	for (Shape* selected : selectedShapes)
-	{
-		if (selected->IsPointWithinBounds(x, y))
-		{
-			clickedOnSelectedShape = true;
-			break;
-		}
-	}
-	if (!clickedOnSelectedShape)
-	{
-		for (Shape* visible : visibleShapes)
-		{
-			if (visible->IsPointWithinBounds(x, y))
-			{
-				selectedShapes.push_back(visible);
-				visible->SetSelected(true);
-				break;
-			}
-		}
-	}*/
+    /*
+    bool clickedOnSelectedShape = false;
+    for(Shape* selected : selectedShapes){
+        if(selected->IsPointWithinBounds(x, y)){
+            clickedOnSelectedShape = true;
+            break;
+        }
+    }
+    if(!clickedOnSelectedShape){
+        for(Shape* visible : visibleShapes){
+            if(visible->IsPointWithinBounds(x, y)){
+                addSelectedShape(visible);
+                visible->SetSelected(true);
+                break;
+            }
+        }
+    }
+*/
 }
 void Renderer::mouseUpHandler(int x, int y, int button)
 {
@@ -245,37 +327,32 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 }
 void Renderer::mouseClickHandler(int x, int y, int button)
 {
-	/*clearSelectedShapes();
-	for (Shape* visible : visibleShapes)
-	{
-		if (visible->IsPointWithinBounds(x, y))
-		{
-			selectedShapes.push_back(visible);
-			visible->SetSelected(true);
-			break;
-		}
-	}*/
+    /*bool isCtrlDown = false;
+    for(std::vector<int>::iterator itr = pressedKeys.begin(); !isCtrlDown && itr != pressedKeys.end(); itr++){
+        isCtrlDown = (*itr) == 768;
+    }
+    if(!isCtrlDown)
+        clearSelectedShapes();
+    for(Shape* visible : visibleShapes){
+        if(visible->IsPointWithinBounds(x, y)){
+            addSelectedShape(visible);
+            visible->SetSelected(true);
+            break;
+        }
+    }*/
 }
 void Renderer::mouseDragHandler(int x, int y, int button)
 {
-	switch (Gui->GetCurrentMode())
-	{
-	case GUI::Edit:
-		for (Shape * selected : selectedShapes)
-		{
-			if (downCast2D = dynamic_cast<Shape2D*>(selected))
-			{
-				downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2);
-			}
-			else if (downCast3D = dynamic_cast<Shape3D*>(selected))
-			{
-				//TODO::Implement;
-			}
-		}
-		break;
-	default:
-		break;
-	}
+    for(Shape * selected : selectedShapes){
+        if (downCast2D = dynamic_cast<Shape2D*>(selected))
+        {
+            downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2);
+        }
+        else if (downCast3D = dynamic_cast<Shape3D*>(selected))
+        {
+            //TODO::Implement;
+        }
+    }
 }
 
 void Renderer::saveFile(string path, std::ifstream & file)
@@ -300,13 +377,14 @@ void Renderer::clearSelectedShapes()
 }
 
 void Renderer::drawTriangleManager(string param){
+    clearSelectedShapes();
     if(shapeDelegateWorker != nullptr)
         mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
     delete shapeDelegateWorker;
     shapeDelegateWorker = nullptr;
 
     mouseWatcher->SetShowSelectionZone(false);
-    visibleShapes.push_back(new Shapes2d::Triangle());
+    addVisibleShape(new Triangle2D());
 
     (visibleShapes.back())->SetSelected(true);
     shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
@@ -315,13 +393,14 @@ void Renderer::drawTriangleManager(string param){
 }
 
 void Renderer::drawRectangleManager(string param){
+    clearSelectedShapes();
     if(shapeDelegateWorker != nullptr)
         mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
     delete shapeDelegateWorker;
     shapeDelegateWorker = nullptr;
 
     mouseWatcher->SetShowSelectionZone(false);
-    visibleShapes.push_back(new Shapes2d::Rectangle());
+    addVisibleShape(new Rectangle2D());
 
     (visibleShapes.back())->SetSelected(true);
     shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
@@ -330,13 +409,14 @@ void Renderer::drawRectangleManager(string param){
 }
 
 void Renderer::drawEllipseManager(string param){
+    clearSelectedShapes();
     if(shapeDelegateWorker != nullptr)
         mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
     delete shapeDelegateWorker;
     shapeDelegateWorker = nullptr;
 
     mouseWatcher->SetShowSelectionZone(false);
-    visibleShapes.push_back(new Shapes2d::Ellipse());
+    addVisibleShape(new Shapes2d::Ellipse());
 
     (visibleShapes.back())->SetSelected(true);
     shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
@@ -345,7 +425,10 @@ void Renderer::drawEllipseManager(string param){
 }
 
 void Renderer::drawShapeWorker(int x, int y, int button){
-    ((Shapes2d::Shapes2d * )visibleShapes.back())->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
+    if (downCast2D = dynamic_cast<Shape2D*>(visibleShapes.back()))
+    {
+        downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
+    }
 }
 
 void Renderer::unbindShapeWorkers(int x, int y, int button){
@@ -355,5 +438,5 @@ void Renderer::unbindShapeWorkers(int x, int y, int button){
     delete shapeDelegateWorker;
     shapeDelegateWorker = nullptr;
     (visibleShapes.back())->SetSelected(false);
-    mouseWatcher->SetShowSelectionZone(Gui->GetCurrentMode() == GUI::Select);
+    //mouseWatcher->SetShowSelectionZone(Gui->GetCurrentMode() == GUI::Select);
 }

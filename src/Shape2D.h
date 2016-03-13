@@ -1,9 +1,10 @@
-#ifndef SHAPE_H
-#define SHAPE_H
+#ifndef SHAPE2D_H
+#define SHAPE2D_H
 #include "Shape.h"
 #ifdef _WIN32
 #define M_PI PI
 #endif
+
 class Shape2D : public Shape
 {
 public:
@@ -11,18 +12,69 @@ public:
 	ofPoint * TopRightPoint() { return &topRightPoint; }
 	ofPoint * BottomLeftPoint() { return &bottomLeftPoint; }
 	ofPoint * BottomRightPoint() { return &bottomRightPoint; }
-	void SetSelected(bool isSelected) { shouldShowBorders = isSelected; }
-	bool GetSelected() { return shouldShowBorders; }
 
+    virtual void Create(int x1, int y1, int width, int height) = 0;
 	virtual bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2) = 0;
 	virtual void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false) = 0;
 
+    void        Draw(){/////////////////////
+        ofDisableDepthTest();
+        ofPushMatrix();
+        if(parentShape != nullptr)
+            ofTranslate(parentXOffset, parentYOffset);
+        else
+            ofTranslate(xOffset, yOffset);
+        ofRotate(angleOffset);
+        ofFill();
+        ofSetColor(drawColor);
+        drawShape();
+        if(shouldShowBorders){
+            ofFill();
+            ofSetColor(ofColor::grey);
+            ofDrawRectangle(horizontalBorder1);
+            ofDrawRectangle(horizontalBorder2);
+            ofDrawRectangle(verticalBorder1);
+            ofDrawRectangle(verticalBorder2);
+        }else{
+        }
+        for(Shape * child : children)
+            child->Draw();
+        ofPopMatrix();
+
+        ofEnableDepthTest();
+    }
+
+    void        SetColor(ofColor * newColor){drawColor = *newColor;}
+    Shape   *   GetParent(){ return  parentShape;}
+    void        AddChild(Shape2D * child){
+        if(child->parentShape == nullptr){
+            children.push_back(child);
+            child->notifyAttachedToParen(this);
+        }
+    }
+    void RemoveChild(Shape2D * child){
+        for(std::vector<Shape2D*>::iterator toDel = children.begin(); toDel != children.end(); toDel++){
+            if(*toDel == child){
+                (*toDel)->parentShape = nullptr;
+                (*toDel)->xOffset = (*toDel)->parentXOffset + xOffset;
+                (*toDel)->yOffset = (*toDel)->parentYOffset + yOffset;
+                children.erase(toDel);
+                break;
+            }
+        }
+    }
+
+    void ClearChildren(){
+        for(Shape2D * toDel : children){
+            toDel->parentShape = nullptr;
+        }
+        children.clear();
+    }
 
 protected:
 
-	int         borderSize = 10, xOffset = 0, yOffset = 0;
-	double      angleOffset = 0, referenceAngleOffset = 0, previousAngle = 0;
-	bool        shouldShowBorders = false;
+    int         borderSize = 10, xOffset = 0, yOffset = 0, parentXOffset = 0, parentYOffset = 0;
+    double      angleOffset = 0, referenceAngleOffset = 0, previousAngle = 0;
 	ofRectangle horizontalBorder1,
 		horizontalBorder2,
 		verticalBorder1,
@@ -31,6 +83,10 @@ protected:
 		topRightPoint,
 		bottomLeftPoint,
 		bottomRightPoint;
+
+    ofColor     drawColor = ofColor(0,0,0);
+    Shape       * parentShape = nullptr;
+    std::vector<Shape2D*> children;
 
 	void refreshBorders()
 	{
@@ -89,10 +145,15 @@ protected:
 		return output;
 	}
 private:
-	static double determinant(const ofPoint & p1, const ofPoint & p2)
-	{
-		return p1.x * p2.y - p1.y * p2.x;
-	}
+    static double determinant(const ofPoint & p1, const ofPoint & p2){
+        return p1.x * p2.y - p1.y * p2.x;
+    }
+    void notifyAttachedToParen(Shape2D * parent){
+        parentShape = parent;
+        parentXOffset = xOffset - parent->xOffset;
+        parentYOffset = yOffset - parent->yOffset;
+    }
+    virtual void        drawShape() = 0;
 };
 
-#endif // SHAPE_H
+#endif // SHAPE2D_H

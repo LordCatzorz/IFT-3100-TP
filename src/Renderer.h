@@ -8,7 +8,7 @@
 #include "ofxAssimpModelLoader.h"
 #include "Image.h"
 #include "Shapes2d/Triangle.h"
-#include "Shapes2d/Rectangle.h"
+#include "Shapes2d/Rectangle2D.h"
 #include "Shapes2d/Ellipse.h"
 
 class Renderer
@@ -34,6 +34,9 @@ public:
     void FileOpenCallback(string param);
     void PrintScreenTakenCallback(string param);
     void PrintScreenSectionCallback(string arg);
+    void AssociateShapesCallback(string arg);
+    void KeyDown(int key);
+    void KeyUp(int key);
 private:
 	Structure* sceneStructure;
 	float cameraOffset;
@@ -71,8 +74,7 @@ private:
 	bool isActiveLightSpot;
 
 	bool isFlipAxisY;
-
-	bool isVerbose;    
+    bool isVerbose;
 
     GUI* Gui;
     void ModeChangeCallback(GUI::ActionType newMode);
@@ -88,14 +90,18 @@ private:
 
     std::vector<Shape*> visibleShapes;
     std::vector<Shape*> selectedShapes;
+    std::vector<int> pressedKeys;
     void saveFile(string path, std::ifstream & file);
-
-
 
 	float oscillate(float time, float amplitude, float period, float shift, float offset)
 	{
 		return amplitude * sin((time - shift) * 2 * PI / period) + offset;
 	}
+
+    void addVisibleShape(Shape * toAdd);
+    void removeVisibleShape(Shape * toRemove);
+    void addSelectedShape(Shape * toAdd);
+    void removeSelectedShape(Shape * toRemove);
 
     void reset();
     void mouseDownHandler(int x, int y, int button);
