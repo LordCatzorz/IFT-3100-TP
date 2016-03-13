@@ -223,6 +223,10 @@ void ofApp::keyPressed(int key)
 	{
 		this->renderer->TestRotateZ();
 	}
+	else if (key == 't')
+	{
+		this->renderer->TestRotateZ2();
+	}
 	else if (key == 'f')
 	{
 		this->renderer->TestMoveDiag();

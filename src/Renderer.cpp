@@ -59,7 +59,12 @@ void Renderer::TestZoomOut()
 
 void Renderer::TestRotateZ()
 {
-	this->sceneStructure->GetElement(0)->AddRotation(ofVec3f(250, 10, 0), 2);
+	this->sceneStructure->GetElement(0)->AddRotation(ofVec3f(25, 10, 0), 2);
+}
+
+void Renderer::TestRotateZ2()
+{
+	this->sceneStructure->GetElement(0)->AddRotation(ofVec3f(-25, 10), 2);
 }
 
 void Renderer::Setup()

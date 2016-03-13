@@ -22,6 +22,7 @@ public:
 	void TestZoomIn();
 	void TestZoomOut();
 	void TestRotateZ();
+	void TestRotateZ2();
 
 	void Setup();
 	void Update();
