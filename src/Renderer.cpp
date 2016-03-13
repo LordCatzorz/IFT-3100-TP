@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
 
+
 Renderer::Renderer()
 {
 	this->sceneStructure = new Structure();
@@ -15,6 +16,50 @@ Renderer::Renderer()
 Renderer::~Renderer()
 {
 	delete this->sceneStructure;
+}
+
+void Renderer::TestMoveLeft()
+{
+	this->sceneStructure->GetElement(0)->AddTranslation(ofVec3f(-10, 0, 0));
+}
+
+void Renderer::TestMoveRight()
+{
+
+	this->sceneStructure->GetElement(0)->AddTranslation(ofVec3f(10, 0, 0));
+}
+
+void Renderer::TestMoveUp()
+{
+
+	this->sceneStructure->GetElement(0)->AddTranslation(ofVec3f(0, -10, 0));
+}
+
+void Renderer::TestMoveDown()
+{
+
+	this->sceneStructure->GetElement(0)->AddTranslation(ofVec3f(0, 10, 0));
+}
+
+void Renderer::TestMoveDiag()
+{
+
+	this->sceneStructure->GetElement(0)->AddTranslation(ofVec3f(10, 20, 0));
+}
+
+void Renderer::TestZoomIn()
+{
+	this->sceneStructure->GetElement(0)->AddScale(true);
+}
+
+void Renderer::TestZoomOut()
+{
+	this->sceneStructure->GetElement(0)->AddScale(false);
+}
+
+void Renderer::TestRotateZ()
+{
+	this->sceneStructure->GetElement(0)->AddRotation(ofVec3f(250, 10, 0), 2);
 }
 
 void Renderer::Setup()
@@ -36,7 +81,7 @@ void Renderer::Setup()
 	light->setDiffuseColor(ofColor(255, 255, 255));
 	light->setSpecularColor(ofColor(191, 191, 191));
 	light->setPointLight();
-    this->sceneStructure->shadersManager->AddLight(light);
+	this->sceneStructure->shadersManager->AddLight(light);
 
 	ofShader* colorFillShader = new ofShader();
 	this->sceneStructure->shadersManager->AddShader(colorFillShader);

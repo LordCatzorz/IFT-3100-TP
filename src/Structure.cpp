@@ -31,10 +31,10 @@ light->enable();
             ofTranslate(600, 600);
             ofRotateY(iteration++);
             ofScale(100,100,100);
-            for (of3dPrimitive* shape : *(this->elements))
+           /* for (of3dPrimitive* shape : *(this->elements))
             {
                 shape->draw();
-            }
+            }*/
             ofPopMatrix();
             shader->end();
     light->disable();

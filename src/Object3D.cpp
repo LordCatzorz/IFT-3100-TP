@@ -38,6 +38,11 @@ void Object3D::SetParent(Structure * _parent)
 	this->parent = _parent;
 }
 
+ofVec3f Object3D::GetCentre()
+{
+	return (this->topLeftFrontPoint + this->bottomRightBackPoint)*0.5;
+}
+
 ofPoint * Object3D::TopLeftPoint()
 {
 	setBondingCube();
@@ -153,26 +158,31 @@ void Object3D::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotatio
 
 		angleOffset = fmod(angleOffset, 360);
 		//this->glRotate(angleOffset, 0, 0, 1);
-	} else
+	}
+	else
 	{
 		prevAngle = referenceAngleOffset = 0;
 		if (isPointInsideRectangle(x, y, horizontalBorder1))
 		{
 			topLeftPoint.y += actionVector->y;
 			topRightPoint.y += actionVector->y;
-		} else if (isPointInsideRectangle(x, y, horizontalBorder2))
+		}
+		else if (isPointInsideRectangle(x, y, horizontalBorder2))
 		{
 			bottomLeftPoint.y += actionVector->y;
 			bottomRightPoint.y += actionVector->y;
-		} else if (isPointInsideRectangle(x, y, verticalBorder1))
+		}
+		else if (isPointInsideRectangle(x, y, verticalBorder1))
 		{
 			topLeftPoint.x += actionVector->x;
 			bottomLeftPoint.x += actionVector->x;
-		} else if (isPointInsideRectangle(x, y, verticalBorder2))
+		}
+		else if (isPointInsideRectangle(x, y, verticalBorder2))
 		{
 			topRightPoint.x += actionVector->x;
 			bottomRightPoint.x += actionVector->x;
-		} else
+		}
+		else
 		{//Not trying to resize
 
 			ofVec3f translation;
@@ -180,7 +190,7 @@ void Object3D::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotatio
 			ofVec3f scale;
 			ofQuaternion so;
 			this->getFinalTransformationMatrix().decompose(translation, rotation, scale, so);
-			xOffset += actionVector->x; 
+			xOffset += actionVector->x;
 			yOffset += actionVector->y;
 			translation += getWorldPosition(ofVec2f(xOffset, yOffset));
 			this->setTranslation(translation);
@@ -200,7 +210,6 @@ bool Object3D::GetSelected()
 {
 	return this->shouldShowBorders;
 }
-
 void Object3D::Draw()
 {
 	setBondingCube();
@@ -338,6 +347,60 @@ void Object3D::setBondingCube()
 	refreshBorders();
 }
 
+void Object3D::AddTranslation(ofVec3f _draggedPixelVector)
+{
+	ofVec3f vec = getWorldPosition(_draggedPixelVector);
+	this->setTranslation(vec + this->getTranslation());
+}
+
+void Object3D::AddRotation(ofVec3f _draggedPixelVector, int _axis)
+{
+	this->GetCentre();
+	float length = _draggedPixelVector.length();
+	if (abs(_draggedPixelVector.x) < abs(_draggedPixelVector.y))
+	{
+		if (_draggedPixelVector.y < 0)
+		{
+			length *= -1;
+		}
+	}
+	else
+	{
+		if (_draggedPixelVector.x < 0)
+		{
+			length *= -1;
+		}
+	}
+	double angle = atan((_draggedPixelVector.length() / ofGetWindowWidth())) * 180 / M_PI;
+	float a, x, y, z;
+	if (_axis == 0) // x
+	{
+		this->glRotate(angle, 1, 0, 0);
+	}
+	else if (_axis == 1) //y
+	{
+		this->glRotate(angle, 0, 1, 0);
+	}
+	else //z
+	{
+		this->glRotate(angle, 0, 0, 1);
+	}
+}
+
+void Object3D::AddScale(bool _zoomIn)
+{
+	if (_zoomIn)
+	{
+		this->preMultScale(ofVec3f(1.1));
+	}
+	else
+	{
+		this->preMultScale(ofVec3f((1 / 1.1)));
+	}
+
+}
+
+
 //http://webglfactory.blogspot.ca/2011/05/how-to-convert-world-to-screen.html
 ofPoint Object3D::getScreenPosition(ofVec3f _point)
 {
@@ -355,8 +418,8 @@ ofPoint Object3D::getScreenPosition(ofVec3f _point)
 //http://webglfactory.blogspot.ca/2011/05/how-to-convert-world-to-screen.html
 ofPoint Object3D::getWorldPosition(ofVec3f _point)
 {
-	ofVec3f point = this->getFinalTransformationMatrix().getInverse().preMult(_point);
-	ofVec3f point2 = this->getFinalTransformationMatrix().getInverse().postMult(_point);
+	ofVec3f point = this->parent->GetFinalTransformationMatrix().getInverse().preMult(_point);
+	ofVec3f point2 = this->parent->GetFinalTransformationMatrix().getInverse().postMult(_point);
 
 	return point;
 	//int winX = round(((point.x + 1) / 2.0) * ofGetWindowWidth());

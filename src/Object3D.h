@@ -4,10 +4,11 @@
 #define M_PI PI
 #endif
 
+#include "Shape3D.h"
 #include "Shape.h"
 class Structure;
 
-class Object3D : public Shape, public ofMatrix4x4
+class Object3D : public Shape3D, public ofMatrix4x4, public Shape
 {
 public:
 	Object3D();
@@ -17,8 +18,16 @@ public:
 	void LoadObject(ofMesh* _mesh);
 
 	void SetParent(Structure* _parent);
+	ofVec3f GetCentre();
+	// Inherited via Shape3D
+	void AddTranslation(ofVec3f _draggedPixelVector);
+	void AddRotation(ofVec3f _draggedPixelVector, int _axis);
+	void AddScale(bool _zoomIn);
+	void SetSelected(bool isSelected);
+	bool GetSelected();
+	void Draw();
 
-	// Inherited via Shape
+	//// Inherited via Shape
 	ofPoint * TopLeftPoint();
 
 	ofPoint * TopRightPoint();
@@ -33,11 +42,11 @@ public:
 
 	void AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
 
-	void SetSelected(bool isSelected);
+	//void SetSelected(bool isSelected);
 
-	bool GetSelected();
+	//bool GetSelected();
 
-	void Draw();
+	//void Draw();
 private:
 	ofPoint getScreenPosition(ofVec3f _point);
 	ofPoint getWorldPosition(ofVec3f _point);
@@ -51,7 +60,7 @@ private:
 		horizontalBorder2,
 		verticalBorder1,
 		verticalBorder2;
-	ofPoint 
+	ofPoint
 		topLeftFrontPoint,
 		topRightFrontPoint,
 		bottomLeftFrontPoint,
@@ -71,7 +80,9 @@ private:
 	Structure* parent;
 
 	ofMatrix4x4 getFinalTransformationMatrix();
-	
+
 	float minX, maxX, minY, maxY, minZ, maxZ;
 	void setBondingCube();
+
+
 };
