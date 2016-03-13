@@ -7,6 +7,7 @@ class Rectangle: public Shapes2d
 {
 public:
                 Rectangle();
+                Rectangle(bool isDefault);
     bool        IsPointWithinBounds(int x, int y);
     bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2);
     void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);

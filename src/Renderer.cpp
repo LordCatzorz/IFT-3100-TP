@@ -14,6 +14,7 @@ Renderer::Renderer()
     Gui->AddCreateTriangleListener(std::bind(&Renderer::drawTriangleManager, this, std::placeholders::_1));
     Gui->AddCreateRectangleListener(std::bind(&Renderer::drawRectangleManager, this, std::placeholders::_1));
     Gui->AddCreateEllipseListener(std::bind(&Renderer::drawEllipseManager, this, std::placeholders::_1));
+    Gui->AddAssociateShapesListener(std::bind(&Renderer::AssociateShapesCallback, this, std::placeholders::_1));
 
 }
 
@@ -99,6 +100,41 @@ void Renderer::PrintScreenSectionCallback(string arg){
     mouseWatcher->AddMouseUpDelegate(screenshotSectionDelegate);
 }
 
+void Renderer::AssociateShapesCallback(string arg){
+    if(selectedShapes.size() <= 1)
+        return;
+    Shape * parent = selectedShapes.front();
+    for(std::vector<Shape*>::iterator itr; itr != selectedShapes.end(); ++itr){
+        parent->AddChild(*itr);
+    }
+
+    bool a = true;
+}
+
+void Renderer::KeyDown(int key){
+    if(pressedKeys.size() == 0)
+        pressedKeys.push_back(key);
+    else{
+        bool isInArray = false;
+        for(int pkey : pressedKeys)
+            if(pkey == key){
+                isInArray = true;
+                break;
+            }
+        if(!isInArray)
+            pressedKeys.push_back(key);
+    }
+}
+
+void Renderer::KeyUp(int key){
+    for(std::vector<int>::iterator itr = pressedKeys.begin(); itr != pressedKeys.end(); itr++){
+        if((*itr) == key){
+            pressedKeys.erase(itr);
+            break;
+        }
+    }
+}
+
 void Renderer::screenSectionSectionWorker(int x, int y, int button){
 
     ScreenshotManager::TakeScreenshot(Gui->RequestSaveFilePath("captureDEcran"), mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
@@ -163,7 +199,12 @@ void Renderer::mouseUpHandler(int x, int y, int button){
     }
 }
 void Renderer::mouseClickHandler(int x, int y, int button){
-    clearSelectedShapes();
+    bool isCtrlDown = false;
+    for(std::vector<int>::iterator itr = pressedKeys.begin(); !isCtrlDown && itr != pressedKeys.end(); itr++){
+        isCtrlDown = (*itr) == 768;
+    }
+    if(!isCtrlDown)
+        clearSelectedShapes();
     for(Shape* visible : visibleShapes){
         if(visible->IsPointWithinBounds(x, y)){
             selectedShapes.push_back(visible);
@@ -173,14 +214,16 @@ void Renderer::mouseClickHandler(int x, int y, int button){
     }
 }
 void Renderer::mouseDragHandler(int x, int y, int button){
-    switch (Gui->GetCurrentMode()) {
+    /*switch (Gui->GetCurrentMode()) {
     case GUI::Edit:
         for(Shape * selected : selectedShapes)
             selected->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2);
         break;
     default:
         break;
-    }
+    }*/
+    for(Shape * selected : selectedShapes)
+        selected->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2);
 }
 
 void Renderer::saveFile(string path, std::ifstream & file)

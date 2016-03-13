@@ -12,14 +12,16 @@ GUI::GUI()
     drawTriangle.addListener(this, &GUI::createTriangleCaller);
     drawRectangle.addListener(this, &GUI::createRectangleCaller);
     drawEllipse.addListener(this, &GUI::createEllipseCaller);
+    associateShapes.addListener(this, &GUI::associateShapesCaller);
     gui.setSize(200, 500);
     gui.setup();
     gui.add(openFileBtn.setup("Ouvir une image"));
     gui.add(printscreenSection.setup("Capturer une zone de l'écran"));
     gui.add(printscreen.setup("Capturer l'écran"));
-    gui.add(selectionToggle.setup("Séléction", true));
-    gui.add(editToggle.setup("Éditer", false));
+    //gui.add(selectionToggle.setup("Séléction", true));
+    //gui.add(editToggle.setup("Éditer", false));
 	gui.add(importObjFile.setup("Importer un OBJ"));
+    gui.add(associateShapes.setup("Associer les formes selectionees"));
     gui.add(drawTriangle.setup("Creer un triangle"));
     gui.add(drawRectangle.setup("Creer un rectangle"));
     gui.add(drawEllipse.setup("Creer un ellipse"));
@@ -72,6 +74,12 @@ void GUI::AddCreateEllipseListener(std::function<void(std::string)> fnc)
 {
     createEllipseCallback = fnc;
 }
+
+void GUI::AddAssociateShapesListener(std::function<void(std::string)> fnc)
+{
+    associateShapesCallback = fnc;
+}
+
 
 string GUI::RequestSaveFilePath(string defaultName)
 {
@@ -172,6 +180,11 @@ void GUI::createRectangleCaller(){
 void GUI::createEllipseCaller(){
     createEllipseCallback("");
 }
+
+void GUI::associateShapesCaller(){
+    associateShapesCallback("");
+}
+
 
 ofFileDialogResult GUI::requestUsrFile()
 {

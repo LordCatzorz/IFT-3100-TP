@@ -8,6 +8,16 @@ Rectangle::Rectangle()
     bottomRightPoint.set(INT_MIN, INT_MIN);
 }
 
+Rectangle::Rectangle(bool isDefault)
+{
+    topLeftPoint.set(0, 0);
+    topRightPoint.set(100, 0);
+    bottomLeftPoint.set(0, 100);
+    bottomRightPoint.set(100, 100);
+    refreshBorders();
+    refreshPoints();
+}
+
 void Rectangle::Draw(){
     ofDisableDepthTest();
     ofPushMatrix();

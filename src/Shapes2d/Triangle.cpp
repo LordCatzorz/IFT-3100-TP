@@ -14,7 +14,7 @@ void Triangle::Draw(){
     ofTranslate(xOffset, yOffset);
     ofRotate(angleOffset);
     ofFill();
-    ofSetColor(0);
+    ofSetColor(drawColor);
     ofDrawTriangle(point1, point2, point3);
     if(shouldShowBorders){
         ofFill();
@@ -72,10 +72,14 @@ void Triangle::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotatio
             bottomRightPoint.x += actionVector->x;
         }else{//Not trying to resize
             xOffset += actionVector->x; yOffset += actionVector->y;
+            for(Shape * child : children){
+                child->AffectVector(x, y, actionVector, isRotation);
+            }
         }
 
         refreshBorders();
         refreshPoints();
+
     }
 }
 

@@ -192,12 +192,13 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-
+    this->renderer->KeyDown(key);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key)
 {
+    this->renderer->KeyUp(key);
 }
 
 //--------------------------------------------------------------

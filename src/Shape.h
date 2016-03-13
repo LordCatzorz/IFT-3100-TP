@@ -12,12 +12,33 @@ public:
     virtual void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false) = 0;
     virtual void        Draw() = 0;
 
-    ofPoint * TopLeftPoint(){return &topLeftPoint;}
-    ofPoint * TopRightPoint(){return &topRightPoint;}
-    ofPoint * BottomLeftPoint(){return &bottomLeftPoint;}
-    ofPoint * BottomRightPoint(){return &bottomRightPoint;}
-    void SetSelected(bool isSelected){ shouldShowBorders = isSelected;}
-    bool GetSelected(){return shouldShowBorders;}
+    void        SetColor(ofColor * newColor){drawColor = *newColor;}
+    ofPoint *   TopLeftPoint(){return &topLeftPoint;}
+    ofPoint *   TopRightPoint(){return &topRightPoint;}
+    ofPoint *   BottomLeftPoint(){return &bottomLeftPoint;}
+    ofPoint *   BottomRightPoint(){return &bottomRightPoint;}
+    void        SetSelected(bool isSelected){ shouldShowBorders = isSelected;}
+    bool        GetSelected(){return shouldShowBorders;}
+    void        AddChild(Shape * child){
+        if(child->parent == nullptr)
+          children.push_back(child);
+    }
+    void RemoveChild(Shape * child){
+        for(std::vector<Shape*>::iterator toDel = children.begin(); toDel != children.end(); toDel++){
+            if(*toDel == child){
+                (*toDel)->parent = nullptr;
+                children.erase(toDel);
+                break;
+            }
+        }
+    }
+
+    void ClearChildren(){
+        for(Shape * toDel : children){
+            toDel->parent = nullptr;
+        }
+        children.clear();
+    }
 
 protected:
 
@@ -32,6 +53,9 @@ protected:
                 topRightPoint,
                 bottomLeftPoint,
                 bottomRightPoint;
+    ofColor     drawColor = ofColor(0,0,0);
+    Shape       * parent = nullptr;
+    std::vector<Shape*> children;
 
     void refreshBorders(){
         horizontalBorder1.set(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, borderSize);
