@@ -7,9 +7,9 @@
 #include "Shapes.h"
 #include "ofxAssimpModelLoader.h"
 #include "Image.h"
-#include "Shapes2d/Triangle.h"
+#include "Shapes2d/Triangle2D.h"
 #include "Shapes2d/Rectangle2D.h"
-#include "Shapes2d/Ellipse.h"
+#include "Shapes2d/Ellipse2D.h"
 
 class Renderer
 {

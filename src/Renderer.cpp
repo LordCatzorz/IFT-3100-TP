@@ -420,7 +420,7 @@ void Renderer::drawEllipseManager(string param){
     shapeDelegateWorker = nullptr;
 
     mouseWatcher->SetShowSelectionZone(false);
-    addVisibleShape(new Ellipse());
+    addVisibleShape(new Ellipse2D());
 
     (visibleShapes.back())->SetSelected(true);
     shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);

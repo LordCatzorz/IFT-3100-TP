@@ -2,10 +2,10 @@
 #define ELLIPSE_H
 #include "Rectangle2D.h"
 
-    class Ellipse : public Rectangle2D
+    class Ellipse2D : public Rectangle2D
 	{
     public:
-        Ellipse();
+        Ellipse2D();
         //void        Draw();
     private:
         void drawShape();
