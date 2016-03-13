@@ -1,5 +1,7 @@
 #pragma once
 #include "Shape.h"
+
+class Structure;
 class Shape3D : public Shape
 {
 public:
@@ -7,9 +9,10 @@ public:
 	virtual void AddRotation(ofVec3f _draggedPixelVector, int _axis) = 0;
 	virtual void AddScale(bool _zoomIn) = 0;
 	virtual void Draw() = 0;
-private:
+	void SetParent(Structure* _parent) { this->parent = _parent; };
+protected:
+	Structure* parent;
 
 
-	
 
 };

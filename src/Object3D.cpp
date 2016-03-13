@@ -11,7 +11,6 @@ Object3D::Object3D() : ofMatrix4x4()
 	this->topRightBackPoint = ofVec3f(0, 0, 0);
 	this->bottomLeftBackPoint = ofVec3f(0, 0, 0);
 	this->bottomRightBackPoint = ofVec3f(0, 0, 0);
-	this->parent = NULL;
 
 	refreshBorders();
 }
@@ -33,10 +32,6 @@ void Object3D::LoadObject(ofMesh * _mesh)
 	refreshBorders();
 }
 
-void Object3D::SetParent(Structure * _parent)
-{
-	this->parent = _parent;
-}
 
 ofVec3f Object3D::GetCentre()
 {

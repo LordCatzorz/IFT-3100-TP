@@ -162,7 +162,7 @@ ofMatrix4x4 Structure::GetFinalTransformationMatrix()
 Structure::Structure() : ofMatrix4x4()
 {
 	this->children = new std::vector<Structure*>();
-	this->elements = new std::vector<Object3D*>();
+	this->elements = new std::vector<Shape3D*>();
 	this->shadersManager = new ShadersManager();
 	this->parent = NULL;
 	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Created structure at adresse: " << this << " with parent structure NULL";
@@ -171,7 +171,7 @@ Structure::Structure() : ofMatrix4x4()
 Structure::Structure(Structure* _parent) : ofMatrix4x4()
 {
 	this->children = new std::vector<Structure*>();
-	this->elements = new std::vector<Object3D*>();
+	this->elements = new std::vector<Shape3D*>();
 	this->shadersManager = new ShadersManager();
 	this->parent = _parent;
 	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Created structure at adresse: " << this << " with parent structure " << _parent;
@@ -182,25 +182,25 @@ Structure::~Structure()
 	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Deleting structure at adresse: " << this;
 	for (size_t i = 0; i < this->GetChildrenCount(); i++)
 	{
-		this->RemoveChild(i);
+		this->DeleteChild(i);
 	}
 	this->children->clear();
 	delete this->children;
 	for (size_t i = 0; i < this->GetElementsCount(); i++)
 	{
-		this->RemoveElement(i);
+		this->DeleteElement(i);
 	}
 	this->elements->clear();
 	delete this->elements;
 	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Deleted structure at adresse: " << this;
 }
 
-std::vector<Object3D*>* Structure::GetElements()
+std::vector<Shape3D*>* Structure::GetElements()
 {
 	return this->elements;
 }
 
-Object3D * Structure::GetElement(int _position)
+Shape3D * Structure::GetElement(int _position)
 {
 	if (_position < this->GetElementsCount())
 	{
@@ -211,14 +211,14 @@ Object3D * Structure::GetElement(int _position)
 	}
 }
 
-bool Structure::AddElement(Object3D * _newElement)
+bool Structure::AddElement(Shape3D * _newElement)
 {
 	_newElement->SetParent(this);
 	this->elements->push_back(_newElement);
 	return true;
 }
 
-bool Structure::RemoveElement(int _position)
+bool Structure::DeleteElement(int _position)
 {
 	if (_position < this->GetElementsCount())
 	{
@@ -228,6 +228,18 @@ bool Structure::RemoveElement(int _position)
 		return true;
 	}
 	return false;
+}
+
+Shape3D* Structure::RemoveElement(int _position)
+{
+	Shape3D* element = NULL;
+	if (_position < this->GetElementsCount())
+	{
+		 element = this->elements->operator[](_position);
+		this->elements->erase(this->elements->begin() + _position);
+		
+	}
+	return element;
 }
 
 Structure * Structure::GetParent()
@@ -258,7 +270,7 @@ Structure * Structure::CreateNewChild()
 	return child;
 }
 
-bool Structure::RemoveChild(int _position)
+bool Structure::DeleteChild(int _position)
 {
 	if (_position < this->GetChildrenCount())
 	{
@@ -268,6 +280,18 @@ bool Structure::RemoveChild(int _position)
 		return true;
 	}
 	return false;
+}
+
+Structure * Structure::RemoveChild(int _position)
+{
+	Structure* child = NULL;
+	if (_position < this->GetChildrenCount())
+	{
+		child = this->children->operator[](_position);
+		this->children->erase(this->children->begin() + _position);
+
+	}
+	return child;
 }
 
 size_t Structure::GetElementsCount() const

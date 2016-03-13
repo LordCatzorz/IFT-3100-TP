@@ -1,5 +1,5 @@
 #include "Renderer.h"
-
+#include "Object3D.h"
 Shape2D* downCast2D;
 Shape3D* downCast3D;
 
@@ -110,7 +110,7 @@ void Renderer::Setup()
 
 void Renderer::Update()
 {
-	this->sceneStructure->GetElement(0)->glRotate(1, 0, 1, 0);
+	((Object3D*)(this->sceneStructure->GetElement(0)))->glRotate(1, 0, 1, 0);
 	ofPushMatrix();
 	ofShader* shader = this->sceneStructure->shadersManager->GetShader(0);
 	shader->begin();
