@@ -192,6 +192,43 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
+	if (key == 'w')
+	{
+		this->renderer->TestMoveUp();
+	}
+	else if(key == 's')
+	{
+		this->renderer->TestMoveDown();
+	}
+	else if (key == 'a')
+	{
+		this->renderer->TestMoveLeft();
+	}
+	else if (key == 'd')
+	{
+		this->renderer->TestMoveRight();
+	}
+	else if (key == 'q')
+	{
+		this->renderer->TestZoomOut();
+	}
+	else if (key == 'e')
+	{
+		this->renderer->TestZoomIn();
+	}
+	else if (key == 'r')
+	{
+		this->renderer->TestRotateZ();
+	}
+	else if (key == 't')
+	{
+		this->renderer->TestRotateZ2();
+	}
+	else if (key == 'f')
+	{
+		this->renderer->TestMoveDiag();
+	}
+
 
 }
 

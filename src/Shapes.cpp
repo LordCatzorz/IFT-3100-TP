@@ -15,10 +15,10 @@ of3dPrimitive * Shapes::createTetrahedron()
 	primitive3d->getMesh().setMode(OF_PRIMITIVE_TRIANGLES);
 	primitive3d->getMesh().enableIndices();
 
-	primitive3d->getMesh().addVertex(ofPoint(0.5, 0, -(1.0 / (2.0*sqrt(2)))));
-	primitive3d->getMesh().addVertex(ofPoint(-0.5, 0, -(1.0 / (2.0*sqrt(2)))));
-	primitive3d->getMesh().addVertex(ofPoint(0, 0.5, (1.0 / (2.0*sqrt(2)))));
-	primitive3d->getMesh().addVertex(ofPoint(0, -0.5, (1.0 / (2.0*sqrt(2)))));
+	primitive3d->getMesh().addVertex(ofPoint(0.5, 0, -(1.0 / (2.0*sqrt(2))))*200);
+	primitive3d->getMesh().addVertex(ofPoint(-0.5, 0, -(1.0 / (2.0*sqrt(2)))) * 200);
+	primitive3d->getMesh().addVertex(ofPoint(0, 0.5, (1.0 / (2.0*sqrt(2)))) * 200);
+	primitive3d->getMesh().addVertex(ofPoint(0, -0.5, (1.0 / (2.0*sqrt(2)))) * 200);
 
 	primitive3d->getMesh().addTriangle(0, 1, 2);
 	primitive3d->getMesh().addTriangle(0, 1, 3);

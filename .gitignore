@@ -23,6 +23,8 @@ bld/
 [Bb]in/*
 ![Bb]in/[Dd]ata/
 ![Bb]in/[Dd]ata/*
+![Bb]in/[Dd]ata/[Ss]hader/*
+![Bb]in/[Dd]ata/[Mm]odels/*
 
 # Visual Studio 2015 cache/options directory
 .vs/

@@ -17,6 +17,16 @@ public:
 	Renderer();
 	~Renderer();
 
+	void TestMoveLeft();
+	void TestMoveRight();
+	void TestMoveUp();
+	void TestMoveDown();
+	void TestMoveDiag();
+	void TestZoomIn();
+	void TestZoomOut();
+	void TestRotateZ();
+	void TestRotateZ2();
+
 	void Setup();
 	void Update();
 	void Draw();
