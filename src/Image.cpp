@@ -62,10 +62,10 @@ void Image::drawShape(){
     ofPopMatrix();
     ofEnableDepthTest();*/
 }
-
+/*
 bool Image::IsPointWithinBounds(float x, float y){
     return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
-}
+}*/
 
 bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wont work if the selection rectangle goes trough inside teh shape and parallel to 2 sides of the shape
     bool output = false;
@@ -119,7 +119,7 @@ bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wo
     return output;
 }
 
-void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
+/*void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
 
 
     if(isRotation){
@@ -164,7 +164,7 @@ void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
         }
         refreshBorders();
     }
-}
+}*/
 
 /*void Image::refreshBorders(){
     horizontalBorder1.set(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, borderSize);
@@ -172,7 +172,7 @@ void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
     verticalBorder1.set(topLeftPoint.x, topLeftPoint.y, borderSize, bottomLeftPoint.y - topLeftPoint.y);
     verticalBorder2.set(topRightPoint.x - borderSize, topRightPoint.y, borderSize, bottomRightPoint.y - topRightPoint.y);
 }*/
-
+/*
 bool Image::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
 
     ofPoint * translated = new ofPoint();
@@ -183,7 +183,7 @@ bool Image::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
 
     return output;
 
-}
+}*/
 
 double Image::dotProduct(const ofPoint & point1, const ofPoint & point2){
 	return 0;

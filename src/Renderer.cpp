@@ -18,7 +18,7 @@ Renderer::Renderer()
     Gui->AddCreateRectangleListener(std::bind(&Renderer::drawRectangleManager, this, std::placeholders::_1));
     Gui->AddCreateEllipseListener(std::bind(&Renderer::drawEllipseManager, this, std::placeholders::_1));
     Gui->AddAssociateShapesListener(std::bind(&Renderer::AssociateShapesCallback, this, std::placeholders::_1));
-
+    Gui->AddDissociateShapesListener(std::bind(&Renderer::DissociateShapesCallback, this, std::placeholders::_1));
 }
 
 Renderer::~Renderer()
@@ -83,6 +83,8 @@ void Renderer::Setup()
     mouseClickDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseClickHandler);
     mouseDragDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDragHandler);
     unbindShapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::unbindShapeWorkers);
+    dissociateShapesDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::dissociateShapesWorkers);
+
 
 	ofSetFrameRate(60);
 	ofSetSphereResolution(12);
@@ -102,8 +104,8 @@ void Renderer::Setup()
 	obj->glTranslate(500, 500, 0);
 	obj->glScale(200, 200, 200);
 	//obj->glRotate(45, 0, 0, -0.5);
-	this->visibleShapes.push_back(obj);
-	this->sceneStructure->AddElement(obj);
+    //this->visibleShapes.push_back(obj);
+    //this->sceneStructure->AddElement(obj);
 
     reset();
     //ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
@@ -188,6 +190,10 @@ void Renderer::AssociateShapesCallback(string arg){
     }
     //Shape * parent = selectedShapes.front();
 
+}
+
+void Renderer::DissociateShapesCallback(string arg){
+    mouseWatcher->AddMouseClickDelegate(dissociateShapesDelegateWorker);
 }
 
 void Renderer::KeyDown(int key){
@@ -308,6 +314,8 @@ void Renderer::mouseDownHandler(int x, int y, int button)
 		{
 			if (visible->IsPointWithinBounds(x, y))
 			{
+                if(!isCtrlDown())
+                    clearSelectedShapes();
 				selectedShapes.push_back(visible);
 				visible->SetSelected(true);
 				break;
@@ -322,6 +330,7 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 		if (downCast2D = dynamic_cast<Shape2D*>(selected))
 		{
 			downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), false);
+            downCast2D->ActionStop();
 		}
 		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
 		{
@@ -331,26 +340,22 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 }
 void Renderer::mouseClickHandler(int x, int y, int button)
 {
-    bool isCtrlDown = false;
-        for(std::vector<int>::iterator itr = pressedKeys.begin(); !isCtrlDown && itr != pressedKeys.end(); itr++){
-            isCtrlDown = (*itr) == 768;
+    if(!isCtrlDown())
+        clearSelectedShapes();
+    for(Shape* visible : visibleShapes){
+        if(visible->IsPointWithinBounds(x, y)){
+            addSelectedShape(visible);
+            visible->SetSelected(true);
+            break;
         }
-        if(!isCtrlDown)
-            clearSelectedShapes();
-        for(Shape* visible : visibleShapes){
-            if(visible->IsPointWithinBounds(x, y)){
-                addSelectedShape(visible);
-                visible->SetSelected(true);
-                break;
-            }
-        }
+    }
 }
 void Renderer::mouseDragHandler(int x, int y, int button)
 {
     for(Shape * selected : selectedShapes){
         if (downCast2D = dynamic_cast<Shape2D*>(selected))
         {
-            downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2);
+            downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2 && downCast2D->IsPointWithinBounds(x, y));
         }
         else if (downCast3D = dynamic_cast<Shape3D*>(selected))
         {
@@ -443,4 +448,24 @@ void Renderer::unbindShapeWorkers(int x, int y, int button){
     shapeDelegateWorker = nullptr;
     (visibleShapes.back())->SetSelected(false);
     //mouseWatcher->SetShowSelectionZone(Gui->GetCurrentMode() == GUI::Select);
+}
+
+void Renderer::dissociateShapesWorkers(int x, int y, int button){
+    for(Shape * selected : visibleShapes){
+        if (downCast2D = dynamic_cast<Shape2D*>(selected))
+        {
+            if(downCast2D->IsPointWithinBounds(x, y)){
+                clearSelectedShapes();
+                downCast2D->ClearChildren();
+                mouseWatcher->RemoveMouseClickDelegate(dissociateShapesDelegateWorker);
+            }
+        }
+    }
+}
+bool Renderer::isCtrlDown(){
+    for(std::vector<int>::iterator itr = pressedKeys.begin(); itr != pressedKeys.end(); itr++){
+        if((*itr) == 768)
+            return true;
+    }
+    return false;
 }

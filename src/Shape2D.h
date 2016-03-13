@@ -15,9 +15,80 @@ public:
 
     virtual void Create(int x1, int y1, int width, int height) = 0;
 	virtual bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2) = 0;
-	virtual void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false) = 0;
 
-    void        Draw(){/////////////////////
+    void ActionStop(){currentAction = Action::Rest;}
+
+    void AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false){
+        if(currentAction == Action::Rotate || isRotation){
+            currentAction = Action::Rotate;
+            double side = (double)(x - xOffset - topLeftPoint.x);
+            double adj = (double)(y - yOffset - topLeftPoint.y);
+
+            double currentAngle = atan((adj / side)) * 180/M_PI;
+
+
+            if(referenceAngleOffset <= 0){
+                referenceAngleOffset = currentAngle;
+                if(side < 0){
+                    referenceAngleOffset += 180;
+                }
+                angleOffset -= referenceAngleOffset;
+            }
+
+            if(side < 0){
+                currentAngle = currentAngle - 180;
+            }
+            angleOffset += currentAngle - previousAngle;
+
+            previousAngle = currentAngle;
+
+            angleOffset = fmod(angleOffset, 360);
+        }else{
+            previousAngle = referenceAngleOffset = 0;
+            if(currentAction == Action::Rest){
+                if(isPointInsideRectangle(x, y, horizontalBorder1)){
+                    currentAction = Action::Resize;
+                    selectedResizeBar = 1;
+                }else if(isPointInsideRectangle(x, y, horizontalBorder2)){
+                    currentAction = Action::Resize;
+                    selectedResizeBar = 2;
+                }else if(isPointInsideRectangle(x, y, verticalBorder1)){
+                    currentAction = Action::Resize;
+                    selectedResizeBar = 3;
+                }else if(isPointInsideRectangle(x, y, verticalBorder2)){
+                    currentAction = Action::Resize;
+                    selectedResizeBar = 4;
+                }else{//Not trying to resize
+                    currentAction = Action::Move;
+                }
+            }
+
+            if(currentAction == Action::Resize){
+                if(selectedResizeBar == 1){
+                    topLeftPoint.y += actionVector->y;
+                    topRightPoint.y += actionVector->y;
+                } else if(selectedResizeBar == 2){
+                    bottomLeftPoint.y += actionVector->y;
+                    bottomRightPoint.y += actionVector->y;
+                } else if(selectedResizeBar == 3){
+                    topLeftPoint.x += actionVector->x;
+                    bottomLeftPoint.x += actionVector->x;
+                } else if(selectedResizeBar == 4){
+                    topRightPoint.x += actionVector->x;
+                    bottomRightPoint.x += actionVector->x;
+                }
+            }else{//Not trying to resize
+                xOffset += actionVector->x; yOffset += actionVector->y;
+                for(Shape2D * child : children){
+                    child->AffectVector(x, y, actionVector, isRotation);
+                }
+            }
+            refreshBorders();
+            refreshPoints();
+        }
+    }
+
+    void Draw(){
         ofDisableDepthTest();
         ofPushMatrix();
         if(parentShape != nullptr)
@@ -28,9 +99,24 @@ public:
         ofFill();
         ofSetColor(drawColor);
         drawShape();
+        if(parentShape != nullptr)
+            SetSelected(parentShape->GetSelected());
         if(shouldShowBorders){
             ofFill();
-            ofSetColor(ofColor::grey);
+            if(children.size() <= 0 && parentShape == nullptr){
+                borderColor = ofColor::gray;
+            }else{
+                if(children.size() > 0){
+                    borderColor.g = 0;
+                    borderColor.r = 255;
+                    borderColor.b = 0;
+                }
+                if(parentShape != nullptr){
+                    borderColor.b = parentShape->getBlueVal();
+                    borderColor.r = (int)(parentShape->getBlueVal() * 0.75);
+                }
+            }
+            ofSetColor(borderColor);
             ofDrawRectangle(horizontalBorder1);
             ofDrawRectangle(horizontalBorder2);
             ofDrawRectangle(verticalBorder1);
@@ -44,9 +130,13 @@ public:
         ofEnableDepthTest();
     }
 
-    void        SetColor(ofColor * newColor){drawColor = *newColor;}
-    Shape   *   GetParent(){ return  parentShape;}
-    void        AddChild(Shape2D * child){
+    bool IsPointWithinBounds(float x, float y){
+        return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
+    }
+
+    void SetColor(ofColor * newColor){drawColor = *newColor;}
+    Shape * GetParent(){ return  parentShape;}
+    void AddChild(Shape2D * child){
         if(child->parentShape == nullptr){
             children.push_back(child);
             child->notifyAttachedToParen(this);
@@ -58,6 +148,8 @@ public:
                 (*toDel)->parentShape = nullptr;
                 (*toDel)->xOffset = (*toDel)->parentXOffset + xOffset;
                 (*toDel)->yOffset = (*toDel)->parentYOffset + yOffset;
+                (*toDel)->SetSelected(false);
+                //(*toDel)->angleOffset += angleOffset;
                 children.erase(toDel);
                 break;
             }
@@ -67,13 +159,17 @@ public:
     void ClearChildren(){
         for(Shape2D * toDel : children){
             toDel->parentShape = nullptr;
+            toDel->xOffset = toDel->parentXOffset + xOffset;
+            toDel->yOffset = toDel->parentYOffset + yOffset;
+            toDel->SetSelected(false);
+            toDel->angleOffset += angleOffset;
         }
         children.clear();
     }
 
 protected:
 
-    int         borderSize = 10, xOffset = 0, yOffset = 0, parentXOffset = 0, parentYOffset = 0;
+    int         borderSize = 10, xOffset = 0, yOffset = 0, parentXOffset = 0, parentYOffset = 0, redVal = 255, blueVal = 255;
     double      angleOffset = 0, referenceAngleOffset = 0, previousAngle = 0;
 	ofRectangle horizontalBorder1,
 		horizontalBorder2,
@@ -85,9 +181,20 @@ protected:
 		bottomRightPoint;
 
     ofColor     drawColor = ofColor(0,0,0);
-    Shape       * parentShape = nullptr;
+    ofColor     borderColor = ofColor::gray;
+    Shape2D     * parentShape = nullptr;
     std::vector<Shape2D*> children;
 
+    enum Action{Move, Resize, Rotate, Rest};
+    Action currentAction = Action::Rest;
+    int selectedResizeBar = -1;
+
+    int getBlueVal(){
+        if(parentShape != nullptr)
+            return parentShape->getBlueVal() - 10;
+        else
+            return 265;
+    }
 	void refreshBorders()
 	{
 		horizontalBorder1.set(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, borderSize);
@@ -144,6 +251,17 @@ protected:
 
 		return output;
 	}
+    bool isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
+
+        ofPoint * traslated = new ofPoint();
+        Shape2D::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, traslated);
+        bool output = traslated->x>= rectangle.getX() && traslated->x <= rectangle.getX() + rectangle.getWidth() &&
+                traslated->y>= rectangle.getY() && traslated->y <= rectangle.getY() + rectangle.getHeight();
+        delete traslated;
+
+        return output;
+
+    }
 private:
     static double determinant(const ofPoint & p1, const ofPoint & p2){
         return p1.x * p2.y - p1.y * p2.x;
@@ -153,7 +271,9 @@ private:
         parentXOffset = xOffset - parent->xOffset;
         parentYOffset = yOffset - parent->yOffset;
     }
-    virtual void        drawShape() = 0;
+
+    virtual void    drawShape() = 0;
+    virtual void    refreshPoints() = 0;
 };
 
 #endif // SHAPE2D_H

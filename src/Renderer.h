@@ -35,6 +35,7 @@ public:
     void PrintScreenTakenCallback(string param);
     void PrintScreenSectionCallback(string arg);
     void AssociateShapesCallback(string arg);
+    void DissociateShapesCallback(string arg);
     void KeyDown(int key);
     void KeyUp(int key);
 private:
@@ -113,10 +114,14 @@ private:
 
     MouseWatcher::MouseActionDelegate * shapeDelegateWorker;
     MouseWatcher::MouseActionDelegate * unbindShapeDelegateWorker;
+    MouseWatcher::MouseActionDelegate * dissociateShapesDelegateWorker;
 
     void drawTriangleManager(string param);
     void drawRectangleManager(string param);
     void drawEllipseManager(string param);
     void drawShapeWorker(int x, int y, int button);
     void unbindShapeWorkers(int x, int y, int button);
+    void dissociateShapesWorkers(int x, int y, int button);
+
+    bool isCtrlDown();
 };

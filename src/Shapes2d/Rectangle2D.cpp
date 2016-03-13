@@ -35,7 +35,7 @@ void Rectangle2D::drawShape(){
     ofEnableDepthTest();*/
 }
 
-void Rectangle2D::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
+/*void Rectangle2D::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
 
 
     if(isRotation){
@@ -82,7 +82,7 @@ void Rectangle2D::AffectVector(int x, int y, ofVec3f * actionVector, bool isRota
         refreshBorders();
         refreshPoints();
     }
-}
+}*/
 
 void Rectangle2D::Create(int x1, int y1, int width, int height){
 
@@ -117,7 +117,7 @@ bool Rectangle2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2){
     return false;
 }
 
-bool Rectangle2D::IsPointWithinBounds(float x, float y){
+/*bool Rectangle2D::IsPointWithinBounds(float x, float y){
     return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
 }
 
@@ -137,7 +137,7 @@ bool Rectangle2D::isPointInsideRectangle(int x, int y, const ofRectangle & recta
 
     return output;
 
-}
+}*/
 
 void Rectangle2D::refreshPoints(){
 
