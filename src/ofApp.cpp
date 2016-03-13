@@ -120,9 +120,6 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-    ofFill();
-    ofSetColor(0);
-    ofEllipse(800, 800, 200, 200);
     ofEnableDepthTest();
 
     this->renderer->Draw();

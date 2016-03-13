@@ -117,7 +117,6 @@ bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wo
     return output;
 }
 
-double prevAngle = 0;
 void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
 
 
@@ -139,13 +138,13 @@ void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
         if(side < 0){
             currentAngle = currentAngle - 180;
         }
-        angleOffset += currentAngle - prevAngle;
+        angleOffset += currentAngle - previousAngle;
 
-        prevAngle = currentAngle;
+        previousAngle = currentAngle;
 
         angleOffset = fmod(angleOffset, 360);
     }else{
-        prevAngle = referenceAngleOffset = 0;
+        previousAngle = referenceAngleOffset = 0;
         if(isPointInsideRectangle(x, y, horizontalBorder1)){
             topLeftPoint.y += actionVector->y;
             topRightPoint.y += actionVector->y;
@@ -165,12 +164,12 @@ void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
     }
 }
 
-void Image::refreshBorders(){
+/*void Image::refreshBorders(){
     horizontalBorder1.set(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, borderSize);
     horizontalBorder2.set(topLeftPoint.x, bottomLeftPoint.y - borderSize, bottomRightPoint.x - bottomLeftPoint.x, borderSize);
     verticalBorder1.set(topLeftPoint.x, topLeftPoint.y, borderSize, bottomLeftPoint.y - topLeftPoint.y);
     verticalBorder2.set(topRightPoint.x - borderSize, topRightPoint.y, borderSize, bottomRightPoint.y - topRightPoint.y);
-}
+}*/
 
 bool Image::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
 

@@ -5,7 +5,7 @@
 class Shapes2d: public Shape
 {
 public:
-
+    virtual void Create(int x1, int y1, int width, int height) = 0;
 protected:
 };
 

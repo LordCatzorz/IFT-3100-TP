@@ -7,6 +7,9 @@
 #include "Shapes.h"
 #include "ofxAssimpModelLoader.h"
 #include "Image.h"
+#include "Shapes2d/Triangle.h"
+#include "Shapes2d/Rectangle.h"
+#include "Shapes2d/Ellipse.h"
 
 class Renderer
 {
@@ -77,6 +80,8 @@ private:
     std::vector<Shape*> selectedShapes;
     void saveFile(string path, std::ifstream & file);
 
+
+
 	float oscillate(float time, float amplitude, float period, float shift, float offset)
 	{
 		return amplitude * sin((time - shift) * 2 * PI / period) + offset;
@@ -89,4 +94,13 @@ private:
     void mouseDragHandler(int x, int y, int button);
 
     void clearSelectedShapes();
+
+    MouseWatcher::MouseActionDelegate * shapeDelegateWorker;
+    MouseWatcher::MouseActionDelegate * unbindShapeDelegateWorker;
+
+    void drawTriangleManager(string param);
+    void drawRectangleManager(string param);
+    void drawEllipseManager(string param);
+    void drawShapeWorker(int x, int y, int button);
+    void unbindShapeWorkers(int x, int y, int button);
 };

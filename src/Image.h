@@ -25,7 +25,7 @@ private:
     string      imgName;
     ofImage     image;
 
-	void        refreshBorders();
+    //void        refreshBorders();
 	bool        isPointInsideRectangle(int x, int y, const ofRectangle & rectangle);
     bool        valueInRange(int value, int min, int max){ return (value >= min) && (value <= max); };
     double      dotProduct(const ofPoint & point1, const ofPoint & point2);

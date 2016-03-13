@@ -9,6 +9,9 @@ GUI::GUI()
     selectionToggle.addListener(this, &GUI::selectionToggleCallback);
     editToggle.addListener(this, &GUI::editToggleCallback);
     importObjFile.addListener(this, &GUI::importObjFileCallBack);
+    drawTriangle.addListener(this, &GUI::createTriangleCaller);
+    drawRectangle.addListener(this, &GUI::createRectangleCaller);
+    drawEllipse.addListener(this, &GUI::createEllipseCaller);
     gui.setSize(200, 500);
     gui.setup();
     gui.add(openFileBtn.setup("Ouvir une image"));
@@ -17,6 +20,9 @@ GUI::GUI()
     gui.add(selectionToggle.setup("Séléction", true));
     gui.add(editToggle.setup("Éditer", false));
 	gui.add(importObjFile.setup("Importer un OBJ"));
+    gui.add(drawTriangle.setup("Creer un triangle"));
+    gui.add(drawRectangle.setup("Creer un rectangle"));
+    gui.add(drawEllipse.setup("Creer un ellipse"));
     editToggle = false;
 
     xPos = gui.getPosition().x;
@@ -50,6 +56,21 @@ void GUI::AddModeChangedListener(std::function<void(GUI::ActionType)> fnc)
 void GUI::AddObjFileImportedListener(std::function<void(std::string)> fnc)
 {
 	objFileImportedCallback = fnc;
+}
+
+void GUI::AddCreateTriangleListener(std::function<void(std::string)> fnc)
+{
+    createTriangleCallback = fnc;
+}
+
+void GUI::AddCreateRectangleListener(std::function<void(std::string)> fnc)
+{
+    createRectangleCallback = fnc;
+}
+
+void GUI::AddCreateEllipseListener(std::function<void(std::string)> fnc)
+{
+    createEllipseCallback = fnc;
 }
 
 string GUI::RequestSaveFilePath(string defaultName)
@@ -138,6 +159,18 @@ void GUI::editToggleCallback(bool & inval)
 	modeChangedCallback(inval ? GUI::ActionType::Edit : GUI::ActionType::Select);
 	// else
 	 //    editToggle = true;
+}
+
+void GUI::createTriangleCaller(){
+    createTriangleCallback("");
+}
+
+void GUI::createRectangleCaller(){
+    createRectangleCallback("");
+}
+
+void GUI::createEllipseCaller(){
+    createEllipseCallback("");
 }
 
 ofFileDialogResult GUI::requestUsrFile()

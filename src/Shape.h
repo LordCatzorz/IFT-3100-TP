@@ -22,7 +22,7 @@ public:
 protected:
 
     int         borderSize = 10, xOffset = 0, yOffset = 0;
-    double      angleOffset = 0, referenceAngleOffset = 0;
+    double      angleOffset = 0, referenceAngleOffset = 0, previousAngle = 0;
     bool        shouldShowBorders = false;
     ofRectangle horizontalBorder1,
                 horizontalBorder2,
@@ -32,6 +32,13 @@ protected:
                 topRightPoint,
                 bottomLeftPoint,
                 bottomRightPoint;
+
+    void refreshBorders(){
+        horizontalBorder1.set(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, borderSize);
+        horizontalBorder2.set(topLeftPoint.x, bottomLeftPoint.y - borderSize, bottomRightPoint.x - bottomLeftPoint.x, borderSize);
+        verticalBorder1.set(topLeftPoint.x, topLeftPoint.y, borderSize, bottomLeftPoint.y - topLeftPoint.y);
+        verticalBorder2.set(topRightPoint.x - borderSize, topRightPoint.y, borderSize, bottomRightPoint.y - topRightPoint.y);
+    }
 
     static ofPoint * translatePoint(int x, int y, double angleInDegrees, ofPoint * translated){
         double angleRad = angleInDegrees * M_PI/180;

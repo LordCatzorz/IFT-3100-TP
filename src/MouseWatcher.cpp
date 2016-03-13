@@ -43,7 +43,7 @@ void MouseWatcher::Record(int x, int y, int button, MouseActions action){
 
 void MouseWatcher::StopRecording(int x, int y, int button){
     isRecording = false;
-    fireMouseUp(x, y, button);
+    //fireMouseUp(x, y, button);
 }
 
 void MouseWatcher::PauseRecording(){

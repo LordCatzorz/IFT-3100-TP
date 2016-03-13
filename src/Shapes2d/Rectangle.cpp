@@ -1,6 +1,6 @@
-#include "Triangle.h"
+#include "Rectangle.h"
 
-Triangle::Triangle()
+Rectangle::Rectangle()
 {
     topLeftPoint.set(INT_MIN, INT_MIN);
     topRightPoint.set(INT_MIN, INT_MIN);
@@ -8,14 +8,14 @@ Triangle::Triangle()
     bottomRightPoint.set(INT_MIN, INT_MIN);
 }
 
-void Triangle::Draw(){
+void Rectangle::Draw(){
     ofDisableDepthTest();
     ofPushMatrix();
     ofTranslate(xOffset, yOffset);
     ofRotate(angleOffset);
     ofFill();
     ofSetColor(0);
-    ofDrawTriangle(point1, point2, point3);
+    ofDrawRectangle(point1, point2.x - point1.x, point4.y - point2.y);
     if(shouldShowBorders){
         ofFill();
         ofSetColor(ofColor::grey);
@@ -30,7 +30,7 @@ void Triangle::Draw(){
     ofEnableDepthTest();
 }
 
-void Triangle::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
+void Rectangle::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
 
 
     if(isRotation){
@@ -79,7 +79,7 @@ void Triangle::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotatio
     }
 }
 
-void Triangle::Create(int x1, int y1, int width, int height){
+void Rectangle::Create(int x1, int y1, int width, int height){
 
     xOffset = x1;
     yOffset = y1;
@@ -92,31 +92,31 @@ void Triangle::Create(int x1, int y1, int width, int height){
     }else{
 
         point1.x = 0;
-        point1.y = height;
-
-        point2.x = (int)(width / 2);
+        point1.y = 0;
+        point2.x = width;
         point2.y = 0;
-
-        point3.x = width;
+        point3.x = 0;
         point3.y = height;
+        point4.x = width;
+        point4.y = height;
 
         topLeftPoint.set(0, 0);
-        topRightPoint.set(point3.x > point1.x ? point3.x : point1.x, 0);
-        bottomLeftPoint.set(0, point3.y > point1.y ? point3.y : point1.y);
-        bottomRightPoint.set(point3.x > point1.x ? point3.x : point1.x, point3.y > point1.y ? point3.y : point1.y);
+        topRightPoint.set(point4.x > point1.x ? point4.x : point1.x, 0);
+        bottomLeftPoint.set(0, point4.y > point1.y ? point4.y : point1.y);
+        bottomRightPoint.set(point4.x > point1.x ? point4.x : point1.x, point4.y > point1.y ? point4.y : point1.y);
     }
     refreshBorders();
 }
 
-bool Triangle::DoesRectangleOverlap(int x1, int y1, int x2, int y2){
+bool Rectangle::DoesRectangleOverlap(int x1, int y1, int x2, int y2){
     return false;
 }
 
-bool Triangle::IsPointWithinBounds(int x, int y){
+bool Rectangle::IsPointWithinBounds(int x, int y){
     return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
 }
 
-bool Triangle::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
+bool Rectangle::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
 
     ofPoint * traslated = new ofPoint();
     Shape::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, traslated);
@@ -128,10 +128,10 @@ bool Triangle::isPointInsideRectangle(int x, int y, const ofRectangle & rectangl
 
 }
 
-void Triangle::refreshPoints(){
+void Rectangle::refreshPoints(){
 
-    point1.set(bottomLeftPoint.x, bottomLeftPoint.y);
-    point2.set(bottomLeftPoint.x + (int)((bottomRightPoint.x - bottomLeftPoint.x) / 2), topLeftPoint.y);
-    point3.set(bottomRightPoint.x, bottomRightPoint.y);
-
+    point1.set(topLeftPoint.x, topLeftPoint.y);
+    point2.set(topRightPoint.x, topRightPoint.y);
+    point3.set(bottomLeftPoint.x, bottomLeftPoint.y);
+    point4.set(bottomRightPoint.x, bottomRightPoint.y);
 }

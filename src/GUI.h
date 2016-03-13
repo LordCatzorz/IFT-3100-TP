@@ -24,6 +24,9 @@ public:
     void AddPrintscreenTakenListener(std::function<void(std::string)> fnc);
     void AddModeChangedListener(std::function<void(GUI::ActionType)> fnc);
 	void AddObjFileImportedListener(std::function<void(std::string)> fnc);
+    void AddCreateTriangleListener(std::function<void(std::string)> fnc);
+    void AddCreateRectangleListener(std::function<void(std::string)> fnc);
+    void AddCreateEllipseListener(std::function<void(std::string)> fnc);
     string RequestSaveFilePath(string defaultName);
 private:
 
@@ -33,6 +36,9 @@ private:
     ofxButton printscreenSection;
     ofxButton printscreen;
 	ofxButton importObjFile;
+    ofxButton drawTriangle;
+    ofxButton drawRectangle;
+    ofxButton drawEllipse;
     ofxToggle selectionToggle, editToggle;
     ofxPanel gui;
 
@@ -42,12 +48,18 @@ private:
     void editToggleCallback(bool & inval);
     void callScreenSectionCallback();
 	void importObjFileCallBack();
+    void createTriangleCaller();
+    void createRectangleCaller();
+    void createEllipseCaller();
     ofFileDialogResult requestUsrFile();
     ofFileDialogResult saveUsrFile(string defaultName);
     std::function<void(std::string)> imageOpenCallback;
     std::function<void(std::string)> printScreenSelectionCallback;
     std::function<void(std::string)> printScreenTakenCallback;
 	std::function<void(std::string)> objFileImportedCallback;
+    std::function<void(std::string)> createTriangleCallback;
+    std::function<void(std::string)> createRectangleCallback;
+    std::function<void(std::string)> createEllipseCallback;
     std::function<void(GUI::ActionType)> modeChangedCallback;
 	
 };
