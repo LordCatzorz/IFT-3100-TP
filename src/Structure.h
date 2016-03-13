@@ -2,7 +2,7 @@
 #define STRUCTURE_H
 
 #include "ShadersManager.h"
-#include "Object3D.h"
+#include "Shape3D.h"
 #include <vector>
 
 class Structure : public ofMatrix4x4
@@ -16,16 +16,18 @@ public:
 	Structure(Structure* _parent);
 	~Structure();
 
-	std::vector<Object3D*>* GetElements();
-	Object3D* GetElement(int _position);
-	bool AddElement(Object3D* _newElement);
-	bool RemoveElement(int _position);
+	std::vector<Shape3D*>* GetElements();
+	Shape3D* GetElement(int _position);
+	bool AddElement(Shape3D* _newElement);
+	bool DeleteElement(int _position);
+	Shape3D* RemoveElement(int _position);
 
 	Structure* GetParent();
 	std::vector<Structure*>* GetChildren();
 	Structure* GetChild(int _position);
 	Structure* CreateNewChild();
-	bool RemoveChild(int _position);
+	bool DeleteChild(int _position);
+	Structure* RemoveChild(int _position);
 
 	size_t GetElementsCount() const;
 	size_t GetChildrenCount() const;
@@ -45,7 +47,7 @@ public:
 	}
 private:
 	int iteration = 0;
-	std::vector<Object3D*>* elements;
+	std::vector<Shape3D*>* elements;
 	Structure* parent;
 	std::vector<Structure*>* children;
 

@@ -1,13 +1,12 @@
 #include "Triangle.h"
 
-
-    Triangle2D::Triangle2D()
-    {
+Triangle2D::Triangle2D()
+{
     topLeftPoint.set(INT_MIN, INT_MIN);
     topRightPoint.set(INT_MIN, INT_MIN);
     bottomLeftPoint.set(INT_MIN, INT_MIN);
     bottomRightPoint.set(INT_MIN, INT_MIN);
-    }
+}
 
 void Triangle2D::drawShape(){
     ofDrawTriangle(point1, point2, point3);
@@ -124,7 +123,7 @@ bool Triangle2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2){
     return false;
 }
 
-bool Triangle2D::IsPointWithinBounds(int x, int y){
+bool Triangle2D::IsPointWithinBounds(float x, float y){
     return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
 }
 
@@ -147,5 +146,4 @@ void Triangle2D::refreshPoints(){
     point3.set(bottomRightPoint.x, bottomRightPoint.y);
 
 }
-
 

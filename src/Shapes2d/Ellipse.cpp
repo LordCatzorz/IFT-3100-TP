@@ -1,6 +1,5 @@
 #include "Ellipse.h"
-namespace Shapes2d
-{
+
 	Ellipse::Ellipse()
 	{
 		topLeftPoint.set(INT_MIN, INT_MIN);
@@ -31,4 +30,4 @@ namespace Shapes2d
 
         ofEnableDepthTest();*/
     }
-}
+

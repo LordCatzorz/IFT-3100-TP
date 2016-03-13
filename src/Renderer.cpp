@@ -1,5 +1,5 @@
 #include "Renderer.h"
-
+#include "Object3D.h"
 Shape2D* downCast2D;
 Shape3D* downCast3D;
 
@@ -111,7 +111,7 @@ void Renderer::Setup()
 
 void Renderer::Update()
 {
-	this->sceneStructure->GetElement(0)->glRotate(1, 0, 1, 0);
+	((Object3D*)(this->sceneStructure->GetElement(0)))->glRotate(1, 0, 1, 0);
 	ofPushMatrix();
 	ofShader* shader = this->sceneStructure->shadersManager->GetShader(0);
 	shader->begin();
@@ -155,9 +155,9 @@ void Renderer::FileOpenCallback(string param)
 	saveFile("./data" + imageName, input);
 	input.close();
 
-    /*Image * newImage = new Image(imageName.substr(1));
+    Image * newImage = new Image(imageName.substr(1));
     newImage->AffectVector((int)(newImage->TopRightPoint()->x /2), (int)(newImage->BottomLeftPoint()->y /2), new ofVec3f(100, 100));
-    addVisibleShape(newImage);*/
+    addVisibleShape(newImage);
 }
 
 void Renderer::PrintScreenTakenCallback(string param)
@@ -292,24 +292,28 @@ void Renderer::reset()
 
 void Renderer::mouseDownHandler(int x, int y, int button)
 {
-    /*
-    bool clickedOnSelectedShape = false;
-    for(Shape* selected : selectedShapes){
-        if(selected->IsPointWithinBounds(x, y)){
-            clickedOnSelectedShape = true;
-            break;
-        }
+
+	bool clickedOnSelectedShape = false;
+	for (Shape* selected : selectedShapes)
+	{
+		if (selected->IsPointWithinBounds(x, y))
+		{
+			clickedOnSelectedShape = true;
+			break;
+		}
+	}
+	if (!clickedOnSelectedShape)
+	{
+		for (Shape* visible : visibleShapes)
+		{
+			if (visible->IsPointWithinBounds(x, y))
+			{
+				selectedShapes.push_back(visible);
+				visible->SetSelected(true);
+				break;
+			}
+		}
     }
-    if(!clickedOnSelectedShape){
-        for(Shape* visible : visibleShapes){
-            if(visible->IsPointWithinBounds(x, y)){
-                addSelectedShape(visible);
-                visible->SetSelected(true);
-                break;
-            }
-        }
-    }
-*/
 }
 void Renderer::mouseUpHandler(int x, int y, int button)
 {
@@ -327,19 +331,19 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 }
 void Renderer::mouseClickHandler(int x, int y, int button)
 {
-    /*bool isCtrlDown = false;
-    for(std::vector<int>::iterator itr = pressedKeys.begin(); !isCtrlDown && itr != pressedKeys.end(); itr++){
-        isCtrlDown = (*itr) == 768;
-    }
-    if(!isCtrlDown)
-        clearSelectedShapes();
-    for(Shape* visible : visibleShapes){
-        if(visible->IsPointWithinBounds(x, y)){
-            addSelectedShape(visible);
-            visible->SetSelected(true);
-            break;
+    bool isCtrlDown = false;
+        for(std::vector<int>::iterator itr = pressedKeys.begin(); !isCtrlDown && itr != pressedKeys.end(); itr++){
+            isCtrlDown = (*itr) == 768;
         }
-    }*/
+        if(!isCtrlDown)
+            clearSelectedShapes();
+        for(Shape* visible : visibleShapes){
+            if(visible->IsPointWithinBounds(x, y)){
+                addSelectedShape(visible);
+                visible->SetSelected(true);
+                break;
+            }
+        }
 }
 void Renderer::mouseDragHandler(int x, int y, int button)
 {
@@ -416,7 +420,7 @@ void Renderer::drawEllipseManager(string param){
     shapeDelegateWorker = nullptr;
 
     mouseWatcher->SetShowSelectionZone(false);
-    addVisibleShape(new Shapes2d::Ellipse());
+    addVisibleShape(new Ellipse());
 
     (visibleShapes.back())->SetSelected(true);
     shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);

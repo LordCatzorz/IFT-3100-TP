@@ -6,7 +6,6 @@
 
 #include "Shape3D.h"
 #include "Shape.h"
-class Structure;
 
 class Object3D : public Shape3D, public ofMatrix4x4
 {
@@ -17,14 +16,11 @@ public:
 
 	void LoadObject(ofMesh* _mesh);
 
-	void SetParent(Structure* _parent);
 	ofVec3f GetCentre();
 	// Inherited via Shape3D
 	void AddTranslation(ofVec3f _draggedPixelVector);
 	void AddRotation(ofVec3f _draggedPixelVector, int _axis);
 	void AddScale(bool _zoomIn);
-	void SetSelected(bool isSelected);
-	bool GetSelected();
 	void Draw();
 	bool IsPointWithinBounds(float x, float y);
 private:
@@ -54,8 +50,6 @@ private:
 		bottomLeftPoint,
 		bottomRightPoint;
 
-
-	Structure* parent;
 
 	ofMatrix4x4 getFinalTransformationMatrix();
 

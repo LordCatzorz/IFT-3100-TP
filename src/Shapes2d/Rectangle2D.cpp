@@ -117,7 +117,7 @@ bool Rectangle2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2){
     return false;
 }
 
-bool Rectangle2D::IsPointWithinBounds(int x, int y){
+bool Rectangle2D::IsPointWithinBounds(float x, float y){
     return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
 }
 
