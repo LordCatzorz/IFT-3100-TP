@@ -18,10 +18,14 @@ Rectangle::Rectangle(bool isDefault)
     refreshPoints();
 }
 
-void Rectangle::Draw(){
-    ofDisableDepthTest();
+void Rectangle::drawShape(){
+    ofDrawRectangle(point1, point2.x - point1.x, point4.y - point2.y);
+    /*ofDisableDepthTest();
     ofPushMatrix();
-    ofTranslate(xOffset, yOffset);
+    if(parentShape != nullptr)
+        ofTranslate(parentXOffset, parentYOffset);
+    else
+        ofTranslate(xOffset, yOffset);
     ofRotate(angleOffset);
     ofFill();
     ofSetColor(0);
@@ -37,7 +41,7 @@ void Rectangle::Draw(){
     }
     ofPopMatrix();
 
-    ofEnableDepthTest();
+    ofEnableDepthTest();*/
 }
 
 void Rectangle::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
@@ -129,7 +133,13 @@ bool Rectangle::IsPointWithinBounds(int x, int y){
 bool Rectangle::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
 
     ofPoint * traslated = new ofPoint();
-    Shape::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, traslated);
+
+    if(parentShape != nullptr)
+        ofTranslate(parentXOffset, parentYOffset);
+    else
+       Shape::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, traslated);
+
+
     bool output = traslated->x>= rectangle.getX() && traslated->x <= rectangle.getX() + rectangle.getWidth() &&
             traslated->y>= rectangle.getY() && traslated->y <= rectangle.getY() + rectangle.getHeight();
     delete traslated;

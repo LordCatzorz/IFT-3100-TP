@@ -11,7 +11,7 @@ public:
     bool        IsPointWithinBounds(int x, int y);
     bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2);
     void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
-    void        Draw();
+    //void        Draw();
     void        Create(int x1, int y1, int width, int height);
 protected:
     ofPoint     point1,
@@ -20,6 +20,7 @@ protected:
                 point4;
     bool isPointInsideRectangle(int x, int y, const ofRectangle & rectangle);
     void refreshPoints();
+    void drawShape();
 };
 
 #endif // RECTANGLE_H

@@ -19,7 +19,7 @@ public:
     bool        IsPointWithinBounds(int x, int y);
     bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2);
     void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
-    void        Draw();
+    //void        Draw();
 private:
 
     string      imgName;
@@ -29,6 +29,7 @@ private:
 	bool        isPointInsideRectangle(int x, int y, const ofRectangle & rectangle);
     bool        valueInRange(int value, int min, int max){ return (value >= min) && (value <= max); };
     double      dotProduct(const ofPoint & point1, const ofPoint & point2);
+    void drawShape();
 
 };
 

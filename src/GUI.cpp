@@ -13,6 +13,7 @@ GUI::GUI()
     drawRectangle.addListener(this, &GUI::createRectangleCaller);
     drawEllipse.addListener(this, &GUI::createEllipseCaller);
     associateShapes.addListener(this, &GUI::associateShapesCaller);
+    dissociateShapes.addListener(this, &GUI::dissociateShapesCaller);
     gui.setSize(200, 500);
     gui.setup();
     gui.add(openFileBtn.setup("Ouvir une image"));
@@ -22,6 +23,7 @@ GUI::GUI()
     //gui.add(editToggle.setup("Éditer", false));
 	gui.add(importObjFile.setup("Importer un OBJ"));
     gui.add(associateShapes.setup("Associer les formes selectionees"));
+    gui.add(dissociateShapes.setup("Séparer les enfants d'un parent"));
     gui.add(drawTriangle.setup("Creer un triangle"));
     gui.add(drawRectangle.setup("Creer un rectangle"));
     gui.add(drawEllipse.setup("Creer un ellipse"));
@@ -80,6 +82,10 @@ void GUI::AddAssociateShapesListener(std::function<void(std::string)> fnc)
     associateShapesCallback = fnc;
 }
 
+void GUI::AddDissociateShapesListener(std::function<void(std::string)> fnc)
+{
+    dissociateShapesCallback = fnc;
+}
 
 string GUI::RequestSaveFilePath(string defaultName)
 {
@@ -185,6 +191,9 @@ void GUI::associateShapesCaller(){
     associateShapesCallback("");
 }
 
+void GUI::dissociateShapesCaller(){
+    dissociateShapesCallback("");
+}
 
 ofFileDialogResult GUI::requestUsrFile()
 {

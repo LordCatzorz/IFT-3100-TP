@@ -33,8 +33,10 @@ string Image::GetImageName(){
 }
 
 double rotVal = 0;
-void Image::Draw(){
-    ofDisableDepthTest();
+void Image::drawShape(){
+    image.allocate(topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y, OF_IMAGE_COLOR);
+    image.draw(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y);
+/*    ofDisableDepthTest();
     ofSetColor(ofColor::white);
 
     ofPushMatrix();
@@ -58,7 +60,7 @@ void Image::Draw(){
     }else{
     }
     ofPopMatrix();
-    ofEnableDepthTest();
+    ofEnableDepthTest();*/
 }
 
 bool Image::IsPointWithinBounds(int x, int y){

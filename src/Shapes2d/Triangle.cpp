@@ -8,10 +8,14 @@ Triangle::Triangle()
     bottomRightPoint.set(INT_MIN, INT_MIN);
 }
 
-void Triangle::Draw(){
-    ofDisableDepthTest();
+void Triangle::drawShape(){
+    ofDrawTriangle(point1, point2, point3);
+    /*ofDisableDepthTest();
     ofPushMatrix();
-    ofTranslate(xOffset, yOffset);
+    if(parentShape != nullptr)
+        ofTranslate(parentXOffset, parentYOffset);
+    else
+        ofTranslate(xOffset, yOffset);
     ofRotate(angleOffset);
     ofFill();
     ofSetColor(drawColor);
@@ -25,9 +29,11 @@ void Triangle::Draw(){
         ofDrawRectangle(verticalBorder2);
     }else{
     }
+    for(Shape * child : children)
+        child->Draw();
     ofPopMatrix();
 
-    ofEnableDepthTest();
+    ofEnableDepthTest();*/
 }
 
 void Triangle::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
@@ -81,6 +87,7 @@ void Triangle::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotatio
         refreshPoints();
 
     }
+
 }
 
 void Triangle::Create(int x1, int y1, int width, int height){

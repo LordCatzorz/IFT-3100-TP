@@ -90,6 +90,8 @@ private:
 
     void addVisibleShape(Shape * toAdd);
     void removeVisibleShape(Shape * toRemove);
+    void addSelectedShape(Shape * toAdd);
+    void removeSelectedShape(Shape * toRemove);
 
     void reset();
     void mouseDownHandler(int x, int y, int button);

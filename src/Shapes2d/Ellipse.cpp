@@ -8,8 +8,9 @@ Ellipse::Ellipse()
     bottomRightPoint.set(INT_MIN, INT_MIN);
 }
 
-void Ellipse::Draw(){
-    ofDisableDepthTest();
+void Ellipse::drawShape(){
+    ofEllipse(point1.x + (int)((point2.x - point1.x) / 2), point1.y + (int)((point3.y - point1.y) / 2), point2.x - point1.x, point4.y - point2.y);
+    /*ofDisableDepthTest();
     ofPushMatrix();
     ofTranslate(xOffset, yOffset);
     ofRotate(angleOffset);
@@ -27,5 +28,5 @@ void Ellipse::Draw(){
     }
     ofPopMatrix();
 
-    ofEnableDepthTest();
+    ofEnableDepthTest();*/
 }

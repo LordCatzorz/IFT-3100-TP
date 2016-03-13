@@ -6,8 +6,9 @@ class Ellipse: public Rectangle
 {
 public:
     Ellipse();
-    void        Draw();
+    //void        Draw();
 private:
+    void drawShape();
 };
 
 #endif // ELLIPSE_H
