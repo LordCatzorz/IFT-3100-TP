@@ -197,11 +197,11 @@ void Image::refreshBorders(){
 
 bool Image::isPointInsideRectangle(int x, int y, const ofRectangle & rectangle){
 
-    ofPoint * traslated = new ofPoint();
-    Shape::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, traslated);
-    bool output = traslated->x>= rectangle.getX() && traslated->x <= rectangle.getX() + rectangle.getWidth() &&
-            traslated->y>= rectangle.getY() && traslated->y <= rectangle.getY() + rectangle.getHeight();
-    delete traslated;
+    ofPoint * translated = new ofPoint();
+    Shape::translatePoint((x - xOffset), (y - yOffset), 360 - angleOffset, translated);
+    bool output = translated->x>= rectangle.getX() && translated->x <= rectangle.getX() + rectangle.getWidth() &&
+            translated->y>= rectangle.getY() && translated->y <= rectangle.getY() + rectangle.getHeight();
+    delete translated;
 
     return output;
 

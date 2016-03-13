@@ -84,6 +84,8 @@ light->enable();
     light->disable();
 	ofDisableLighting();
     ofPopMatrix();*/
+
+
     //ofPushMatrix();
 	//// position
 	////ofTranslate(this->shadersManager->GetLight(0)->getPosition());
@@ -146,19 +148,30 @@ light->enable();
 	//ofPopMatrix();
 }
 
-Structure::Structure()
+ofMatrix4x4 Structure::GetFinalTransformationMatrix()
+{
+	if (this->parent != NULL)
+	{
+		return (this->getInverse()*this->parent->getInverse()).getInverse();
+	} else
+	{
+		return this->getInverse().getInverse();
+	}
+}
+
+Structure::Structure() : ofMatrix4x4()
 {
 	this->children = new std::vector<Structure*>();
-	this->elements = new std::vector<of3dPrimitive*>();
+	this->elements = new std::vector<Object3D*>();
 	this->shadersManager = new ShadersManager();
 	this->parent = NULL;
 	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Created structure at adresse: " << this << " with parent structure NULL";
 }
 
-Structure::Structure(Structure* _parent)
+Structure::Structure(Structure* _parent) : ofMatrix4x4()
 {
 	this->children = new std::vector<Structure*>();
-	this->elements = new std::vector<of3dPrimitive*>();
+	this->elements = new std::vector<Object3D*>();
 	this->shadersManager = new ShadersManager();
 	this->parent = _parent;
 	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Created structure at adresse: " << this << " with parent structure " << _parent;
@@ -182,25 +195,25 @@ Structure::~Structure()
 	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Deleted structure at adresse: " << this;
 }
 
-std::vector<of3dPrimitive*>* Structure::GetElements()
+std::vector<Object3D*>* Structure::GetElements()
 {
 	return this->elements;
 }
 
-of3dPrimitive * Structure::GetElement(int _position)
+Object3D * Structure::GetElement(int _position)
 {
 	if (_position < this->GetElementsCount())
 	{
 		return this->elements->at(_position);
-	}
-	else
+	} else
 	{
 		return NULL;
 	}
 }
 
-bool Structure::AddElement(of3dPrimitive * _newElement)
+bool Structure::AddElement(Object3D * _newElement)
 {
+	_newElement->SetParent(this);
 	this->elements->push_back(_newElement);
 	return true;
 }
@@ -232,8 +245,7 @@ Structure * Structure::GetChild(int _position)
 	if (_position < this->GetChildrenCount())
 	{
 		return this->children->at(_position);
-	}
-	else
+	} else
 	{
 		return NULL;
 	}

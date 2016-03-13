@@ -2,21 +2,23 @@
 #define STRUCTURE_H
 
 #include "ShadersManager.h"
+#include "Object3D.h"
 #include <vector>
 
-class Structure 
+class Structure : public ofMatrix4x4
 {
 public:
 
+	ofMatrix4x4 GetFinalTransformationMatrix();
 	ShadersManager* shadersManager;
 
 	Structure();
 	Structure(Structure* _parent);
 	~Structure();
 
-	std::vector<of3dPrimitive*>* GetElements();
-	of3dPrimitive* GetElement(int _position);
-	bool AddElement(of3dPrimitive* _newElement);
+	std::vector<Object3D*>* GetElements();
+	Object3D* GetElement(int _position);
+	bool AddElement(Object3D* _newElement);
 	bool RemoveElement(int _position);
 
 	Structure* GetParent();
@@ -27,6 +29,7 @@ public:
 
 	size_t GetElementsCount() const;
 	size_t GetChildrenCount() const;
+
 
 	void Draw();
 	static ofVec3f calculateCenter(ofMeshFace *face)
@@ -42,7 +45,7 @@ public:
 	}
 private:
 	int iteration = 0;
-	std::vector<of3dPrimitive*>* elements;
+	std::vector<Object3D*>* elements;
 	Structure* parent;
 	std::vector<Structure*>* children;
 
