@@ -56,6 +56,8 @@ public:
         for(std::vector<Shape*>::iterator toDel = children.begin(); toDel != children.end(); toDel++){
             if(*toDel == child){
                 (*toDel)->parentShape = nullptr;
+                (*toDel)->xOffset = (*toDel)->parentXOffset + xOffset;
+                (*toDel)->yOffset = (*toDel)->parentYOffset + yOffset;
                 children.erase(toDel);
                 break;
             }
