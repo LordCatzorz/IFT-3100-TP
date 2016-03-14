@@ -25,7 +25,19 @@ public:
 	void TestZoomIn();
 	void TestZoomOut();
 	void TestRotateZ();
-	void TestRotateZ2();
+	void TestRotateZNeg();
+	void TestRotateX();
+	void TestRotateXNeg();
+	void TestRotateY();
+	void TestRotateYNeg();
+	void TestCreateTetrahedron();
+	void TestCreateHexahedron();
+	void TestCreateOctahedron();
+	void TestCreateDodecahedron();
+	void TestCreateIsocahedron();
+	void TestSelectNext();
+	void TestSelectPrevious();
+	void TestDeselectAll();
 
 	void Setup();
 	void Update();
@@ -36,9 +48,11 @@ public:
     void PrintScreenSectionCallback(string arg);
     void AssociateShapesCallback(string arg);
     void DissociateShapesCallback(string arg);
+	void ImportObjFileCallback(string param);
     void KeyDown(int key);
     void KeyUp(int key);
 private:
+	int testSelectedElement = -1;
 	Structure* sceneStructure;
 	float cameraOffset;
 

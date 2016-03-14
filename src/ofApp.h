@@ -46,6 +46,9 @@ class ofApp : public ofBaseApp{
 
         void someFunction(int x, int y);*/
     private:
+		bool ctrlKeyPressed;
+		bool altKeyPressed;
+		bool shiftKeyPressed;
         MouseWatcher * mouseWatcher;
         //typedef FastDelegate2<int, int> MouseActionDelegate;
         //MouseActionDelegate mouseDownDelegates[12];
@@ -65,7 +68,7 @@ class ofApp : public ofBaseApp{
         bool isRecordingMouseMouvements = false;
         bool isMakingScreenshotSection = false;*/
 
-        ofxAssimpModelLoader* importedModel;
+        //ofxAssimpModelLoader* importedModel;
 
         //GUI::ActionType actionMode = GUI::ActionType::Select;
         int iteration;

@@ -73,7 +73,7 @@ void ShadersManager::EnableShaders()
 {
 	for (int i = 0; i < this->shaders->size(); i++)
 	{
-		this->shaders->operator[](i)->begin();
+		GetShader(i)->begin();
 	}
 }
 
@@ -81,6 +81,23 @@ void ShadersManager::DisableShaders()
 {
 	for (int i = 0; i < this->shaders->size(); i++)
 	{
-		this->shaders->operator[](i)->end();
+		GetShader(i)->end();
 	}
 }
+
+void ShadersManager::EnableLights()
+{
+	for (int i = 0; i < this->lights->size(); i++)
+	{
+		GetLight(i)->enable();
+	}
+}
+
+void ShadersManager::DisableLights()
+{
+	for (int i = 0; i < this->lights->size(); i++)
+	{
+		GetLight(i)->disable();
+	}
+}
+

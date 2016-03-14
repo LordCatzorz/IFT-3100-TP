@@ -3,6 +3,9 @@
 
 Object3D::Object3D() : ofMatrix4x4()
 {
+	this->object = NULL;
+	this->parent = NULL;
+	this->model = new ofxAssimpModelLoader();
 	this->topLeftFrontPoint = ofVec3f(0, 0, 0);
 	this->topRightFrontPoint = ofVec3f(0, 0, 0);
 	this->bottomLeftFrontPoint = ofVec3f(0, 0, 0);
@@ -17,19 +20,30 @@ Object3D::Object3D() : ofMatrix4x4()
 
 Object3D::Object3D(ofMesh* _mesh) : Object3D()
 {
-	LoadObject(_mesh);
+	loadObject(_mesh);
+}
+
+Object3D::Object3D(string _path) : Object3D()
+{
+	loadModel(_path);
 }
 
 Object3D::~Object3D()
 {
+	delete object;
+	delete model;
 }
 
-void Object3D::LoadObject(ofMesh * _mesh)
+void Object3D::loadObject(ofMesh * _mesh)
 {
 	this->object = _mesh;
+	this->setBondingCube();
+}
 
-
-	refreshBorders();
+void Object3D::loadModel(string _path)
+{
+	this->model->loadModel(_path);
+	this->setBondingCube();
 }
 
 
@@ -53,25 +67,35 @@ void Object3D::Draw()
 	ofTranslate(translation);
 	ofScale(scale.x, scale.y, scale.z);
 	ofRotate(f, v.x, v.y, v.z);
-	
+
 	//ofRotate(rot)
 	ofSetColor(255);
-	this->object->draw();
-	ofSetColor(0);
-	ofScale(1.001, 1.001, 1.001);
-	ofDisableLighting();
-	this->parent->shadersManager->DisableShaders();
-	this->object->drawWireframe();
-	this->parent->shadersManager->EnableShaders();
-	ofPopMatrix();
-	if (shouldShowBorders)
+	if (this->object != NULL)
 	{
+		this->object->draw();
+		ofSetColor(0);
+		ofScale(1.001, 1.001, 1.001);
+		ofDisableLighting();
+		this->parent->shadersManager->DisableShaders();
+		this->object->drawWireframe();
+		this->parent->shadersManager->EnableShaders();
+	}
+	else if (this->model->getMeshCount() > 0)
+	{
+		this->model->drawFaces();
+	}
+	ofPopMatrix();
+	if (GetSelected())
+	{
+
+		this->parent->shadersManager->DisableShaders();
 		ofFill();
 		ofSetColor(ofColor::grey);
 		ofDrawRectangle(horizontalBorder1);
 		ofDrawRectangle(horizontalBorder2);
 		ofDrawRectangle(verticalBorder1);
 		ofDrawRectangle(verticalBorder2);
+		this->parent->shadersManager->EnableShaders();
 	}
 }
 
@@ -93,22 +117,42 @@ ofMatrix4x4 Object3D::getFinalTransformationMatrix()
 
 void Object3D::setBondingCube()
 {
-	float maxX = this->object->getVertex(0).x;
-	float maxY = this->object->getVertex(0).y;
-	float maxZ = this->object->getVertex(0).z;
-	float minX = this->object->getVertex(0).x;
-	float minY = this->object->getVertex(0).y;
-	float minZ = this->object->getVertex(0).z;
-
-	for (ofVec3f v : this->object->getVertices())
+	float maxX = 0;
+	float maxY = 0;
+	float maxZ = 0;
+	float minX = 0;
+	float minY = 0;
+	float minZ = 0;
+	if (this->object != NULL)
 	{
-		maxX = max(maxX, v.x);
-		maxY = max(maxY, v.y);
-		maxZ = max(maxZ, v.z);
+		this->object->getVertex(0).x;
+		this->object->getVertex(0).y;
+		this->object->getVertex(0).z;
+		this->object->getVertex(0).x;
+		this->object->getVertex(0).y;
+		this->object->getVertex(0).z;
 
-		minX = min(minX, v.x);
-		minY = min(minY, v.y);
-		minZ = min(minZ, v.z);
+		for (ofVec3f v : this->object->getVertices())
+		{
+			maxX = max(maxX, v.x);
+			maxY = max(maxY, v.y);
+			maxZ = max(maxZ, v.z);
+
+			minX = min(minX, v.x);
+			minY = min(minY, v.y);
+			minZ = min(minZ, v.z);
+		}
+	}
+	else if (this->model->getMeshCount() != NULL)
+	{
+		ofPoint pMax = this->model->getSceneMax();
+		ofPoint pMin = this->model->getSceneMin();
+		minX = pMin.x;
+		minY = pMin.y;
+		minZ = pMin.z;
+		maxX = pMax.x;
+		maxY = pMax.y;
+		maxZ = pMax.z;
 	}
 
 	this->topLeftFrontPoint = getScreenPosition(ofVec3f(minX, minY, minZ));

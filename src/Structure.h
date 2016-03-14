@@ -5,7 +5,7 @@
 #include "Shape3D.h"
 #include <vector>
 
-class Structure : public ofMatrix4x4
+class Structure : public Shape3D, public ofMatrix4x4
 {
 public:
 
@@ -31,6 +31,15 @@ public:
 
 	size_t GetElementsCount() const;
 	size_t GetChildrenCount() const;
+
+	// Inherited via Shape3D
+	bool IsPointWithinBounds(float x, float y);
+
+	void AddTranslation(ofVec3f _draggedPixelVector);
+
+	void AddRotation(ofVec3f _draggedPixelVector, int _axis);
+
+	void AddScale(bool _zoomIn);
 
 
 	void Draw();
@@ -61,6 +70,9 @@ private:
 	////virtual void AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false) override;
 	//virtual void ShowBorders(bool shouldShow) override;
 	
+
+	
+
 };
 
 

@@ -6,15 +6,17 @@
 
 #include "Shape3D.h"
 #include "Shape.h"
+#include "ofxAssimpModelLoader.h"
 
 class Object3D : public Shape3D, public ofMatrix4x4
 {
 public:
 	Object3D();
+	Object3D(string _path);
 	Object3D(ofMesh* _mesh);
 	~Object3D();
 
-	void LoadObject(ofMesh* _mesh);
+	
 
 	ofVec3f GetCentre();
 	// Inherited via Shape3D
@@ -24,6 +26,8 @@ public:
 	void Draw();
 	bool IsPointWithinBounds(float x, float y);
 private:
+	void loadObject(ofMesh* _mesh);
+	void loadModel(string _path);
 	ofPoint getScreenPosition(ofVec3f _point);
 	ofPoint getWorldPosition(ofVec3f _point);
 	void refreshBorders();
@@ -32,6 +36,7 @@ private:
 	double      angleOffset = 0, referenceAngleOffset = 0, prevAngle = 0;
 	bool        shouldShowBorders = false;
 	ofMesh*     object;
+	ofxAssimpModelLoader* model;
 	ofRectangle horizontalBorder1,
 		horizontalBorder2,
 		verticalBorder1,

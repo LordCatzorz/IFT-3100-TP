@@ -192,8 +192,19 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-
-	if (key == 'w')
+	if (key == '1')
+	{
+		this->altKeyPressed = !this->altKeyPressed;
+	}
+	else if (key == '2')
+	{
+		this->ctrlKeyPressed = !this->ctrlKeyPressed;
+	}
+	else if (key == '3')
+	{
+		this->shiftKeyPressed = !this->shiftKeyPressed;
+	}
+	else if (key == 'w')
 	{
 		this->renderer->TestMoveUp();
 	}
@@ -219,16 +230,68 @@ void ofApp::keyPressed(int key)
 	}
 	else if (key == 'r')
 	{
-		this->renderer->TestRotateZ();
+		if (this->ctrlKeyPressed)
+		{
+			this->renderer->TestRotateY();
+		}
+		if (this->altKeyPressed)
+		{
+			this->renderer->TestRotateZ();
+		}
+		if (this->shiftKeyPressed)
+		{
+			this->renderer->TestRotateX();
+		}
 	}
 	else if (key == 't')
 	{
-		this->renderer->TestRotateZ2();
+		if (this->ctrlKeyPressed)
+		{
+			this->renderer->TestRotateYNeg();
+		}
+		if (this->altKeyPressed)
+		{
+			this->renderer->TestRotateZNeg();
+		}
+		if (this->shiftKeyPressed)
+		{
+			this->renderer->TestRotateXNeg();
+		}
+		
+	}
+	else if (key == 'z')
+	{
+		this->renderer->TestCreateTetrahedron();
+	}
+	else if (key == 'x')
+	{
+		this->renderer->TestCreateHexahedron();
+	}
+	else if (key == 'c')
+	{
+		this->renderer->TestCreateOctahedron();
+	}
+	else if (key == 'v')
+	{
+		this->renderer->TestCreateDodecahedron();
+	}
+	else if (key == 'b')
+	{
+		this->renderer->TestCreateIsocahedron();
 	}
 	else if (key == 'f')
 	{
-		this->renderer->TestMoveDiag();
+		this->renderer->TestSelectPrevious();
 	}
+	else if (key == 'g')
+	{
+		this->renderer->TestSelectNext();
+	}
+	else if (key == 'h')
+	{
+		this->renderer->TestDeselectAll();
+	}
+	
 
     this->renderer->KeyDown(key);
 }

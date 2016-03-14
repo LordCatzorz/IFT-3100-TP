@@ -13,13 +13,15 @@ void Structure::Draw()
 light->enable();
 
     ofPushMatrix();
-    //ofTranslate(300, 300);
 
 
     ofFill();
-            ofSetColor(180);
-            //ofDrawBox(100);
+            //ofSetColor(180);
+			ofTranslate(300, 300);
+	this->shadersManager->EnableShaders();
+            ofDrawBox(100);
 
+			this->shadersManager->DisableShaders();
 
             ofPopMatrix();
 
@@ -145,6 +147,35 @@ light->enable();
 	///*ofDrawSphere(1);*/
 	//shadersManager->GetShader(0)->end();
 	//ofPopMatrix();
+}
+
+bool Structure::IsPointWithinBounds(float x, float y)
+{
+	throw exception("Not yet implemented");
+}
+
+void Structure::AddTranslation(ofVec3f _draggedPixelVector)
+{
+
+	throw exception("Not yet implemented");
+}
+
+void Structure::AddRotation(ofVec3f _draggedPixelVector, int _axis)
+{
+
+	throw exception("Not yet implemented");
+}
+
+void Structure::AddScale(bool _zoomIn)
+{
+	if (_zoomIn)
+	{
+		this->preMultScale(ofVec3f(1.1));
+	}
+	else
+	{
+		this->preMultScale(ofVec3f((1 / 1.1)));
+	}
 }
 
 ofMatrix4x4 Structure::GetFinalTransformationMatrix()

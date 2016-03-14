@@ -19,6 +19,10 @@ public:
 	void EnableShaders();
 	void DisableShaders();
 
+
+	void EnableLights();
+	void DisableLights();
+
 private:
 	std::vector<ofLight*>* lights;
 	std::vector<ofShader*>* shaders;

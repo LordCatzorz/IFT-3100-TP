@@ -8,17 +8,21 @@ Renderer::Renderer()
 {
 	this->sceneStructure = new Structure();
 
-    Gui = new GUI();
-    Gui->AddImageOpenedListener(std::bind(&Renderer::FileOpenCallback, this, std::placeholders::_1));
-    Gui->AddPrintscreenTakenListener(std::bind(&Renderer::PrintScreenTakenCallback, this, std::placeholders::_1));
-    Gui->AddPrintscreenSelectionListener(std::bind(&Renderer::PrintScreenSectionCallback, this, std::placeholders::_1));
-    //Gui->AddObjFileImportedListener(std::bind(&ofApp::ImportObjFileCallback, this, std::placeholders::_1));
-    //Gui->AddModeChangedListener(std::bind(&Renderer::ModeChangeCallback, this, std::placeholders::_1));
-    Gui->AddCreateTriangleListener(std::bind(&Renderer::drawTriangleManager, this, std::placeholders::_1));
-    Gui->AddCreateRectangleListener(std::bind(&Renderer::drawRectangleManager, this, std::placeholders::_1));
-    Gui->AddCreateEllipseListener(std::bind(&Renderer::drawEllipseManager, this, std::placeholders::_1));
-    Gui->AddAssociateShapesListener(std::bind(&Renderer::AssociateShapesCallback, this, std::placeholders::_1));
-    Gui->AddDissociateShapesListener(std::bind(&Renderer::DissociateShapesCallback, this, std::placeholders::_1));
+	shapeDelegateWorker = NULL;
+	unbindShapeDelegateWorker = NULL;
+	dissociateShapesDelegateWorker = NULL;
+
+	Gui = new GUI();
+	Gui->AddImageOpenedListener(std::bind(&Renderer::FileOpenCallback, this, std::placeholders::_1));
+	Gui->AddPrintscreenTakenListener(std::bind(&Renderer::PrintScreenTakenCallback, this, std::placeholders::_1));
+	Gui->AddPrintscreenSelectionListener(std::bind(&Renderer::PrintScreenSectionCallback, this, std::placeholders::_1));
+	Gui->AddObjFileImportedListener(std::bind(&Renderer::ImportObjFileCallback, this, std::placeholders::_1));
+	//Gui->AddModeChangedListener(std::bind(&Renderer::ModeChangeCallback, this, std::placeholders::_1));
+	Gui->AddCreateTriangleListener(std::bind(&Renderer::drawTriangleManager, this, std::placeholders::_1));
+	Gui->AddCreateRectangleListener(std::bind(&Renderer::drawRectangleManager, this, std::placeholders::_1));
+	Gui->AddCreateEllipseListener(std::bind(&Renderer::drawEllipseManager, this, std::placeholders::_1));
+	Gui->AddAssociateShapesListener(std::bind(&Renderer::AssociateShapesCallback, this, std::placeholders::_1));
+	Gui->AddDissociateShapesListener(std::bind(&Renderer::DissociateShapesCallback, this, std::placeholders::_1));
 }
 
 Renderer::~Renderer()
@@ -28,62 +32,242 @@ Renderer::~Renderer()
 
 void Renderer::TestMoveLeft()
 {
-	this->sceneStructure->GetElement(0)->AddTranslation(ofVec3f(-10, 0, 0));
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddTranslation(ofVec3f(-10, 0, 0));
+		}
+	}
 }
 
 void Renderer::TestMoveRight()
 {
-
-	this->sceneStructure->GetElement(0)->AddTranslation(ofVec3f(10, 0, 0));
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddTranslation(ofVec3f(10, 0, 0));
+		}
+	}
 }
 
 void Renderer::TestMoveUp()
 {
-
-	this->sceneStructure->GetElement(0)->AddTranslation(ofVec3f(0, -10, 0));
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddTranslation(ofVec3f(0, -10, 0));
+		}
+	}
 }
 
 void Renderer::TestMoveDown()
 {
-
-	this->sceneStructure->GetElement(0)->AddTranslation(ofVec3f(0, 10, 0));
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddTranslation(ofVec3f(0, 10, 0));
+		}
+	}
 }
 
 void Renderer::TestMoveDiag()
 {
-
-	this->sceneStructure->GetElement(0)->AddTranslation(ofVec3f(10, 20, 0));
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddTranslation(ofVec3f(10, 20, 0));
+		}
+	}
 }
 
 void Renderer::TestZoomIn()
 {
-	this->sceneStructure->GetElement(0)->AddScale(true);
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddScale(true);
+		}
+	}
 }
 
 void Renderer::TestZoomOut()
 {
-	this->sceneStructure->GetElement(0)->AddScale(false);
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddScale(false);
+		}
+	}
 }
 
 void Renderer::TestRotateZ()
 {
-	this->sceneStructure->GetElement(0)->AddRotation(ofVec3f(25, 10, 0), 1);
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddRotation(ofVec3f(10, 0), 2);
+		}
+	}
 }
 
-void Renderer::TestRotateZ2()
+void Renderer::TestRotateZNeg()
 {
-	this->sceneStructure->GetElement(0)->AddRotation(ofVec3f(25, 10), 2);
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddRotation(ofVec3f(-10, 0), 2);
+		}
+	}
 }
+
+void Renderer::TestRotateX()
+{
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddRotation(ofVec3f(10, 0), 0);
+		}
+	}
+}
+
+void Renderer::TestRotateXNeg()
+{
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddRotation(ofVec3f(-10, 0), 0);
+		}
+	}
+}
+
+void Renderer::TestRotateY()
+{
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddRotation(ofVec3f(10, 0), 1);
+		}
+	}
+}
+
+void Renderer::TestRotateYNeg()
+{
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->GetSelected())
+		{
+			shape->AddRotation(ofVec3f(-10, 0), 1);
+		}
+	}
+}
+
+
+void Renderer::TestCreateTetrahedron()
+{
+	Object3D* obj = new Object3D(Shapes::createTetrahedron()->getMeshPtr());
+	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
+	obj->glScale(200, 200, 200);
+	this->sceneStructure->AddElement(obj);
+}
+
+void Renderer::TestCreateHexahedron()
+{
+	Object3D* obj = new Object3D(Shapes::createHexahedron()->getMeshPtr());
+	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
+	obj->glScale(200, 200, 200);
+	this->sceneStructure->AddElement(obj);
+}
+
+void Renderer::TestCreateOctahedron()
+{
+	Object3D* obj = new Object3D(Shapes::createOctahedron()->getMeshPtr());
+	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
+	obj->glScale(200, 200, 200);
+	this->sceneStructure->AddElement(obj);
+}
+
+void Renderer::TestCreateDodecahedron()
+{
+	Object3D* obj = new Object3D(Shapes::createDodecahedron()->getMeshPtr());
+	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
+	obj->glScale(200, 200, 200);
+	this->sceneStructure->AddElement(obj);
+}
+
+void Renderer::TestCreateIsocahedron()
+{
+	Object3D* obj = new Object3D(Shapes::createIcosahedron()->getMeshPtr());
+	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
+	obj->glScale(200, 200, 200);
+	this->sceneStructure->AddElement(obj);
+}
+
+void Renderer::TestSelectNext()
+{
+	if (this->testSelectedElement > -1)
+	{
+		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
+	}
+	this->testSelectedElement++;
+	if (this->testSelectedElement >= this->sceneStructure->GetElementsCount())
+	{
+		this->testSelectedElement = -1;
+	}
+	else
+	{
+		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
+	}
+}
+
+void Renderer::TestSelectPrevious()
+{
+	if (this->testSelectedElement > -1 && this->testSelectedElement < this->sceneStructure->GetElementsCount())
+	{
+		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
+	}
+	if (this->testSelectedElement == -1)
+	{
+		this->testSelectedElement = this->sceneStructure->GetElementsCount();
+	}
+	this->testSelectedElement--;
+	if (this->testSelectedElement > -1)
+	{
+		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
+	}
+}
+
+void Renderer::TestDeselectAll()
+{
+	this->testSelectedElement = -1;
+	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	{
+		shape->SetSelected(false);
+	}
+}
+
+
 
 void Renderer::Setup()
 {
 
-    mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
-    mouseUpDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseUpHandler);
-    mouseClickDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseClickHandler);
-    mouseDragDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDragHandler);
-    unbindShapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::unbindShapeWorkers);
-    dissociateShapesDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::dissociateShapesWorkers);
+	mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+	mouseUpDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseUpHandler);
+	mouseClickDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseClickHandler);
+	mouseDragDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDragHandler);
+	unbindShapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::unbindShapeWorkers);
+	dissociateShapesDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::dissociateShapesWorkers);
 
 
 	ofSetFrameRate(60);
@@ -97,18 +281,12 @@ void Renderer::Setup()
 	light->setPointLight();
 	this->sceneStructure->shadersManager->AddLight(light);
 
-	ofShader* colorFillShader = new ofShader();
-	this->sceneStructure->shadersManager->AddShader(colorFillShader);
-	colorFillShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
-	Object3D* obj = new Object3D(Shapes::createDodecahedron()->getMeshPtr());
-	obj->glTranslate(500, 500, 0);
-	obj->glScale(200, 200, 200);
-	//obj->glRotate(45, 0, 0, -0.5);
-    //this->visibleShapes.push_back(obj);
-    //this->sceneStructure->AddElement(obj);
+	ofShader* defaultShader = new ofShader();
+	this->sceneStructure->shadersManager->AddShader(defaultShader);
+	defaultShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
 
-    reset();
-    //ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
+	reset();
+	//ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
 }
 
 void Renderer::Update()
@@ -134,17 +312,18 @@ void Renderer::Update()
 void Renderer::Draw()
 {
 	ofPushMatrix();
-    this->sceneStructure->Draw();
+	this->sceneStructure->Draw();
 	mouseWatcher->Draw();
 	Gui->Draw();
-    Gui->Draw();
-    for(Shape * toShow : visibleShapes){
-        if (downCast2D = dynamic_cast<Shape2D*>(toShow))
-        {
-            if(downCast2D->GetParent() == nullptr)
-                downCast2D->Draw();
-        }
-    }
+	Gui->Draw();
+	for (Shape * toShow : visibleShapes)
+	{
+		if (downCast2D = dynamic_cast<Shape2D*>(toShow))
+		{
+			if (downCast2D->GetParent() == nullptr)
+				downCast2D->Draw();
+		}
+	}
 	ofPopMatrix();
 }
 
@@ -157,9 +336,9 @@ void Renderer::FileOpenCallback(string param)
 	saveFile("./data" + imageName, input);
 	input.close();
 
-    Image * newImage = new Image(imageName.substr(1));
-    newImage->AffectVector((int)(newImage->TopRightPoint()->x /2), (int)(newImage->BottomLeftPoint()->y /2), new ofVec3f(100, 100));
-    addVisibleShape(newImage);
+	Image * newImage = new Image(imageName.substr(1));
+	newImage->AffectVector((int) (newImage->TopRightPoint()->x / 2), (int) (newImage->BottomLeftPoint()->y / 2), new ofVec3f(100, 100));
+	addVisibleShape(newImage);
 }
 
 void Renderer::PrintScreenTakenCallback(string param)
@@ -173,53 +352,72 @@ void Renderer::PrintScreenSectionCallback(string arg)
 	mouseWatcher->AddMouseUpDelegate(screenshotSectionDelegate);
 }
 
-void Renderer::AssociateShapesCallback(string arg){
-    if(selectedShapes.size() <= 1)
-        return;
-    Shape2D* parent;
-    if (parent = dynamic_cast<Shape2D*>(selectedShapes.front()))
-    {
-        std::vector<Shape*>::iterator itr = selectedShapes.begin();
-        itr++;
-        for(itr; itr != selectedShapes.end(); ++itr){
-            Shape2D* child;
-            if (child = dynamic_cast<Shape2D*>(*itr)){
-                parent->AddChild(child);
-            }
-        }
-        clearSelectedShapes();
-    }
-    //Shape * parent = selectedShapes.front();
+void Renderer::AssociateShapesCallback(string arg)
+{
+	if (selectedShapes.size() <= 1)
+		return;
+	Shape2D* parent;
+	if (parent = dynamic_cast<Shape2D*>(selectedShapes.front()))
+	{
+		std::vector<Shape*>::iterator itr = selectedShapes.begin();
+		itr++;
+		for (itr; itr != selectedShapes.end(); ++itr)
+		{
+			Shape2D* child;
+			if (child = dynamic_cast<Shape2D*>(*itr))
+			{
+				parent->AddChild(child);
+			}
+		}
+		clearSelectedShapes();
+	}
+	//Shape * parent = selectedShapes.front();
 
 }
 
-void Renderer::DissociateShapesCallback(string arg){
-    mouseWatcher->AddMouseClickDelegate(dissociateShapesDelegateWorker);
+void Renderer::DissociateShapesCallback(string arg)
+{
+	mouseWatcher->AddMouseClickDelegate(dissociateShapesDelegateWorker);
 }
 
-void Renderer::KeyDown(int key){
-    if(pressedKeys.size() == 0)
-        pressedKeys.push_back(key);
-    else{
-        bool isInArray = false;
-        for(int pkey : pressedKeys)
-            if(pkey == key){
-                isInArray = true;
-                break;
-            }
-        if(!isInArray)
-            pressedKeys.push_back(key);
-    }
+void Renderer::ImportObjFileCallback(string param)
+{
+	Object3D* obj = new Object3D(param);
+	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
+
+	this->sceneStructure->AddElement(obj);
 }
 
-void Renderer::KeyUp(int key){
-    for(std::vector<int>::iterator itr = pressedKeys.begin(); itr != pressedKeys.end(); itr++){
-        if((*itr) == key){
-            pressedKeys.erase(itr);
-            break;
-        }
-    }
+void Renderer::KeyDown(int key)
+{
+	if (pressedKeys.size() == 0)
+		pressedKeys.push_back(key);
+	else
+	{
+		bool isInArray = false;
+		for (int pkey : pressedKeys)
+			if (pkey == key)
+			{
+				isInArray = true;
+				break;
+			}
+		if (!isInArray)
+			pressedKeys.push_back(key);
+	}
 }
+
+void Renderer::KeyUp(int key)
+{
+	for (std::vector<int>::iterator itr = pressedKeys.begin(); itr != pressedKeys.end(); itr++)
+	{
+		if ((*itr) == key)
+		{
+			pressedKeys.erase(itr);
+			break;
+		}
+	}
+}
+
 
 void Renderer::screenSectionSectionWorker(int x, int y, int button){
 
@@ -239,37 +437,47 @@ void Renderer::SetMouseRecorder(MouseWatcher * mouseRecorder)
 	mouseWatcher->AddMouseDragDelegate(mouseDragDelegate);
 }
 
-void Renderer::addVisibleShape(Shape * toAdd){
-    bool isInArray = false;
-    for(std::vector<Shape*>::iterator itr = visibleShapes.begin(); itr != visibleShapes.end() && !isInArray; itr++){
-        isInArray = toAdd == (*itr);
-    }
-    if(!isInArray)
-        visibleShapes.push_back(toAdd);
+void Renderer::addVisibleShape(Shape * toAdd)
+{
+	bool isInArray = false;
+	for (std::vector<Shape*>::iterator itr = visibleShapes.begin(); itr != visibleShapes.end() && !isInArray; itr++)
+	{
+		isInArray = toAdd == (*itr);
+	}
+	if (!isInArray)
+		visibleShapes.push_back(toAdd);
 }
-void Renderer::removeVisibleShape(Shape * toAdd){
-    for(std::vector<Shape*>::iterator itr = visibleShapes.end(); itr != visibleShapes.begin(); itr--){
-        if(*itr == toAdd){
-            visibleShapes.erase(itr);
-            break;
-        }
-    }
+void Renderer::removeVisibleShape(Shape * toAdd)
+{
+	for (std::vector<Shape*>::iterator itr = visibleShapes.end(); itr != visibleShapes.begin(); itr--)
+	{
+		if (*itr == toAdd)
+		{
+			visibleShapes.erase(itr);
+			break;
+		}
+	}
 }
-void Renderer::addSelectedShape(Shape * toAdd){
-    bool isInArray = false;
-    for(std::vector<Shape*>::iterator itr = selectedShapes.begin(); itr != selectedShapes.end() && !isInArray; itr++){
-        isInArray = toAdd == (*itr);
-    }
-    if(!isInArray)
-        selectedShapes.push_back(toAdd);
+void Renderer::addSelectedShape(Shape * toAdd)
+{
+	bool isInArray = false;
+	for (std::vector<Shape*>::iterator itr = selectedShapes.begin(); itr != selectedShapes.end() && !isInArray; itr++)
+	{
+		isInArray = toAdd == (*itr);
+	}
+	if (!isInArray)
+		selectedShapes.push_back(toAdd);
 }
-void Renderer::removeSelectedShape(Shape * toAdd){
-    for(std::vector<Shape*>::iterator itr = selectedShapes.end(); itr != selectedShapes.begin(); itr--){
-        if(*itr == toAdd){
-            selectedShapes.erase(itr);
-            break;
-        }
-    }
+void Renderer::removeSelectedShape(Shape * toAdd)
+{
+	for (std::vector<Shape*>::iterator itr = selectedShapes.end(); itr != selectedShapes.begin(); itr--)
+	{
+		if (*itr == toAdd)
+		{
+			selectedShapes.erase(itr);
+			break;
+		}
+	}
 }
 
 void Renderer::reset()
@@ -315,14 +523,14 @@ void Renderer::mouseDownHandler(int x, int y, int button)
 		{
 			if (visible->IsPointWithinBounds(x, y))
 			{
-                if(!isCtrlDown())
-                    clearSelectedShapes();
+				if (!isCtrlDown())
+					clearSelectedShapes();
 				selectedShapes.push_back(visible);
 				visible->SetSelected(true);
 				break;
 			}
 		}
-    }
+	}
 }
 void Renderer::mouseUpHandler(int x, int y, int button)
 {
@@ -331,7 +539,7 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 		if (downCast2D = dynamic_cast<Shape2D*>(selected))
 		{
 			downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), false);
-            downCast2D->ActionStop();
+			downCast2D->ActionStop();
 		}
 		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
 		{
@@ -341,28 +549,31 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 }
 void Renderer::mouseClickHandler(int x, int y, int button)
 {
-    if(!isCtrlDown())
-        clearSelectedShapes();
-    for(Shape* visible : visibleShapes){
-        if(visible->IsPointWithinBounds(x, y)){
-            addSelectedShape(visible);
-            visible->SetSelected(true);
-            break;
-        }
-    }
+	if (!isCtrlDown())
+		clearSelectedShapes();
+	for (Shape* visible : visibleShapes)
+	{
+		if (visible->IsPointWithinBounds(x, y))
+		{
+			addSelectedShape(visible);
+			visible->SetSelected(true);
+			break;
+		}
+	}
 }
 void Renderer::mouseDragHandler(int x, int y, int button)
 {
-    for(Shape * selected : selectedShapes){
-        if (downCast2D = dynamic_cast<Shape2D*>(selected))
-        {
-            downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2 && downCast2D->IsPointWithinBounds(x, y));
-        }
-        else if (downCast3D = dynamic_cast<Shape3D*>(selected))
-        {
-            //TODO::Implement;
-        }
-    }
+	for (Shape * selected : selectedShapes)
+	{
+		if (downCast2D = dynamic_cast<Shape2D*>(selected))
+		{
+			downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2 && downCast2D->IsPointWithinBounds(x, y));
+		}
+		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
+		{
+			//TODO::Implement;
+		}
+	}
 }
 
 void Renderer::saveFile(string path, std::ifstream & file)
