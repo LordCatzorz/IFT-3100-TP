@@ -168,7 +168,8 @@ void Renderer::PrintScreenTakenCallback(string param)
 }
 
 void Renderer::PrintScreenSectionCallback(string arg)
-{
+{    
+    mouseWatcher->SetShowSelectionZone(true);
 	mouseWatcher->AddMouseUpDelegate(screenshotSectionDelegate);
 }
 
@@ -225,7 +226,7 @@ void Renderer::screenSectionSectionWorker(int x, int y, int button){
     ScreenshotManager::TakeScreenshot(Gui->RequestSaveFilePath("captureDEcran"), mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
                                       x - mouseWatcher->TopLeftPoint()->x, y - mouseWatcher->TopLeftPoint()->y);
     mouseWatcher->RemoveMouseUpDelegate(screenshotSectionDelegate);
-    //mouseWatcher->SetShowSelectionZone(Gui->GetCurrentMode() == GUI::Select);
+    mouseWatcher->SetShowSelectionZone(false);
 
 }
 
@@ -436,6 +437,8 @@ void Renderer::drawEllipseManager(string param){
 void Renderer::drawShapeWorker(int x, int y, int button){
     if (downCast2D = dynamic_cast<Shape2D*>(visibleShapes.back()))
     {
+        ofColor tmpColor = *(Gui->GetCurrentColor());
+        ((Shape2D *)visibleShapes.back())->SetColor(&tmpColor);
         downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
     }
 }

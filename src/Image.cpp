@@ -34,6 +34,7 @@ string Image::GetImageName(){
 
 double rotVal = 0;
 void Image::drawShape(){
+    ofSetColor(ofColor::white);
     image.allocate(topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y, OF_IMAGE_COLOR);
     image.draw(topLeftPoint.x, topLeftPoint.y, topRightPoint.x - topLeftPoint.x, bottomLeftPoint.y - topLeftPoint.y);
 /*    ofDisableDepthTest();

@@ -29,6 +29,9 @@ public:
     void AddCreateEllipseListener(std::function<void(std::string)> fnc);
     void AddAssociateShapesListener(std::function<void(std::string)> fnc);
     void AddDissociateShapesListener(std::function<void(std::string)> fnc);
+    ofColor * GetCurrentColor(){
+        outputColor = color;
+        return &(outputColor);}
     string RequestSaveFilePath(string defaultName);
 private:
 
@@ -44,6 +47,8 @@ private:
     ofxButton associateShapes;
     ofxButton dissociateShapes;
     ofxToggle selectionToggle, editToggle;
+    ofxColorSlider color;
+    ofColor  outputColor;
     ofxPanel gui;
 
 	void openFileBtnCallback();

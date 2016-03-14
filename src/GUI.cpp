@@ -14,19 +14,21 @@ GUI::GUI()
     drawEllipse.addListener(this, &GUI::createEllipseCaller);
     associateShapes.addListener(this, &GUI::associateShapesCaller);
     dissociateShapes.addListener(this, &GUI::dissociateShapesCaller);
-    gui.setSize(200, 500);
+
     gui.setup();
     gui.add(openFileBtn.setup("Ouvir une image"));
-    gui.add(printscreenSection.setup("Capturer une zone de l'écran"));
-    gui.add(printscreen.setup("Capturer l'écran"));
+    gui.add(printscreenSection.setup("Capturer une zone"));
+    gui.add(printscreen.setup("Capturer l'ecran"));
     //gui.add(selectionToggle.setup("Séléction", true));
     //gui.add(editToggle.setup("Éditer", false));
 	gui.add(importObjFile.setup("Importer un OBJ"));
-    gui.add(associateShapes.setup("Associer les formes selectionees"));
-    gui.add(dissociateShapes.setup("Séparer les enfants d'un parent"));
+    gui.add(associateShapes.setup("Associer les formes"));
+    gui.add(dissociateShapes.setup("Separer les enfants"));
     gui.add(drawTriangle.setup("Creer un triangle"));
     gui.add(drawRectangle.setup("Creer un rectangle"));
     gui.add(drawEllipse.setup("Creer un ellipse"));
+    gui.add(color.setup("Couleur", ofColor(100, 100, 140), ofColor(0, 0), ofColor(255, 255)));
+
     editToggle = false;
 
     xPos = gui.getPosition().x;

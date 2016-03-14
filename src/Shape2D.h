@@ -97,7 +97,7 @@ public:
             ofTranslate(xOffset, yOffset);
         ofRotate(angleOffset);
         ofFill();
-        ofSetColor(drawColor);
+        ofSetColor(*drawColor);
         drawShape();
         if(parentShape != nullptr)
             SetSelected(parentShape->GetSelected());
@@ -134,7 +134,15 @@ public:
         return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
     }
 
-    void SetColor(ofColor * newColor){drawColor = *newColor;}
+    void SetColor(ofColor * newColor){
+        delete drawColor;
+        drawColor = new ofColor();
+        (*drawColor).r = newColor->r;
+        (*drawColor).g = newColor->g;
+        (*drawColor).b = newColor->b;
+        (*drawColor).a = newColor->a;
+        bool a = true;
+    }
     Shape * GetParent(){ return  parentShape;}
     void AddChild(Shape2D * child){
         if(child->parentShape == nullptr){
@@ -180,7 +188,7 @@ protected:
 		bottomLeftPoint,
 		bottomRightPoint;
 
-    ofColor     drawColor = ofColor(0,0,0);
+    ofColor *   drawColor = new ofColor(0,0,0);
     ofColor     borderColor = ofColor::gray;
     Shape2D     * parentShape = nullptr;
     std::vector<Shape2D*> children;
