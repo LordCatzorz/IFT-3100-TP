@@ -4,47 +4,33 @@ void Structure::Draw()
 {
 	ofColor colours[4] = {ofColor::red, ofColor::green, ofColor::blue, ofColor::purple};
 	ofLight* light = this->shadersManager->GetLight(0);
-
-    ofEnableLighting();
-
-    light->setPointLight();
-    light->setAttenuation(0.5f);
-    light->setPosition(ofVec3f(500,500,-500));
-light->enable();
-
-    ofPushMatrix();
-
-
-    ofFill();
-            //ofSetColor(180);
-			ofTranslate(300, 300);
+	ofEnableLighting();
+	light->setPointLight();
+	light->setAttenuation(0.5f);
+	light->setPosition(ofVec3f(500, 500, -500));
+	light->enable();
 	this->shadersManager->EnableShaders();
-            ofDrawBox(100);
+	ofPushMatrix();
+	//ofTranslate(600, 600);
+	//ofRotateY(iteration++);
+	//ofScale(100,100,100);
+	for (Structure* child : *(this->children))
+	{
+		child->Draw();
+	}
+	for (Shape3D* shape : *(this->elements))
+	{
+		shape->Draw();
+	}
+	ofPopMatrix();
+	this->shadersManager->DisableShaders();
+	light->disable();
 
-			this->shadersManager->DisableShaders();
+	ofDisableLighting();
 
-            ofPopMatrix();
-
-
-
-			this->shadersManager->EnableShaders();
-            ofPushMatrix();
-            //ofTranslate(600, 600);
-            //ofRotateY(iteration++);
-            //ofScale(100,100,100);
-            for (Shape3D* shape : *(this->elements))
-            {
-                shape->Draw();
-            }
-            ofPopMatrix();
-			this->shadersManager->DisableShaders();
-    light->disable();
-
-    ofDisableLighting();
-
-    /*ofPushMatrix();
+	/*ofPushMatrix();
 	// afficher un repère visuel pour les lumières
-    light->draw();
+	light->draw();
 	ofPopMatrix();
 
 	ofPushMatrix();
@@ -52,8 +38,8 @@ light->enable();
 	ofTranslate(300, 300);
 	ofRotateY(iteration++);
 
-    ofEnableLighting();
-    light->enable();
+	ofEnableLighting();
+	light->enable();
 
 	shader->begin();
 	ofPushMatrix();
@@ -64,30 +50,30 @@ light->enable();
 	}
 	ofPopMatrix();
 	shader->end();
-    light->disable();
-    ofDisableLighting();
-    ofPopMatrix();
+	light->disable();
+	ofDisableLighting();
+	ofPopMatrix();
 
 	ofPushMatrix();
 
 	ofTranslate(600, 600);
 	ofRotateY(iteration);
 
-    ofEnableLighting();
-    light->enable();
+	ofEnableLighting();
+	light->enable();
 
 	shader->begin();
 	ofPushMatrix();
 	ofScale(100, 100, 100);
-    ofDrawBox(1, 1, 1);
+	ofDrawBox(1, 1, 1);
 	ofPopMatrix();
 	shader->end();
-    light->disable();
+	light->disable();
 	ofDisableLighting();
-    ofPopMatrix();*/
+	ofPopMatrix();*/
 
 
-    //ofPushMatrix();
+	//ofPushMatrix();
 	//// position
 	////ofTranslate(this->shadersManager->GetLight(0)->getPosition());
 
@@ -183,7 +169,8 @@ ofMatrix4x4 Structure::GetFinalTransformationMatrix()
 	if (this->parent != NULL)
 	{
 		return (this->getInverse()*this->parent->getInverse()).getInverse();
-	} else
+	}
+	else
 	{
 		return this->getInverse().getInverse();
 	}
@@ -235,7 +222,8 @@ Shape3D * Structure::GetElement(int _position)
 	if (_position < this->GetElementsCount())
 	{
 		return this->elements->at(_position);
-	} else
+	}
+	else
 	{
 		return NULL;
 	}
@@ -265,9 +253,9 @@ Shape3D* Structure::RemoveElement(int _position)
 	Shape3D* element = NULL;
 	if (_position < this->GetElementsCount())
 	{
-		 element = this->elements->operator[](_position);
+		element = this->elements->operator[](_position);
 		this->elements->erase(this->elements->begin() + _position);
-		
+
 	}
 	return element;
 }
@@ -287,7 +275,8 @@ Structure * Structure::GetChild(int _position)
 	if (_position < this->GetChildrenCount())
 	{
 		return this->children->at(_position);
-	} else
+	}
+	else
 	{
 		return NULL;
 	}
