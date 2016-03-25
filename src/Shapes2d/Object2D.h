@@ -4,7 +4,10 @@
 class Object2D : public Shape2D, public ofMatrix4x4
 {
 public:
-	Object2D();
+    enum Shape{Rectangle, Triangle, Ellipse};
+
+    Object2D();
+    Object2D(const Shape & shape);
 
 	~Object2D();
 	void AddTranslation(ofVec3f _draggedPixelVector);
@@ -15,17 +18,15 @@ public:
 
 private:
 
-	ofMatrix4x4 getFinalTransformationMatrix();
-
 	// Inherited via Shape2D
 	
+    virtual void Create(int x1, int y1, int width, int height) = 0;
+    virtual bool DoesRectangleOverlap(int x1, int y1, int x2, int y2) =0;
+    virtual void drawShape()=0;
+    virtual void refreshPoints()=0;
 
-	virtual void Create(int x1, int y1, int width, int height) = 0;
+protected:
 
-	virtual bool DoesRectangleOverlap(int x1, int y1, int x2, int y2) =0;
-
-	virtual void drawShape()=0;
-
-	virtual void refreshPoints()=0;
-
+    ofMatrix4x4 getFinalTransformationMatrix();
+    ofPoint getWorldPosition(ofVec3f _point);
 };

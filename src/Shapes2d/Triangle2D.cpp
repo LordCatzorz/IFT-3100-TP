@@ -9,7 +9,23 @@ Triangle2D::Triangle2D()
 }
 
 void Triangle2D::drawShape(){
+
+    ofPushMatrix();
+    ofVec3f translation;
+    ofQuaternion rotation;
+    ofVec3f scale;
+    ofQuaternion so;
+    this->getFinalTransformationMatrix().decompose(translation, rotation, scale, so);
+    float f;
+    ofVec3f v;
+    rotation.getRotate(f, v);
+    ofTranslate(translation);
+    ofScale(scale.x, scale.y, scale.z);
+    ofRotate(f, v.x, v.y, v.z);
+
     ofDrawTriangle(point1, point2, point3);
+
+    ofPopMatrix();
 }
 
 void Triangle2D::Create(int x1, int y1, int width, int height){

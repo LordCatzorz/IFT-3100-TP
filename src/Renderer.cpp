@@ -444,6 +444,7 @@ void Renderer::addVisibleShape(Shape * toAdd)
 	{
 		isInArray = toAdd == (*itr);
 	}
+    this->sceneStructure->AddElement(toAdd);
 	if (!isInArray)
 		visibleShapes.push_back(toAdd);
 }
@@ -538,8 +539,8 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 	{
 		if (downCast2D = dynamic_cast<Shape2D*>(selected))
 		{
-			downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), false);
-			downCast2D->ActionStop();
+            //downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), false);
+            //downCast2D->ActionStop();
 		}
 		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
 		{
@@ -567,7 +568,11 @@ void Renderer::mouseDragHandler(int x, int y, int button)
 	{
 		if (downCast2D = dynamic_cast<Shape2D*>(selected))
 		{
-			downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2 && downCast2D->IsPointWithinBounds(x, y));
+            if(button != 2)
+                downCast2D->AddTranslation(*(mouseWatcher->CurretVector()));
+            else
+                downCast2D->AddRotation(*(mouseWatcher->CurretVector()), 2);
+            //downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2 && downCast2D->IsPointWithinBounds(x, y));
 		}
 		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
 		{
@@ -650,7 +655,8 @@ void Renderer::drawShapeWorker(int x, int y, int button){
     {
         ofColor tmpColor = *(Gui->GetCurrentColor());
         ((Shape2D *)visibleShapes.back())->SetColor(&tmpColor);
-        downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
+        //downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
+        downCast2D->Create(0, 0, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
     }
 }
 

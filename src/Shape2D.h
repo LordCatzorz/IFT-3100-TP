@@ -89,7 +89,8 @@ public:
     }
 
     void Draw(){
-        ofDisableDepthTest();
+        drawShape();
+        /*ofDisableDepthTest();
         ofPushMatrix();
         if(parentShape != nullptr)
             ofTranslate(parentXOffset, parentYOffset);
@@ -127,7 +128,7 @@ public:
             child->Draw();
         ofPopMatrix();
 
-        ofEnableDepthTest();
+        ofEnableDepthTest();*/
     }
 
     bool IsPointWithinBounds(float x, float y){
