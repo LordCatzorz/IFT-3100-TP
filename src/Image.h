@@ -6,11 +6,11 @@
 #endif
 
 #include "ofMain.h"
-#include "Shape2D.h"
+#include "Shapes2d\Object2D.h"
 #include <math.h>
 #include <stdlib.h>
 
-class Image: public Shape2D
+class Image: public Object2D
 {
 public:
 	Image(string imageName);

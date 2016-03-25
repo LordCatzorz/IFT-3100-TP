@@ -1,8 +1,8 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
-#include "../Shape2D.h"
+#include "Object2D.h"
 
-    class Rectangle2D : public Shape2D
+    class Rectangle2D : public Object2D
     {
     public:
                     Rectangle2D();
@@ -19,6 +19,6 @@
         //bool isPointInsideRectangle(int x, int y, const ofRectangle & rectangle);
         void refreshPoints();
         void drawShape();
-    };
+	};
 
 #endif // RECTANGLE_H

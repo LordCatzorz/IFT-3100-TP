@@ -18,7 +18,7 @@ void Structure::Draw()
 	{
 		child->Draw();
 	}
-	for (Shape3D* shape : *(this->elements))
+	for (Shape* shape : *(this->elements))
 	{
 		shape->Draw();
 	}
@@ -179,7 +179,7 @@ ofMatrix4x4 Structure::GetFinalTransformationMatrix()
 Structure::Structure() : ofMatrix4x4()
 {
 	this->children = new std::vector<Structure*>();
-	this->elements = new std::vector<Shape3D*>();
+	this->elements = new std::vector<Shape*>();
 	this->shadersManager = new ShadersManager();
 	this->parent = NULL;
 	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Created structure at adresse: " << this << " with parent structure NULL";
@@ -188,7 +188,7 @@ Structure::Structure() : ofMatrix4x4()
 Structure::Structure(Structure* _parent) : ofMatrix4x4()
 {
 	this->children = new std::vector<Structure*>();
-	this->elements = new std::vector<Shape3D*>();
+	this->elements = new std::vector<Shape*>();
 	this->shadersManager = new ShadersManager();
 	this->parent = _parent;
 	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Created structure at adresse: " << this << " with parent structure " << _parent;
@@ -212,12 +212,12 @@ Structure::~Structure()
 	ofLog(ofLogLevel::OF_LOG_VERBOSE) << "Deleted structure at adresse: " << this;
 }
 
-std::vector<Shape3D*>* Structure::GetElements()
+std::vector<Shape*>* Structure::GetElements()
 {
 	return this->elements;
 }
 
-Shape3D * Structure::GetElement(int _position)
+Shape * Structure::GetElement(int _position)
 {
 	if (_position < this->GetElementsCount())
 	{
@@ -229,7 +229,7 @@ Shape3D * Structure::GetElement(int _position)
 	}
 }
 
-bool Structure::AddElement(Shape3D * _newElement)
+bool Structure::AddElement(Shape * _newElement)
 {
 	_newElement->SetParent(this);
 	this->elements->push_back(_newElement);
@@ -248,9 +248,9 @@ bool Structure::DeleteElement(int _position)
 	return false;
 }
 
-Shape3D* Structure::RemoveElement(int _position)
+Shape* Structure::RemoveElement(int _position)
 {
-	Shape3D* element = NULL;
+	Shape* element = NULL;
 	if (_position < this->GetElementsCount())
 	{
 		element = this->elements->operator[](_position);

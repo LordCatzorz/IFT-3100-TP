@@ -5,7 +5,6 @@
 #endif
 
 #include "Shape3D.h"
-#include "Shape.h"
 #include "ofxAssimpModelLoader.h"
 
 class Object3D : public Shape3D, public ofMatrix4x4

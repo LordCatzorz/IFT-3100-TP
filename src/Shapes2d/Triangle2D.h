@@ -1,10 +1,9 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
-#include "../Shape2D.h"
-#include "../Shape.h"
+#include "Object2D.h"
 
-    class Triangle2D : public Shape2D
+    class Triangle2D : public Object2D
     {
     public:
                     Triangle2D();

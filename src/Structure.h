@@ -2,10 +2,10 @@
 #define STRUCTURE_H
 
 #include "ShadersManager.h"
-#include "Shape3D.h"
+#include "Shape.h"
 #include <vector>
 
-class Structure : public Shape3D, public ofMatrix4x4
+class Structure : public Shape, public ofMatrix4x4
 {
 public:
 
@@ -16,11 +16,11 @@ public:
 	Structure(Structure* _parent);
 	~Structure();
 
-	std::vector<Shape3D*>* GetElements();
-	Shape3D* GetElement(int _position);
-	bool AddElement(Shape3D* _newElement);
+	std::vector<Shape*>* GetElements();
+	Shape* GetElement(int _position);
+	bool AddElement(Shape* _newElement);
 	bool DeleteElement(int _position);
-	Shape3D* RemoveElement(int _position);
+	Shape* RemoveElement(int _position);
 
 	Structure* GetParent();
 	std::vector<Structure*>* GetChildren();
@@ -32,7 +32,7 @@ public:
 	size_t GetElementsCount() const;
 	size_t GetChildrenCount() const;
 
-	// Inherited via Shape3D
+	// Inherited via Shape
 	bool IsPointWithinBounds(float x, float y);
 
 	void AddTranslation(ofVec3f _draggedPixelVector);
@@ -56,7 +56,7 @@ public:
 	}
 private:
 	int iteration = 0;
-	std::vector<Shape3D*>* elements;
+	std::vector<Shape*>* elements;
 	Structure* parent;
 	std::vector<Structure*>* children;
 

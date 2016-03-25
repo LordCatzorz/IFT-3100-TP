@@ -32,7 +32,7 @@ Renderer::~Renderer()
 
 void Renderer::TestMoveLeft()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -43,7 +43,7 @@ void Renderer::TestMoveLeft()
 
 void Renderer::TestMoveRight()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -54,7 +54,7 @@ void Renderer::TestMoveRight()
 
 void Renderer::TestMoveUp()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -65,7 +65,7 @@ void Renderer::TestMoveUp()
 
 void Renderer::TestMoveDown()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -76,7 +76,7 @@ void Renderer::TestMoveDown()
 
 void Renderer::TestMoveDiag()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -87,7 +87,7 @@ void Renderer::TestMoveDiag()
 
 void Renderer::TestZoomIn()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -98,7 +98,7 @@ void Renderer::TestZoomIn()
 
 void Renderer::TestZoomOut()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -109,7 +109,7 @@ void Renderer::TestZoomOut()
 
 void Renderer::TestRotateZ()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -120,7 +120,7 @@ void Renderer::TestRotateZ()
 
 void Renderer::TestRotateZNeg()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -131,7 +131,7 @@ void Renderer::TestRotateZNeg()
 
 void Renderer::TestRotateX()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -142,7 +142,7 @@ void Renderer::TestRotateX()
 
 void Renderer::TestRotateXNeg()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -153,7 +153,7 @@ void Renderer::TestRotateXNeg()
 
 void Renderer::TestRotateY()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -164,7 +164,7 @@ void Renderer::TestRotateY()
 
 void Renderer::TestRotateYNeg()
 {
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		if (shape->GetSelected())
 		{
@@ -251,7 +251,7 @@ void Renderer::TestSelectPrevious()
 void Renderer::TestDeselectAll()
 {
 	this->testSelectedElement = -1;
-	for (Shape3D* shape : *(this->sceneStructure->GetElements()))
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
 	{
 		shape->SetSelected(false);
 	}
