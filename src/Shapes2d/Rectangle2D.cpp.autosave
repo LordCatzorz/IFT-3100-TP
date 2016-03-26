@@ -11,22 +11,7 @@ Rectangle2D::Rectangle2D()
 
 void Rectangle2D::drawShape(){
 
-    ofPushMatrix();
-    ofVec3f translation;
-    ofQuaternion rotation;
-    ofVec3f scale;
-    ofQuaternion so;
-    this->getFinalTransformationMatrix().decompose(translation, rotation, scale, so);
-    float f;
-    ofVec3f v;
-    rotation.getRotate(f, v);
-    ofTranslate(translation);
-    ofScale(scale.x, scale.y, scale.z);
-    ofRotate(f, v.x, v.y, v.z);
-
     ofDrawRectangle(point1, point2.x - point1.x, point4.y - point2.y);
-
-    ofPopMatrix();
 
     /*ofDisableDepthTest();
     ofPushMatrix();

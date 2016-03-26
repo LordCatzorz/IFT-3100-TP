@@ -23,7 +23,35 @@ public:
     void AddScale(bool _zoomIn);
 
     void ActionStop(){currentAction = Action::Rest;}
-    void Draw(){drawShape();}
+    void Draw(){
+        ofFill();
+        ofSetColor(255);
+        ofPushMatrix();
+        ofVec3f translation;
+        ofQuaternion rotation;
+        ofVec3f scale;
+        ofQuaternion so;
+        this->getFinalTransformationMatrix().decompose(translation, rotation, scale, so);
+        float f;
+        ofVec3f v;
+        rotation.getRotate(f, v);
+        ofTranslate(translation);
+        ofScale(scale.x, scale.y, scale.z);
+        ofRotate(f, v.x, v.y, v.z);
+    
+        drawShape();
+    
+        if(shouldShowBorders){
+            ofFill();
+            ofSetColor(borderColor);
+            ofDrawRectangle(horizontalBorder1);
+            ofDrawRectangle(horizontalBorder2);
+            ofDrawRectangle(verticalBorder1);
+            ofDrawRectangle(verticalBorder2);
+        }
+        ofPopMatrix();
+    
+    }
     bool IsPointWithinBounds(float x, float y){
         return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
     }

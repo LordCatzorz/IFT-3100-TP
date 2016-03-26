@@ -68,7 +68,7 @@ bool Image::IsPointWithinBounds(float x, float y){
     return isPointInsideRectangle(x, y, ofRectangle(topLeftPoint, bottomRightPoint));
 }*/
 
-bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wont work if the selection rectangle goes trough inside teh shape and parallel to 2 sides of the shape
+/*bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wont work if the selection rectangle goes trough inside teh shape and parallel to 2 sides of the shape
     bool output = false;
 
     ofPoint * p1 = new ofPoint();
@@ -107,9 +107,6 @@ bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wo
             (p5->x>= selectionBox->x && p5->x <= selectionBox->x + selectionBox->width &&
             p5->y>= selectionBox->y && p5->y <= selectionBox->y + selectionBox->height);
 
-            /*isPointInsideRectangle(p5->x - xOffset - xOffset, p5->y - yOffset - yOffset, *selectionBox) ||
-            isPointInsideRectangle(bottomRightPoint.x, bottomRightPoint.y, *selectionBox);*/
-
     delete p1;
     delete p2;
     delete p3;
@@ -118,7 +115,7 @@ bool Image::DoesRectangleOverlap(int x1, int y1, int x2, int y2){//TODO: this wo
     delete selectionBox;
 
     return output;
-}
+}*/
 
 /*void Image::AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation){
 

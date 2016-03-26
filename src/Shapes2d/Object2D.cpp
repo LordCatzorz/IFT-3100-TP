@@ -55,10 +55,10 @@ void Object2D::Create(int x1, int y1, int width, int height)
 {
 }
 
-bool Object2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2)
+/*bool Object2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2)
 {
 	return false;
-}
+}*/
 
 void Object2D::drawShape()
 {

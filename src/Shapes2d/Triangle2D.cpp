@@ -9,29 +9,15 @@ Triangle2D::Triangle2D()
 }
 
 void Triangle2D::drawShape(){
-
-    ofPushMatrix();
-    ofVec3f translation;
-    ofQuaternion rotation;
-    ofVec3f scale;
-    ofQuaternion so;
-    this->getFinalTransformationMatrix().decompose(translation, rotation, scale, so);
-    float f;
-    ofVec3f v;
-    rotation.getRotate(f, v);
-    ofTranslate(translation);
-    ofScale(scale.x, scale.y, scale.z);
-    ofRotate(f, v.x, v.y, v.z);
-
     ofDrawTriangle(point1, point2, point3);
-
-    ofPopMatrix();
 }
 
 void Triangle2D::Create(int x1, int y1, int width, int height){
 
     xOffset = x1;
     yOffset = y1;
+    this->setTranslation(ofVec3f(x1, y1));
+
     if(topLeftPoint.x == INT_MIN){
         topLeftPoint.set(0, 0);
         topRightPoint.set(0, 0);
@@ -57,9 +43,9 @@ void Triangle2D::Create(int x1, int y1, int width, int height){
     refreshBorders();
 }
 
-bool Triangle2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2){
+/*bool Triangle2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2){
     return false;
-}
+}*/
 
 void Triangle2D::refreshPoints(){
 

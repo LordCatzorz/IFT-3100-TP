@@ -1,8 +1,6 @@
 #include "Renderer.h"
 #include "Object3D.h"
-Shape2D* downCast2D;
-Shape3D* downCast3D;
-
+Object2D * downCast2D;
 
 Renderer::Renderer()
 {
@@ -314,16 +312,7 @@ void Renderer::Draw()
 	ofPushMatrix();
 	this->sceneStructure->Draw();
 	mouseWatcher->Draw();
-	Gui->Draw();
-	Gui->Draw();
-	for (Shape * toShow : visibleShapes)
-	{
-		if (downCast2D = dynamic_cast<Shape2D*>(toShow))
-		{
-			if (downCast2D->GetParent() == nullptr)
-				downCast2D->Draw();
-		}
-	}
+    Gui->Draw();
 	ofPopMatrix();
 }
 
@@ -337,7 +326,8 @@ void Renderer::FileOpenCallback(string param)
 	input.close();
 
 	Image * newImage = new Image(imageName.substr(1));
-	newImage->AffectVector((int) (newImage->TopRightPoint()->x / 2), (int) (newImage->BottomLeftPoint()->y / 2), new ofVec3f(100, 100));
+    //TODO: Reintegrate
+    //newImage->AffectVector((int) (newImage->TopRightPoint()->x / 2), (int) (newImage->BottomLeftPoint()->y / 2), new ofVec3f(100, 100));
 	addVisibleShape(newImage);
 }
 
@@ -356,15 +346,15 @@ void Renderer::AssociateShapesCallback(string arg)
 {
 	if (selectedShapes.size() <= 1)
 		return;
-	Shape2D* parent;
-	if (parent = dynamic_cast<Shape2D*>(selectedShapes.front()))
+    Object2D* parent;
+    if (parent = dynamic_cast<Object2D*>(selectedShapes.front()))
 	{
 		std::vector<Shape*>::iterator itr = selectedShapes.begin();
 		itr++;
 		for (itr; itr != selectedShapes.end(); ++itr)
 		{
-			Shape2D* child;
-			if (child = dynamic_cast<Shape2D*>(*itr))
+            Object2D* child;
+            if (child = dynamic_cast<Object2D*>(*itr))
 			{
 				parent->AddChild(child);
 			}
@@ -537,7 +527,7 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 {
 	for (Shape* selected : selectedShapes)
 	{
-		if (downCast2D = dynamic_cast<Shape2D*>(selected))
+        /*if (downCast2D = dynamic_cast<Object2D*>(selected))
 		{
             //downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), false);
             //downCast2D->ActionStop();
@@ -545,7 +535,7 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
 		{
 			//TODO::Implement;
-		}
+        }*/
 	}
 }
 void Renderer::mouseClickHandler(int x, int y, int button)
@@ -566,7 +556,11 @@ void Renderer::mouseDragHandler(int x, int y, int button)
 {
 	for (Shape * selected : selectedShapes)
 	{
-		if (downCast2D = dynamic_cast<Shape2D*>(selected))
+        if(button != 2)
+            selected->AddTranslation(*(mouseWatcher->CurretVector()));
+        else
+            selected->AddRotation(*(mouseWatcher->CurretVector()), 2);
+        /*if (downCast2D = dynamic_cast<Object2D*>(selected))
 		{
             if(button != 2)
                 downCast2D->AddTranslation(*(mouseWatcher->CurretVector()));
@@ -577,7 +571,7 @@ void Renderer::mouseDragHandler(int x, int y, int button)
 		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
 		{
 			//TODO::Implement;
-		}
+        }*/
 	}
 }
 
@@ -651,12 +645,12 @@ void Renderer::drawEllipseManager(string param){
 }
 
 void Renderer::drawShapeWorker(int x, int y, int button){
-    if (downCast2D = dynamic_cast<Shape2D*>(visibleShapes.back()))
+    if (downCast2D = dynamic_cast<Object2D*>(visibleShapes.back()))
     {
         ofColor tmpColor = *(Gui->GetCurrentColor());
-        ((Shape2D *)visibleShapes.back())->SetColor(&tmpColor);
-        //downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
-        downCast2D->Create(0, 0, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
+        ((Object2D *)visibleShapes.back())->SetColor(&tmpColor);
+        downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
+        //downCast2D->Create(0, 0, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
     }
 }
 
@@ -672,7 +666,7 @@ void Renderer::unbindShapeWorkers(int x, int y, int button){
 
 void Renderer::dissociateShapesWorkers(int x, int y, int button){
     for(Shape * selected : visibleShapes){
-        if (downCast2D = dynamic_cast<Shape2D*>(selected))
+        if (downCast2D = dynamic_cast<Object2D*>(selected))
         {
             if(downCast2D->IsPointWithinBounds(x, y)){
                 clearSelectedShapes();
