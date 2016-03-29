@@ -116,7 +116,7 @@ void ofApp::keyPressed(int key)
 	}
 	else if (key == 'b')
 	{
-		this->renderer->TestCreateIsocahedron();
+		this->renderer->TestCreateIcosahedron();
 	}
 	else if (key == 'f')
 	{

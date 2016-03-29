@@ -174,41 +174,41 @@ void Renderer::TestRotateYNeg()
 
 void Renderer::TestCreateTetrahedron()
 {
-	Object3D* obj = new Object3D(Shapes::createTetrahedron()->getMeshPtr());
+	Object3D* obj = new Object3D("models/tetrahedron/tetrahedron.obj");
 	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
-	obj->glScale(200, 200, 200);
+	//obj->glScale(200, 200, 200);
 	this->sceneStructure->AddElement(obj);
 }
 
 void Renderer::TestCreateHexahedron()
 {
-	Object3D* obj = new Object3D(Shapes::createHexahedron()->getMeshPtr());
+	Object3D* obj = new Object3D("models/hexahedron/hexahedron.obj");
 	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
-	obj->glScale(200, 200, 200);
+	//obj->glScale(200, 200, 200);
 	this->sceneStructure->AddElement(obj);
 }
 
 void Renderer::TestCreateOctahedron()
 {
-	Object3D* obj = new Object3D(Shapes::createOctahedron()->getMeshPtr());
+	Object3D* obj = new Object3D("models/octahedron/octahedron.obj");
 	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
-	obj->glScale(200, 200, 200);
+	//obj->glScale(200, 200, 200);
 	this->sceneStructure->AddElement(obj);
 }
 
 void Renderer::TestCreateDodecahedron()
 {
-	Object3D* obj = new Object3D(Shapes::createDodecahedron()->getMeshPtr());
+	Object3D* obj = new Object3D("models/dodecahedron/dodecahedron.obj");
 	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
-	obj->glScale(200, 200, 200);
+	//obj->glScale(200, 200, 200);
 	this->sceneStructure->AddElement(obj);
 }
 
-void Renderer::TestCreateIsocahedron()
+void Renderer::TestCreateIcosahedron()
 {
-	Object3D* obj = new Object3D(Shapes::createIcosahedron()->getMeshPtr());
+	Object3D* obj = new Object3D("models/icosahedron/icosahedron.obj");
 	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
-	obj->glScale(200, 200, 200);
+	//obj->glScale(200, 200, 200);
 	this->sceneStructure->AddElement(obj);
 }
 
