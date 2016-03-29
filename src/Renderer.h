@@ -10,6 +10,7 @@
 #include "Shapes2d/Triangle2D.h"
 #include "Shapes2d/Rectangle2D.h"
 #include "Shapes2d/Ellipse2D.h"
+#include "Camera/CameraManager.h"
 
 class Renderer
 {
@@ -94,6 +95,10 @@ private:
     GUI* Gui;
     void ModeChangeCallback(GUI::ActionType newMode);
     void screenSectionSectionWorker(int x, int y, int button);
+
+    ofLight ambientLight;
+    CameraManager cameraManager;
+    void drawCallback();
 
     //------ MouseWatcher attributes
     MouseWatcher * mouseWatcher;

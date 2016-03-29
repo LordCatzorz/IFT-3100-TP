@@ -15,7 +15,8 @@ GUI::GUI()
     associateShapes.addListener(this, &GUI::associateShapesCaller);
     dissociateShapes.addListener(this, &GUI::dissociateShapesCaller);
 
-    gui.setup();
+    gui.setup("Outils");
+    cameraGui.setPosition(10, 10);
     gui.add(openFileBtn.setup("Ouvir une image"));
     gui.add(printscreenSection.setup("Capturer une zone"));
     gui.add(printscreen.setup("Capturer l'ecran"));
@@ -33,6 +34,27 @@ GUI::GUI()
 
     xPos = gui.getPosition().x;
     yPos = gui.getPosition().y;
+
+    cameraGui.setup("Camera");
+    cameraGui.setPosition(ofGetWidth() - cameraGui.getWidth() - 10, 10);
+    cameraGui.add(fovVSlider.setup("FOV Verticale", 0, 0, 1032));
+    cameraGui.add(focHSlider.setup("FOV Horizontale", 0, 0, 1032));
+    cameraGui.add(farClipSlider.setup("Far clip", 0, 0, 1032));
+    cameraGui.add(nearClipSlider.setup("Near clip", 0, 0, 1032));
+
+
+    //cameraGui.add();
+
+
+    //aspectRatioGroup.add(&Square);
+    //Square.setup("Caree");
+    cameraGui.add(aspectRatioGroup.setup("Aspect ratio"));
+    aspectRatioGroup.add(Square.setup("Caree"));
+    Square.setName("Caree");
+    aspectRatioGroup.add(Wide.setup("Large"));
+    Wide.setName("Large");
+    aspectRatioGroup.add(UlraWide.setup("Tres large"));
+    UlraWide.setName("Tres large");
     ofEnableDepthTest();
 }
 
@@ -98,6 +120,7 @@ string GUI::RequestSaveFilePath(string defaultName)
 void GUI::Draw(){
     ofDisableDepthTest();
     gui.draw();
+    cameraGui.draw();
     ofEnableDepthTest();
 }
 

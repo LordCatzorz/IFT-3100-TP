@@ -51,6 +51,14 @@ private:
     ofColor  outputColor;
     ofxPanel gui;
 
+    ofxPanel cameraGui;
+    ofxSlider<int> fovVSlider,
+              focHSlider,
+              farClipSlider,
+              nearClipSlider;
+    ofxGuiGroup aspectRatioGroup;
+    ofxToggle Square, Wide, UlraWide;
+
 	void openFileBtnCallback();
     void openFilePrintscreenCallback();
     void selectionToggleCallback(bool & inval);

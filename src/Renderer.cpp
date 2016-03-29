@@ -283,6 +283,11 @@ void Renderer::Setup()
 	this->sceneStructure->shadersManager->AddShader(defaultShader);
 	defaultShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
 
+    cameraManager.setTarget(ofVec3f((ofGetWidth() / 2), (ofGetHeight() / 2)));
+    cameraManager.setDistance(500);
+    cameraManager.setup();
+    ambientLight.setPosition(0, 0, -50);
+
 	reset();
 	//ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
 }
@@ -309,11 +314,25 @@ void Renderer::Update()
 
 void Renderer::Draw()
 {
-	ofPushMatrix();
-	this->sceneStructure->Draw();
-	mouseWatcher->Draw();
+    cameraManager.begin();
+    ofPushMatrix();
+    this->sceneStructure->Draw();
+    mouseWatcher->Draw();
     Gui->Draw();
-	ofPopMatrix();
+    ofPopMatrix();
+
+    //TODO: Camera testing code. To be removed
+    light.enable();
+    ofFill();
+    ofPushMatrix();
+    ofTranslate((ofGetWidth() / 2) - 50, (ofGetHeight() / 2) - 50);
+    ofRotate(-52, 0, 0, 1);
+    ofSetColor(255);
+    ofBox(100);
+    ofPopMatrix();
+    light.disable();
+
+    cameraManager.end();
 }
 
 void Renderer::FileOpenCallback(string param)
