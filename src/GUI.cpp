@@ -15,6 +15,13 @@ GUI::GUI()
     associateShapes.addListener(this, &GUI::associateShapesCaller);
     dissociateShapes.addListener(this, &GUI::dissociateShapesCaller);
 
+    frontToggle.addListener(this, &GUI::frontCameraCaller);
+    backToggle.addListener(this, &GUI::backCameraCaller);
+    fovVSlider.addListener(this, &GUI::VFOVCaller);
+    fovHSlider.addListener(this, &GUI::HFOVCaller);
+    farClipSlider.addListener(this, &GUI::FarClipCaller);
+    nearClipSlider.addListener(this, &GUI::NearClipCaller);
+
     gui.setup("Outils");
     cameraGui.setPosition(10, 10);
     gui.add(openFileBtn.setup("Ouvir une image"));
@@ -36,18 +43,19 @@ GUI::GUI()
     yPos = gui.getPosition().y;
 
     cameraGui.setup("Camera");
+
+    cameraGui.add(cameraPickerGroup.setup("Aspect ratio"));
+    cameraPickerGroup.add(frontToggle.setup("Camera avant", true));
+    cameraPickerGroup.add(backToggle.setup("Camera arrière", false));
+    frontToggle.setName("Camera avant");
+    backToggle.setName("Camera arrière");
+
     cameraGui.setPosition(ofGetWidth() - cameraGui.getWidth() - 10, 10);
     cameraGui.add(fovVSlider.setup("FOV Verticale", 0, 0, 1032));
-    cameraGui.add(focHSlider.setup("FOV Horizontale", 0, 0, 1032));
-    cameraGui.add(farClipSlider.setup("Far clip", 0, 0, 1032));
+    cameraGui.add(fovHSlider.setup("FOV Horizontale", 0, 0, 1032));
+    cameraGui.add(farClipSlider.setup("Far clip", 1032, 0, 1032));
     cameraGui.add(nearClipSlider.setup("Near clip", 0, 0, 1032));
 
-
-    //cameraGui.add();
-
-
-    //aspectRatioGroup.add(&Square);
-    //Square.setup("Caree");
     cameraGui.add(aspectRatioGroup.setup("Aspect ratio"));
     aspectRatioGroup.add(Square.setup("Caree"));
     Square.setName("Caree");
@@ -109,6 +117,31 @@ void GUI::AddAssociateShapesListener(std::function<void(std::string)> fnc)
 void GUI::AddDissociateShapesListener(std::function<void(std::string)> fnc)
 {
     dissociateShapesCallback = fnc;
+}
+
+void GUI::AddCameraChangedListener(std::function<void(GUI::CameraSelected)> fnc)
+{
+    cameraChangedCallback = fnc;
+}
+
+void GUI::AddVFOVChangedListener(std::function<void(int)> fnc)
+{
+    VFOVChangedCallback = fnc;
+}
+
+void GUI::AddHFOVChangedListener(std::function<void(int)> fnc)
+{
+    HFOVChangedCallback = fnc;
+}
+
+void GUI::AddFarClipChangedListener(std::function<void(int)> fnc)
+{
+    FarClipChangedCallback = fnc;
+}
+
+void GUI::AddNearClipChangedListener(std::function<void(int)> fnc)
+{
+    NearClipChangedCallback = fnc;
 }
 
 string GUI::RequestSaveFilePath(string defaultName)
@@ -230,4 +263,37 @@ ofFileDialogResult GUI::saveUsrFile(string defaultName)
 {
 	ofFileDialogResult result = ofSystemSaveDialog(defaultName, "Choisisez où savegarder votre capture d'écran");
 	return result;
+}
+
+
+void GUI::frontCameraCaller(bool & inval)
+{
+    backToggle = !inval;
+    cameraChangedCallback(inval ? GUI::CameraSelected::Front : GUI::CameraSelected::Back);
+}
+
+void GUI::backCameraCaller(bool & inval)
+{
+    frontToggle = !inval;
+    cameraChangedCallback(inval ? GUI::CameraSelected::Back : GUI::CameraSelected::Front);
+}
+
+void GUI::VFOVCaller(int & val)
+{
+    VFOVChangedCallback(val);
+}
+
+void GUI::HFOVCaller(int & val)
+{
+    HFOVChangedCallback(val);
+}
+
+void GUI::FarClipCaller(int & val)
+{
+    FarClipChangedCallback(val);
+}
+
+void GUI::NearClipCaller(int & val)
+{
+    NearClipChangedCallback(val);
 }

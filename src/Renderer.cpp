@@ -21,6 +21,11 @@ Renderer::Renderer()
 	Gui->AddCreateEllipseListener(std::bind(&Renderer::drawEllipseManager, this, std::placeholders::_1));
 	Gui->AddAssociateShapesListener(std::bind(&Renderer::AssociateShapesCallback, this, std::placeholders::_1));
 	Gui->AddDissociateShapesListener(std::bind(&Renderer::DissociateShapesCallback, this, std::placeholders::_1));
+    Gui->AddCameraChangedListener(std::bind(&Renderer::CameraChangedCallback, this, std::placeholders::_1));
+    Gui->AddVFOVChangedListener(std::bind(&Renderer::VFOVChangedCallback, this, std::placeholders::_1));
+    Gui->AddHFOVChangedListener(std::bind(&Renderer::HFOVCallback, this, std::placeholders::_1));
+    Gui->AddFarClipChangedListener(std::bind(&Renderer::FarClipChangedCallback, this, std::placeholders::_1));
+    Gui->AddNearClipChangedListener(std::bind(&Renderer::NearClipChangedCallback, this, std::placeholders::_1));
 }
 
 Renderer::~Renderer()
@@ -287,6 +292,7 @@ void Renderer::Setup()
     cameraManager.setDistance(500);
     cameraManager.setup();
     ambientLight.setPosition(0, 0, -50);
+    GuiLight.setPosition(0, 0, 10000);
 
 	reset();
 	//ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
@@ -314,23 +320,28 @@ void Renderer::Update()
 
 void Renderer::Draw()
 {
+    GuiLight.enable();
+    Gui->Draw();
+    GuiLight.disable();
     cameraManager.begin();
     ofPushMatrix();
     this->sceneStructure->Draw();
     mouseWatcher->Draw();
-    Gui->Draw();
+
     ofPopMatrix();
 
     //TODO: Camera testing code. To be removed
-    light.enable();
+    ambientLight.enable();
     ofFill();
-    ofPushMatrix();
-    ofTranslate((ofGetWidth() / 2) - 50, (ofGetHeight() / 2) - 50);
-    ofRotate(-52, 0, 0, 1);
-    ofSetColor(255);
-    ofBox(100);
-    ofPopMatrix();
-    light.disable();
+    for(int i = 0; i < 20; i++){
+        ofPushMatrix();
+        ofTranslate(20 + 50 * i, (ofGetHeight() / 2) - 50);
+        //ofRotate(-52, 0, 0, 1);
+        ofSetColor(255);
+        ofBox(40);
+        ofPopMatrix();
+    }
+    ambientLight.disable();
 
     cameraManager.end();
 }
@@ -386,7 +397,7 @@ void Renderer::AssociateShapesCallback(string arg)
 
 void Renderer::DissociateShapesCallback(string arg)
 {
-	mouseWatcher->AddMouseClickDelegate(dissociateShapesDelegateWorker);
+    mouseWatcher->AddMouseClickDelegate(dissociateShapesDelegateWorker);
 }
 
 void Renderer::ImportObjFileCallback(string param)
@@ -395,6 +406,33 @@ void Renderer::ImportObjFileCallback(string param)
 	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
 
 	this->sceneStructure->AddElement(obj);
+}
+
+void Renderer::CameraChangedCallback(const GUI::CameraSelected & activeCamera)
+{
+    cameraManager.switchCam(activeCamera == GUI::Front ? CameraManager::front : CameraManager::back);
+}
+
+void Renderer::VFOVChangedCallback(int val)
+{
+    // TODO: implement
+    //cameraManager.
+}
+
+void Renderer::HFOVCallback(int val)
+{
+    // TODO: implement
+    //cameraManager.
+}
+
+void Renderer::FarClipChangedCallback(int val)
+{
+    cameraManager.setFarClip(val);
+}
+
+void Renderer::NearClipChangedCallback(int val)
+{
+    cameraManager.setNearClip(val);
 }
 
 void Renderer::KeyDown(int key)
@@ -518,6 +556,14 @@ void Renderer::reset()
 void Renderer::mouseDownHandler(int x, int y, int button)
 {
 
+    if(button == OF_MOUSE_BUTTON_4){
+        cameraManager.zoomIn();
+    }else if(button == OF_MOUSE_BUTTON_5){
+        cameraManager.zoomOut();
+    }else{
+        cameraManager.notifyMousePressed(x, y, button);
+    }
+
 	bool clickedOnSelectedShape = false;
 	for (Shape* selected : selectedShapes)
 	{
@@ -544,6 +590,7 @@ void Renderer::mouseDownHandler(int x, int y, int button)
 }
 void Renderer::mouseUpHandler(int x, int y, int button)
 {
+    cameraManager.notifyMouseReleased(x, y, button);
 	for (Shape* selected : selectedShapes)
 	{
         /*if (downCast2D = dynamic_cast<Object2D*>(selected))
@@ -573,6 +620,7 @@ void Renderer::mouseClickHandler(int x, int y, int button)
 }
 void Renderer::mouseDragHandler(int x, int y, int button)
 {
+    cameraManager.notifyMouseDragged(x, y, button);
 	for (Shape * selected : selectedShapes)
 	{
         if(button != 2)

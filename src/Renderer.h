@@ -50,6 +50,12 @@ public:
     void AssociateShapesCallback(string arg);
     void DissociateShapesCallback(string arg);
 	void ImportObjFileCallback(string param);
+    void CameraChangedCallback(const GUI::CameraSelected & activeCamera);
+    void VFOVChangedCallback(int val);
+    void HFOVCallback(int val);
+    void FarClipChangedCallback(int val);
+    void NearClipChangedCallback(int val);
+
     void KeyDown(int key);
     void KeyUp(int key);
 private:
@@ -92,6 +98,7 @@ private:
 	bool isFlipAxisY;
     bool isVerbose;
 
+    ofLight GuiLight;
     GUI* Gui;
     void ModeChangeCallback(GUI::ActionType newMode);
     void screenSectionSectionWorker(int x, int y, int button);

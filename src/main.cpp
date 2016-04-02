@@ -1,9 +1,11 @@
 #include "ofMain.h"
 #include "ofApp.h"
+#include "app/ofAppGlutWindow.h"
 
 //========================================================================
 int main()
 {
+    ofAppGlutWindow window;
     // param�tres du contexte de rendu OpenGL
     ofGLWindowSettings windowSettings;
 
@@ -19,7 +21,7 @@ int main()
     // cr�ation de la fen�tre
     //ofCreateWindow(windowSettings);			// <-------- setup the GL context
 
-     ofSetupOpenGL(ofApp::SCREEN_WIDTH,ofApp::SCREEN_HEIGHT,OF_WINDOW);
+     ofSetupOpenGL(&window, ofApp::SCREEN_WIDTH,ofApp::SCREEN_HEIGHT,OF_WINDOW);
 
     // this kicks off the running of my app
     // can be OF_WINDOW or OF_FULLSCREEN

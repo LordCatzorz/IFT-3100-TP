@@ -13,6 +13,7 @@ class GUI
 {
 public:
     enum ActionType {Select, Edit};
+    enum CameraSelected {Front, Back};
     GUI();
     void Draw();
     void Show();
@@ -29,6 +30,11 @@ public:
     void AddCreateEllipseListener(std::function<void(std::string)> fnc);
     void AddAssociateShapesListener(std::function<void(std::string)> fnc);
     void AddDissociateShapesListener(std::function<void(std::string)> fnc);
+    void AddCameraChangedListener(std::function<void(GUI::CameraSelected)> fnc);
+    void AddVFOVChangedListener(std::function<void(int)> fnc);
+    void AddHFOVChangedListener(std::function<void(int)> fnc);
+    void AddFarClipChangedListener(std::function<void(int)> fnc);
+    void AddNearClipChangedListener(std::function<void(int)> fnc);
     ofColor * GetCurrentColor(){
         outputColor = color;
         return &(outputColor);}
@@ -52,13 +58,17 @@ private:
     ofxPanel gui;
 
     ofxPanel cameraGui;
-    ofxSlider<int> fovVSlider,
-              focHSlider,
+    ofxGuiGroup cameraPickerGroup;
+    ofxToggle frontToggle, backToggle;
+    ofxIntSlider fovVSlider,
+              fovHSlider,
               farClipSlider,
               nearClipSlider;
     ofxGuiGroup aspectRatioGroup;
     ofxToggle Square, Wide, UlraWide;
 
+
+    //Right-Side pane callers
 	void openFileBtnCallback();
     void openFilePrintscreenCallback();
     void selectionToggleCallback(bool & inval);
@@ -70,6 +80,16 @@ private:
     void createEllipseCaller();
     void associateShapesCaller();
     void dissociateShapesCaller();
+
+    //Left-side pane callers
+    void frontCameraCaller(bool & inval);
+    void backCameraCaller(bool & inval);
+    void VFOVCaller(int & val);
+    void HFOVCaller(int & val);
+    void FarClipCaller(int & val);
+    void NearClipCaller(int & val);
+
+
     ofFileDialogResult requestUsrFile();
     ofFileDialogResult saveUsrFile(string defaultName);
     std::function<void(std::string)> imageOpenCallback;
@@ -83,6 +103,12 @@ private:
     std::function<void(std::string)> dissociateShapesCallback;
     std::function<void(GUI::ActionType)> modeChangedCallback;
 	
+    std::function<void(GUI::CameraSelected)> cameraChangedCallback;
+    std::function<void(int val)> VFOVChangedCallback;
+    std::function<void(int val)> HFOVChangedCallback;
+    std::function<void(int val)> FarClipChangedCallback;
+    std::function<void(int val)> NearClipChangedCallback;
+
 };
 
 #endif // GUI_H
