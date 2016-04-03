@@ -10,11 +10,15 @@ public:
     Camera();
     void begin(const ofRectangle & viewportBounds = ofRectangle());
     void end();
+    void enableOrtho();
+    void disableOrtho();
     void setTarget(const ofVec3f& target);
     void setDistance(float distance);
     void setPosition(float x, float y, float z);
     void zoomIn(int zoomVal = 30);
     void zoomOut(int zoomVal = 10);
+    void setVFOV(float fovVal);
+    void setHFOV(float fovVal);
     void setNearClip(float clipD);
     void setFarClip(float clipD);
     void setAspectRatio(float ratio);
@@ -22,6 +26,8 @@ public:
     float getDistance() const;
     float getNearClip() const;
     float getFarClip() const;
+    float getVFOV() const;
+    float getHFOV() const;
     ofQuaternion getOrientationQuat() const;
     ofRectangle getCurrentViewport() const;
     void notifyMousePressed(int x, int y, int button);

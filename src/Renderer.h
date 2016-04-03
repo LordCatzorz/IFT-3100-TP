@@ -51,10 +51,12 @@ public:
     void DissociateShapesCallback(string arg);
 	void ImportObjFileCallback(string param);
     void CameraChangedCallback(const GUI::CameraSelected & activeCamera);
-    void VFOVChangedCallback(int val);
-    void HFOVCallback(int val);
+    void VFOVChangedCallback(float val);
+    void HFOVCallback(float val);
     void FarClipChangedCallback(int val);
     void NearClipChangedCallback(int val);
+    void AspectRatioChangedCallback(const GUI::AspectRatio & aspectRatio);
+    void ProjectionChangedCallback(const GUI::ProjectionType & projection);
 
     void KeyDown(int key);
     void KeyUp(int key);
@@ -83,6 +85,10 @@ private:
 
 	float xInitial;
 	float yInitial;
+
+    float squareARMultiplier = 4.f/3.f,
+    wideARMultiplier = 16.f/9.f,
+    ultraWideARMultiplier = 21.f/9.f;
 
 	int framebufferWidth;
 	int framebufferHeight;

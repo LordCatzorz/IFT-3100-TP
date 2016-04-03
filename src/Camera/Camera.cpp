@@ -17,6 +17,14 @@ void Camera::end(){
     innerCamera.end();
 }
 
+void Camera::enableOrtho(){
+    innerCamera.enableOrtho();
+}
+
+void Camera::disableOrtho(){
+    innerCamera.disableOrtho();
+}
+
 void Camera::setTarget(const ofVec3f &target){
     innerTarget.setPosition(target);
     innerCamera.lookAt(innerTarget);
@@ -38,6 +46,14 @@ void Camera::zoomIn(int zoomVal){
 
 void Camera::zoomOut(int zoomVal){
     setDistance(getDistance() + zoomVal);
+}
+
+void Camera::setVFOV(float fovVal){
+    innerCamera.setFov(fovVal);
+}
+
+void Camera::setHFOV(float fovVal){
+    innerCamera.setFov(2.0f * atan2( tan( (fovVal * DEG_TO_RAD) / 2.0f ) , innerCamera.getAspectRatio() ) * RAD_TO_DEG);
 }
 
 void Camera::setNearClip(float clipD){
@@ -70,6 +86,14 @@ float Camera::getNearClip() const{
 
 float Camera::getFarClip() const{
     return innerCamera.getFarClip();
+}
+
+float Camera::getVFOV() const{
+    return innerCamera.getFov();
+}
+
+float Camera::getHFOV() const{
+    return ( 2.0f * atan( tan( (innerCamera.getFov() * DEG_TO_RAD) / 2.0f ) * innerCamera.getAspectRatio() ) * RAD_TO_DEG );
 }
 
 ofQuaternion Camera::getOrientationQuat() const{

@@ -18,7 +18,7 @@ using namespace fastdelegate;
 class ofApp : public ofBaseApp{
 
     public:
-        const static int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 1024;
+        const static int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 768;
 
         void setup();
         void update();

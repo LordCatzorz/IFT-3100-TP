@@ -21,15 +21,17 @@ GUI::GUI()
     fovHSlider.addListener(this, &GUI::HFOVCaller);
     farClipSlider.addListener(this, &GUI::FarClipCaller);
     nearClipSlider.addListener(this, &GUI::NearClipCaller);
+    squareToggle.addListener(this, &GUI::squareCaller);
+    wideToggle.addListener(this, &GUI::wideCaller);
+    ulraWideToggle.addListener(this, &GUI::ultraWideCaller);
+    perspectiveToggle.addListener(this, &GUI::perspectiveCaller);
+    orthoToggle.addListener(this, &GUI::orthogonalCaller);
 
     gui.setup("Outils");
-    cameraGui.setPosition(10, 10);
     gui.add(openFileBtn.setup("Ouvir une image"));
     gui.add(printscreenSection.setup("Capturer une zone"));
     gui.add(printscreen.setup("Capturer l'ecran"));
-    //gui.add(selectionToggle.setup("Séléction", true));
-    //gui.add(editToggle.setup("Éditer", false));
-	gui.add(importObjFile.setup("Importer un OBJ"));
+    gui.add(importObjFile.setup("Importer un OBJ"));
     gui.add(associateShapes.setup("Associer les formes"));
     gui.add(dissociateShapes.setup("Separer les enfants"));
     gui.add(drawTriangle.setup("Creer un triangle"));
@@ -51,18 +53,26 @@ GUI::GUI()
     backToggle.setName("Camera arrière");
 
     cameraGui.setPosition(ofGetWidth() - cameraGui.getWidth() - 10, 10);
-    cameraGui.add(fovVSlider.setup("FOV Verticale", 0, 0, 1032));
-    cameraGui.add(fovHSlider.setup("FOV Horizontale", 0, 0, 1032));
+    cameraGui.add(fovVSlider.setup("FOV Verticale", 0, 0, 180));
+    cameraGui.add(fovHSlider.setup("FOV Horizontale", 0, 0, 180));
     cameraGui.add(farClipSlider.setup("Far clip", 1032, 0, 1032));
     cameraGui.add(nearClipSlider.setup("Near clip", 0, 0, 1032));
 
     cameraGui.add(aspectRatioGroup.setup("Aspect ratio"));
-    aspectRatioGroup.add(Square.setup("Caree"));
-    Square.setName("Caree");
-    aspectRatioGroup.add(Wide.setup("Large"));
-    Wide.setName("Large");
-    aspectRatioGroup.add(UlraWide.setup("Tres large"));
-    UlraWide.setName("Tres large");
+    aspectRatioGroup.add(squareToggle.setup("Caree", false));
+    aspectRatioGroup.add(wideToggle.setup("Large", false));
+    aspectRatioGroup.add(ulraWideToggle.setup("Tres large", false));
+    squareToggle.setName("Caree");
+    wideToggle.setName("Large");
+    ulraWideToggle.setName("Tres large");
+    squareToggle.setBackgroundColor(0);
+    wideToggle.setBackgroundColor(160);
+    ulraWideToggle.setBackgroundColor(160);
+
+    cameraGui.add(projectionGroup.setup("Type de projection"));
+    projectionGroup.add(perspectiveToggle.setup("Perspective", true));
+    projectionGroup.add(orthoToggle.setup("Orthogonale", false));
+
     ofEnableDepthTest();
 }
 
@@ -124,12 +134,12 @@ void GUI::AddCameraChangedListener(std::function<void(GUI::CameraSelected)> fnc)
     cameraChangedCallback = fnc;
 }
 
-void GUI::AddVFOVChangedListener(std::function<void(int)> fnc)
+void GUI::AddVFOVChangedListener(std::function<void(float)> fnc)
 {
     VFOVChangedCallback = fnc;
 }
 
-void GUI::AddHFOVChangedListener(std::function<void(int)> fnc)
+void GUI::AddHFOVChangedListener(std::function<void(float)> fnc)
 {
     HFOVChangedCallback = fnc;
 }
@@ -144,6 +154,24 @@ void GUI::AddNearClipChangedListener(std::function<void(int)> fnc)
     NearClipChangedCallback = fnc;
 }
 
+void GUI::AddAspectRatioChangedListener(std::function<void(AspectRatio)> fnc)
+{
+    aspectRatioChangedCallback = fnc;
+}
+
+void GUI::AddProjectionChangedListener(std::function<void(ProjectionType)> fnc)
+{
+    projectionChangedCallback = fnc;
+}
+
+void GUI::setVFOV(const float val){
+    fovVSlider = val;
+}
+
+void GUI::setHFOV(const float val){
+    fovHSlider = val;
+}
+
 string GUI::RequestSaveFilePath(string defaultName)
 {
 	ofFileDialogResult result = saveUsrFile("captureDEcran");
@@ -153,6 +181,7 @@ string GUI::RequestSaveFilePath(string defaultName)
 void GUI::Draw(){
     ofDisableDepthTest();
     gui.draw();
+    cameraGui.setPosition(ofGetWidth() - cameraGui.getWidth() - 10, 10);
     cameraGui.draw();
     ofEnableDepthTest();
 }
@@ -228,9 +257,7 @@ void GUI::selectionToggleCallback(bool & inval)
 void GUI::editToggleCallback(bool & inval)
 {
 	selectionToggle = !inval;
-	modeChangedCallback(inval ? GUI::ActionType::Edit : GUI::ActionType::Select);
-	// else
-	 //    editToggle = true;
+    modeChangedCallback(inval ? GUI::ActionType::Edit : GUI::ActionType::Select);
 }
 
 void GUI::createTriangleCaller(){
@@ -265,7 +292,6 @@ ofFileDialogResult GUI::saveUsrFile(string defaultName)
 	return result;
 }
 
-
 void GUI::frontCameraCaller(bool & inval)
 {
     backToggle = !inval;
@@ -278,12 +304,12 @@ void GUI::backCameraCaller(bool & inval)
     cameraChangedCallback(inval ? GUI::CameraSelected::Back : GUI::CameraSelected::Front);
 }
 
-void GUI::VFOVCaller(int & val)
+void GUI::VFOVCaller(float & val)
 {
     VFOVChangedCallback(val);
 }
 
-void GUI::HFOVCaller(int & val)
+void GUI::HFOVCaller(float & val)
 {
     HFOVChangedCallback(val);
 }
@@ -296,4 +322,52 @@ void GUI::FarClipCaller(int & val)
 void GUI::NearClipCaller(int & val)
 {
     NearClipChangedCallback(val);
+}
+
+void GUI::squareCaller(bool & inval)
+{
+    squareToggle = false;
+    wideToggle = false;
+    ulraWideToggle = false;
+
+    squareToggle.setBackgroundColor(0);
+    wideToggle.setBackgroundColor(160);
+    ulraWideToggle.setBackgroundColor(160);
+    aspectRatioChangedCallback(AspectRatio::Square);
+}
+
+void GUI::wideCaller(bool & inval)
+{
+    wideToggle = false;
+    squareToggle = false;
+    ulraWideToggle = false;
+
+    squareToggle.setBackgroundColor(160);
+    wideToggle.setBackgroundColor(0);
+    ulraWideToggle.setBackgroundColor(160);
+    aspectRatioChangedCallback(AspectRatio::Wide);
+}
+
+void GUI::ultraWideCaller(bool & inval)
+{
+    ulraWideToggle = false;
+    wideToggle = false;
+    squareToggle = false;
+
+    squareToggle.setBackgroundColor(160);
+    wideToggle.setBackgroundColor(160);
+    ulraWideToggle.setBackgroundColor(0);
+    aspectRatioChangedCallback(AspectRatio::UltraWide);
+}
+
+void GUI::perspectiveCaller(bool & inval)
+{
+    orthoToggle = !inval;
+    projectionChangedCallback(inval ? GUI::ProjectionType::Perspective : GUI::ProjectionType::Orthogonal);
+}
+
+void GUI::orthogonalCaller(bool & inval)
+{
+    perspectiveToggle = !inval;
+    projectionChangedCallback(inval ? GUI::ProjectionType::Orthogonal : GUI::ProjectionType::Perspective);
 }

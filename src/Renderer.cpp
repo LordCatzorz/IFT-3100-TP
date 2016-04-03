@@ -26,6 +26,11 @@ Renderer::Renderer()
     Gui->AddHFOVChangedListener(std::bind(&Renderer::HFOVCallback, this, std::placeholders::_1));
     Gui->AddFarClipChangedListener(std::bind(&Renderer::FarClipChangedCallback, this, std::placeholders::_1));
     Gui->AddNearClipChangedListener(std::bind(&Renderer::NearClipChangedCallback, this, std::placeholders::_1));
+    Gui->AddAspectRatioChangedListener(std::bind(&Renderer::AspectRatioChangedCallback, this, std::placeholders::_1));
+    Gui->AddProjectionChangedListener(std::bind(&Renderer::ProjectionChangedCallback, this, std::placeholders::_1));
+
+    Gui->setVFOV(cameraManager.getVFOV());
+    Gui->setHFOV(cameraManager.getHFOV());
 }
 
 Renderer::~Renderer()
@@ -413,16 +418,16 @@ void Renderer::CameraChangedCallback(const GUI::CameraSelected & activeCamera)
     cameraManager.switchCam(activeCamera == GUI::Front ? CameraManager::front : CameraManager::back);
 }
 
-void Renderer::VFOVChangedCallback(int val)
+void Renderer::VFOVChangedCallback(float val)
 {
-    // TODO: implement
-    //cameraManager.
+    cameraManager.setVFOV(val);
+    Gui->setHFOV(cameraManager.getHFOV());
 }
 
-void Renderer::HFOVCallback(int val)
+void Renderer::HFOVCallback(float val)
 {
-    // TODO: implement
-    //cameraManager.
+    cameraManager.setHFOV(val);
+    Gui->setVFOV(cameraManager.getVFOV());
 }
 
 void Renderer::FarClipChangedCallback(int val)
@@ -433,6 +438,34 @@ void Renderer::FarClipChangedCallback(int val)
 void Renderer::NearClipChangedCallback(int val)
 {
     cameraManager.setNearClip(val);
+}
+
+void Renderer::AspectRatioChangedCallback(const GUI::AspectRatio & aspectRatio)
+{
+    switch (aspectRatio) {
+    case GUI::Wide:
+        ofSetWindowShape((int)(ofGetHeight() * wideARMultiplier), ofGetHeight());
+        cameraManager.setAspectRatio(CameraManager::wide);
+        break;
+    case GUI::UltraWide:
+        ofSetWindowShape((int)(ofGetHeight() * ultraWideARMultiplier), ofGetHeight());
+        cameraManager.setAspectRatio(CameraManager::ultraWide);
+        break;
+    default:
+        ofSetWindowShape((int)(ofGetHeight() * squareARMultiplier), ofGetHeight());
+        cameraManager.setAspectRatio(CameraManager::square);
+        break;
+    }
+    Gui->setVFOV(cameraManager.getVFOV());
+    Gui->setHFOV(cameraManager.getHFOV());
+}
+
+void Renderer::ProjectionChangedCallback(const GUI::ProjectionType & projection){
+    if(projection == GUI::Orthogonal){
+        cameraManager.enableOrtho();
+    }else{
+        cameraManager.disableOrtho();
+    }
 }
 
 void Renderer::KeyDown(int key)

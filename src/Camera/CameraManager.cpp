@@ -11,26 +11,22 @@ void CameraManager::setup(){
     backCamera.notifyMouseDragged(-1030, 0, OF_MOUSE_BUTTON_3);
 }
 
-/*void CameraManager::setPreRotate(int val){
-    //backCamera.setViewport(secondaryViewport);
-    backCamera.notifyMouseDragged(val, 0, OF_MOUSE_BUTTON_3);
-    innerVal += val;
-    ofLog() << innerVal;
-}*/
-/*
-void CameraManager::drawScene(std::function<void()> fnc){
-    selectedCam->begin();
-    fnc();
-    selectedCam->end();
-}
-*/
-
 void CameraManager::begin(){
     selectedCam->begin();
 }
 
 void CameraManager::end(){
     selectedCam->end();
+}
+
+void CameraManager::enableOrtho(){
+    frontCamera.enableOrtho();
+    backCamera.enableOrtho();
+}
+
+void CameraManager::disableOrtho(){
+    frontCamera.disableOrtho();
+    backCamera.disableOrtho();
 }
 
 void CameraManager::setTarget(const ofVec3f& target){
@@ -56,6 +52,16 @@ void CameraManager::zoomIn(int zoomVal){
 void CameraManager::zoomOut(int zoomVal){
     frontCamera.zoomOut(zoomVal);
     backCamera.zoomOut(zoomVal);
+}
+
+void CameraManager::setVFOV(float fovVal){
+    frontCamera.setVFOV(fovVal);
+    backCamera.setVFOV(fovVal);
+}
+
+void CameraManager::setHFOV(float fovVal){
+    frontCamera.setHFOV(fovVal);
+    backCamera.setHFOV(fovVal);
 }
 
 void CameraManager::setNearClip(float clipD){
@@ -95,6 +101,14 @@ float CameraManager::getNearClip() const{
 
 float CameraManager::getFarClip() const{
     return frontCamera.getFarClip();
+}
+
+float CameraManager::getVFOV() const{
+    return frontCamera.getVFOV();
+}
+
+float CameraManager::getHFOV() const{
+    return frontCamera.getHFOV();
 }
 
 void CameraManager::notifyMousePressed(int x, int y, int button){

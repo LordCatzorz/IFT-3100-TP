@@ -14,6 +14,8 @@ class GUI
 public:
     enum ActionType {Select, Edit};
     enum CameraSelected {Front, Back};
+    enum AspectRatio {Square, Wide, UltraWide};
+    enum ProjectionType {Perspective, Orthogonal};
     GUI();
     void Draw();
     void Show();
@@ -31,10 +33,16 @@ public:
     void AddAssociateShapesListener(std::function<void(std::string)> fnc);
     void AddDissociateShapesListener(std::function<void(std::string)> fnc);
     void AddCameraChangedListener(std::function<void(GUI::CameraSelected)> fnc);
-    void AddVFOVChangedListener(std::function<void(int)> fnc);
-    void AddHFOVChangedListener(std::function<void(int)> fnc);
+    void AddVFOVChangedListener(std::function<void(float)> fnc);
+    void AddHFOVChangedListener(std::function<void(float)> fnc);
     void AddFarClipChangedListener(std::function<void(int)> fnc);
     void AddNearClipChangedListener(std::function<void(int)> fnc);
+    void AddAspectRatioChangedListener(std::function<void(AspectRatio)> fnc);
+    void AddProjectionChangedListener(std::function<void(ProjectionType)> fnc);
+
+    void setVFOV(const float val);
+    void setHFOV(const float val);
+
     ofColor * GetCurrentColor(){
         outputColor = color;
         return &(outputColor);}
@@ -60,12 +68,12 @@ private:
     ofxPanel cameraGui;
     ofxGuiGroup cameraPickerGroup;
     ofxToggle frontToggle, backToggle;
-    ofxIntSlider fovVSlider,
-              fovHSlider,
-              farClipSlider,
+    ofxFloatSlider fovVSlider,
+              fovHSlider;
+    ofxIntSlider farClipSlider,
               nearClipSlider;
-    ofxGuiGroup aspectRatioGroup;
-    ofxToggle Square, Wide, UlraWide;
+    ofxGuiGroup aspectRatioGroup, projectionGroup;
+    ofxToggle squareToggle, wideToggle, ulraWideToggle, perspectiveToggle, orthoToggle;
 
 
     //Right-Side pane callers
@@ -84,10 +92,15 @@ private:
     //Left-side pane callers
     void frontCameraCaller(bool & inval);
     void backCameraCaller(bool & inval);
-    void VFOVCaller(int & val);
-    void HFOVCaller(int & val);
+    void VFOVCaller(float & val);
+    void HFOVCaller(float & val);
     void FarClipCaller(int & val);
     void NearClipCaller(int & val);
+    void squareCaller(bool & inval);
+    void wideCaller(bool & inval);
+    void ultraWideCaller(bool & inval);
+    void perspectiveCaller(bool & inval);
+    void orthogonalCaller(bool & inval);
 
 
     ofFileDialogResult requestUsrFile();
@@ -104,10 +117,12 @@ private:
     std::function<void(GUI::ActionType)> modeChangedCallback;
 	
     std::function<void(GUI::CameraSelected)> cameraChangedCallback;
-    std::function<void(int val)> VFOVChangedCallback;
-    std::function<void(int val)> HFOVChangedCallback;
+    std::function<void(float val)> VFOVChangedCallback;
+    std::function<void(float val)> HFOVChangedCallback;
     std::function<void(int val)> FarClipChangedCallback;
     std::function<void(int val)> NearClipChangedCallback;
+    std::function<void(GUI::AspectRatio)> aspectRatioChangedCallback;
+    std::function<void(GUI::ProjectionType)> projectionChangedCallback;
 
 };
 

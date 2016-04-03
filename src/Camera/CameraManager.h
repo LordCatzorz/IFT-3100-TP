@@ -15,21 +15,23 @@ public:
     void setup();
     void begin();
     void end();
-    void drawScene(std::function<void()> fnc);
+    void enableOrtho();
+    void disableOrtho();
     void setTarget(const ofVec3f& target);
     void setDistance(float distance);
     void setPosition(float x, float y, float z);
     void zoomIn(int zoomVal = 30);
     void zoomOut(int zoomVal = 10);
-    void setNearClip(float clipD);
+    void setVFOV(float fovVal);
+    void setHFOV(float fovVal);
     void setFarClip(float clipD);
+    void setNearClip(float clipD);
     void setAspectRatio(const aspectRatio & ratio);
     float getDistance() const;
     float getNearClip() const;
     float getFarClip() const;
-
-    //int innerVal = 0, innerVal2 = 0;
-    //void setPreRotate(int val);
+    float getVFOV() const;
+    float getHFOV() const;
 
     void notifyMousePressed(int x, int y, int button);
     void notifyMouseDragged(int x, int y, int button);
