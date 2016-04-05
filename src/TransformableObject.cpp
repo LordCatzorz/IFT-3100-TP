@@ -77,8 +77,7 @@ bool TransformableObject::IsPointWithinBounds(float x, float y)
 	ofPoint screenPoint2 = getScreenPosition(vertice2);
 	float distanceScreen = screenPoint1.distance(screenPoint2);
 
-	ofPoint middlePoint= (vertice1 + vertice2)*0.5;
-	ofPoint screenPoint=  getScreenPosition(middlePoint);
+	ofPoint screenPoint=  getScreenPosition(this->GetCentre());
 	float distanceClic = screenPoint.distance(ofPoint(x, y));
 	if (distanceClic*0.5 < distanceScreen)
 	{
