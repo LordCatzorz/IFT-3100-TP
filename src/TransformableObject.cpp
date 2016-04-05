@@ -61,6 +61,29 @@ bool TransformableObject::IsPointWithinBounds(float x, float y)
 {
 	//return this->boundingBox->
 	//@Todo IMPLEMENT IT
+	auto vertices = this->boundingBox->getMesh().getVertices();
+	ofPoint vertice1 = vertices.front();
+	ofPoint vertice2;
+	float distanceMax = 0;
+	for (ofPoint vertice : vertices)
+	{
+		if (vertice1.distance(vertice) > distanceMax)
+		{
+			vertice2 = vertice;
+			distanceMax = vertice1.distance(vertice);
+		}
+	}
+	ofPoint screenPoint1 = getScreenPosition(vertice1);
+	ofPoint screenPoint2 = getScreenPosition(vertice2);
+	float distanceScreen = screenPoint1.distance(screenPoint2);
+
+	ofPoint middlePoint= (vertice1 + vertice2)*0.5;
+	ofPoint screenPoint=  getScreenPosition(middlePoint);
+	float distanceClic = screenPoint.distance(ofPoint(x, y));
+	if (distanceClic*0.5 < distanceScreen)
+	{
+		return true;
+	}
 	return false;
 }
 
@@ -143,8 +166,6 @@ void TransformableObject::setBondingCube(ofMesh* _mesh)
 			minY = min(minY, v.y);
 			minZ = min(minZ, v.z);
 		}
-
-
 
 		this->boundingBox->setPosition(minX, minY, minZ);
 		this->boundingBox->set(maxX - minX, maxY - minY, maxZ - minZ);

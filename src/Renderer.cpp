@@ -551,6 +551,13 @@ void Renderer::mouseClickHandler(int x, int y, int button)
 			break;
 		}
 	}
+	for (Shape* shape : *(this->sceneStructure->GetElements()))
+	{
+		if (shape->IsPointWithinBounds(x, y))
+		{
+
+		}
+	}
 }
 void Renderer::mouseDragHandler(int x, int y, int button)
 {
