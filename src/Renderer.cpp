@@ -171,7 +171,6 @@ void Renderer::TestRotateYNeg()
 	}
 }
 
-
 void Renderer::TestCreateTetrahedron()
 {
 	Object3D* obj = new Object3D("models/tetrahedron/tetrahedron.obj");
@@ -214,48 +213,42 @@ void Renderer::TestCreateIcosahedron()
 
 void Renderer::TestSelectNext()
 {
-	if (this->testSelectedElement > -1)
-	{
-		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
-	}
-	this->testSelectedElement++;
-	if (this->testSelectedElement >= this->sceneStructure->GetElementsCount())
-	{
-		this->testSelectedElement = -1;
-	}
-	else
-	{
-		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
-	}
+	//if (this->testSelectedElement > -1)
+	//{
+	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
+	//}
+	//this->testSelectedElement++;
+	//if (this->testSelectedElement >= this->sceneStructure->GetElementsCount())
+	//{
+	//	this->testSelectedElement = -1;
+	//}
+	//else
+	//{
+	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
+	//}
 }
 
 void Renderer::TestSelectPrevious()
 {
-	if (this->testSelectedElement > -1 && this->testSelectedElement < this->sceneStructure->GetElementsCount())
-	{
-		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
-	}
-	if (this->testSelectedElement == -1)
-	{
-		this->testSelectedElement = this->sceneStructure->GetElementsCount();
-	}
-	this->testSelectedElement--;
-	if (this->testSelectedElement > -1)
-	{
-		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
-	}
+	//if (this->testSelectedElement > -1 && this->testSelectedElement < this->sceneStructure->GetElementsCount())
+	//{
+	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
+	//}
+	//if (this->testSelectedElement == -1)
+	//{
+	//	this->testSelectedElement = this->sceneStructure->GetElementsCount();
+	//}
+	//this->testSelectedElement--;
+	//if (this->testSelectedElement > -1)
+	//{
+	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
+	//}
 }
 
 void Renderer::TestDeselectAll()
 {
-	this->testSelectedElement = -1;
-	for (Shape* shape : *(this->sceneStructure->GetElements()))
-	{
-		shape->SetSelected(false);
-	}
+	this->clearSelectedShapes();
 }
-
-
 
 void Renderer::Setup()
 {
@@ -542,7 +535,7 @@ void Renderer::mouseClickHandler(int x, int y, int button)
 {
 	if (!isCtrlDown())
 		clearSelectedShapes();
-	for (Shape* visible : visibleShapes)
+	for (Shape* visible : *(this->sceneStructure->GetElements()) /*visibleShapes*/)
 	{
 		if (visible->IsPointWithinBounds(x, y))
 		{
@@ -551,13 +544,7 @@ void Renderer::mouseClickHandler(int x, int y, int button)
 			break;
 		}
 	}
-	for (Shape* shape : *(this->sceneStructure->GetElements()))
-	{
-		if (shape->IsPointWithinBounds(x, y))
-		{
 
-		}
-	}
 }
 void Renderer::mouseDragHandler(int x, int y, int button)
 {
