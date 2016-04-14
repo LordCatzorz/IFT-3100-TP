@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Object3D.h"
+#include "HeightMap.h"
 Object2D * downCast2D;
 
 Renderer::Renderer()
@@ -271,9 +272,13 @@ void Renderer::Setup()
 	light->setSpecularColor(ofColor(191, 191, 191));
 	light->setPointLight();
 	this->sceneStructure->shadersManager->AddLight(light);
-
+	ofImage* textureImage = new ofImage("textureSimple/crate.jpg");
+	HeightMap* heightmap = new HeightMap();
+	heightmap->Setup(textureImage);
+	textureImage->bind(0);
 	ofShader* defaultShader = new ofShader();
 	this->sceneStructure->shadersManager->AddShader(defaultShader);
+	this->sceneStructure->AddElement(heightmap);
 	defaultShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
 
 	reset();
@@ -307,6 +312,8 @@ void Renderer::Draw()
 	mouseWatcher->Draw();
     Gui->Draw();
 	ofPopMatrix();
+
+	
 }
 
 void Renderer::FileOpenCallback(string param)
