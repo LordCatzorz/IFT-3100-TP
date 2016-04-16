@@ -10,7 +10,7 @@ public:
 
     void SetSelected(bool isSelected) { shouldShowBorders = isSelected; }
     bool GetSelected() { return shouldShowBorders; }
-	virtual void AddTranslation(ofVec3f _draggedPixelVector) = 0;
+    virtual void AddTranslation(int x, int y, ofVec3f _draggedPixelVector) = 0;
 	virtual void AddRotation(ofVec3f _draggedPixelVector, int _axis) = 0;
 	virtual void AddScale(bool _zoomIn) = 0;
     virtual void        Draw() = 0;

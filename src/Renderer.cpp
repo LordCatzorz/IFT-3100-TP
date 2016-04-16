@@ -21,6 +21,8 @@ Renderer::Renderer()
 	Gui->AddCreateEllipseListener(std::bind(&Renderer::drawEllipseManager, this, std::placeholders::_1));
 	Gui->AddAssociateShapesListener(std::bind(&Renderer::AssociateShapesCallback, this, std::placeholders::_1));
 	Gui->AddDissociateShapesListener(std::bind(&Renderer::DissociateShapesCallback, this, std::placeholders::_1));
+    Gui->AddBSplineCreateListener(std::bind(&Renderer::drawBSplineWorker, this));
+    Gui->AddCRomCreateListener(std::bind(&Renderer::drawCRomWorker, this));
     Gui->AddCameraChangedListener(std::bind(&Renderer::CameraChangedCallback, this, std::placeholders::_1));
     Gui->AddVFOVChangedListener(std::bind(&Renderer::VFOVChangedCallback, this, std::placeholders::_1));
     Gui->AddHFOVChangedListener(std::bind(&Renderer::HFOVCallback, this, std::placeholders::_1));
@@ -44,7 +46,7 @@ void Renderer::TestMoveLeft()
 	{
 		if (shape->GetSelected())
 		{
-			shape->AddTranslation(ofVec3f(-10, 0, 0));
+            shape->AddTranslation( 0, 0, ofVec3f(-10, 0, 0));
 		}
 	}
 }
@@ -55,7 +57,7 @@ void Renderer::TestMoveRight()
 	{
 		if (shape->GetSelected())
 		{
-			shape->AddTranslation(ofVec3f(10, 0, 0));
+            shape->AddTranslation( 0, 0, ofVec3f(10, 0, 0));
 		}
 	}
 }
@@ -66,7 +68,7 @@ void Renderer::TestMoveUp()
 	{
 		if (shape->GetSelected())
 		{
-			shape->AddTranslation(ofVec3f(0, -10, 0));
+            shape->AddTranslation( 0, 0, ofVec3f(0, -10, 0));
 		}
 	}
 }
@@ -77,7 +79,7 @@ void Renderer::TestMoveDown()
 	{
 		if (shape->GetSelected())
 		{
-			shape->AddTranslation(ofVec3f(0, 10, 0));
+            shape->AddTranslation( 0, 0, ofVec3f(0, 10, 0));
 		}
 	}
 }
@@ -88,7 +90,7 @@ void Renderer::TestMoveDiag()
 	{
 		if (shape->GetSelected())
 		{
-			shape->AddTranslation(ofVec3f(10, 20, 0));
+            shape->AddTranslation( 0, 0, ofVec3f(10, 20, 0));
 		}
 	}
 }
@@ -184,7 +186,7 @@ void Renderer::TestRotateYNeg()
 
 void Renderer::TestCreateTetrahedron()
 {
-	Object3D* obj = new Object3D(Shapes::createTetrahedron()->getMeshPtr());
+    Object3D* obj = new Object3D(Shapes::createTetrahedron()->getMeshPtr());
 	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
 	obj->glScale(200, 200, 200);
 	this->sceneStructure->AddElement(obj);
@@ -328,7 +330,7 @@ void Renderer::Draw()
     GuiLight.enable();
     Gui->Draw();
     GuiLight.disable();
-    cameraManager.begin();
+    //cameraManager.begin();
     ofPushMatrix();
     this->sceneStructure->Draw();
     mouseWatcher->Draw();
@@ -336,7 +338,7 @@ void Renderer::Draw()
     ofPopMatrix();
 
     //TODO: Camera testing code. To be removed
-    ambientLight.enable();
+    /*ambientLight.enable();
     ofFill();
     for(int i = 0; i < 20; i++){
         ofPushMatrix();
@@ -346,9 +348,9 @@ void Renderer::Draw()
         ofBox(40);
         ofPopMatrix();
     }
-    ambientLight.disable();
+    ambientLight.disable();*/
 
-    cameraManager.end();
+    //cameraManager.end();
 }
 
 void Renderer::FileOpenCallback(string param)
@@ -593,9 +595,9 @@ void Renderer::mouseDownHandler(int x, int y, int button)
         cameraManager.zoomIn();
     }else if(button == OF_MOUSE_BUTTON_5){
         cameraManager.zoomOut();
-    }else{
+    }/*else{
         cameraManager.notifyMousePressed(x, y, button);
-    }
+    }*/
 
 	bool clickedOnSelectedShape = false;
 	for (Shape* selected : selectedShapes)
@@ -631,11 +633,11 @@ void Renderer::mouseUpHandler(int x, int y, int button)
             //downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), false);
             //downCast2D->ActionStop();
 		}
-		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
+        else if (downCast3D = dynamic_cast<Shape3D*>(selected))
 		{
 			//TODO::Implement;
         }*/
-	}
+    }
 }
 void Renderer::mouseClickHandler(int x, int y, int button)
 {
@@ -657,7 +659,7 @@ void Renderer::mouseDragHandler(int x, int y, int button)
 	for (Shape * selected : selectedShapes)
 	{
         if(button != 2)
-            selected->AddTranslation(*(mouseWatcher->CurretVector()));
+            selected->AddTranslation(x, y, *(mouseWatcher->CurretVector()));
         else
             selected->AddRotation(*(mouseWatcher->CurretVector()), 2);
         /*if (downCast2D = dynamic_cast<Object2D*>(selected))
@@ -752,6 +754,40 @@ void Renderer::drawShapeWorker(int x, int y, int button){
         downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
         //downCast2D->Create(0, 0, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
     }
+}
+
+void Renderer::drawBSplineWorker(){
+    clearSelectedShapes();
+
+    if(shapeDelegateWorker != nullptr)
+        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+    delete shapeDelegateWorker;
+    shapeDelegateWorker = nullptr;
+
+    mouseWatcher->SetShowSelectionZone(false);
+    addVisibleShape(new BSpliline(Gui->getCurveControlPoints()));
+
+    (visibleShapes.back())->SetSelected(true);
+    shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
+    mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
+    mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
+}
+
+void Renderer::drawCRomWorker(){
+    clearSelectedShapes();
+
+    if(shapeDelegateWorker != nullptr)
+        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+    delete shapeDelegateWorker;
+    shapeDelegateWorker = nullptr;
+
+    mouseWatcher->SetShowSelectionZone(false);
+    addVisibleShape(new CatmullRom(Gui->getCurveControlPoints()));
+
+    (visibleShapes.back())->SetSelected(true);
+    shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
+    mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
+    mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
 }
 
 void Renderer::unbindShapeWorkers(int x, int y, int button){

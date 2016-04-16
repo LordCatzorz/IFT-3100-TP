@@ -22,6 +22,7 @@ public:
     void Hide();
     void SetCurrentMode(ActionType newMode);
     ActionType GetCurrentMode();
+    int getCurveControlPoints() const;
     void AddImageOpenedListener(std::function<void(std::string)> fnc);
     void AddPrintscreenSelectionListener(std::function<void(std::string)> fnc);
     void AddPrintscreenTakenListener(std::function<void(std::string)> fnc);
@@ -32,6 +33,10 @@ public:
     void AddCreateEllipseListener(std::function<void(std::string)> fnc);
     void AddAssociateShapesListener(std::function<void(std::string)> fnc);
     void AddDissociateShapesListener(std::function<void(std::string)> fnc);
+    void AddBSplineCreateListener(std::function<void()> fnc);
+    void AddCRomCreateListener(std::function<void()> fnc);
+
+
     void AddCameraChangedListener(std::function<void(GUI::CameraSelected)> fnc);
     void AddVFOVChangedListener(std::function<void(float)> fnc);
     void AddHFOVChangedListener(std::function<void(float)> fnc);
@@ -49,7 +54,7 @@ public:
     string RequestSaveFilePath(string defaultName);
 private:
 
-    int xPos, yPos;
+    int xPos, yPos, curveControlPoints = 5;
 
 	ofxButton openFileBtn;
     ofxButton printscreenSection;
@@ -64,6 +69,9 @@ private:
     ofxColorSlider color;
     ofColor  outputColor;
     ofxPanel gui;
+    ofxGuiGroup courbesGroup;
+    ofxButton bSplineCreate, CRomCreate;
+    ofxIntSlider controlPointsSlider;
 
     ofxPanel cameraGui;
     ofxGuiGroup cameraPickerGroup;
@@ -88,6 +96,9 @@ private:
     void createEllipseCaller();
     void associateShapesCaller();
     void dissociateShapesCaller();
+    void bSplineCreateCaller();
+    void cRomCreateCaller();
+    void controlPointsSliderCaller(int & val);
 
     //Left-side pane callers
     void frontCameraCaller(bool & inval);
@@ -115,6 +126,8 @@ private:
     std::function<void(std::string)> associateShapesCallback;
     std::function<void(std::string)> dissociateShapesCallback;
     std::function<void(GUI::ActionType)> modeChangedCallback;
+    std::function<void()> bSplineCreateCallback;
+    std::function<void()> cRomCreateCallback;
 	
     std::function<void(GUI::CameraSelected)> cameraChangedCallback;
     std::function<void(float val)> VFOVChangedCallback;

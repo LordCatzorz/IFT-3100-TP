@@ -10,7 +10,7 @@ Object2D::~Object2D()
 {
 }
 
-void Object2D::AddTranslation(ofVec3f _draggedPixelVector)
+void Object2D::AddTranslation(int x, int y, ofVec3f _draggedPixelVector)
 {
     ofVec3f vec = getWorldPosition(_draggedPixelVector);
     this->setTranslation(vec + this->getTranslation());

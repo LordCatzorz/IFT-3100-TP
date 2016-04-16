@@ -31,7 +31,7 @@ bool Structure::IsPointWithinBounds(float x, float y)
     throw std::runtime_error("Not yet implemented");
 }
 
-void Structure::AddTranslation(ofVec3f _draggedPixelVector)
+void Structure::AddTranslation(int x, int y, ofVec3f _draggedPixelVector)
 {
 
     throw std::runtime_error("Not yet implemented");

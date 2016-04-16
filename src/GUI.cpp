@@ -14,6 +14,9 @@ GUI::GUI()
     drawEllipse.addListener(this, &GUI::createEllipseCaller);
     associateShapes.addListener(this, &GUI::associateShapesCaller);
     dissociateShapes.addListener(this, &GUI::dissociateShapesCaller);
+    bSplineCreate.addListener(this, &GUI::bSplineCreateCaller);
+    CRomCreate.addListener(this, &GUI::cRomCreateCaller);
+    controlPointsSlider.addListener(this, &GUI::controlPointsSliderCaller);
 
     frontToggle.addListener(this, &GUI::frontCameraCaller);
     backToggle.addListener(this, &GUI::backCameraCaller);
@@ -38,6 +41,10 @@ GUI::GUI()
     gui.add(drawRectangle.setup("Creer un rectangle"));
     gui.add(drawEllipse.setup("Creer un ellipse"));
     gui.add(color.setup("Couleur", ofColor(100, 100, 140), ofColor(0, 0), ofColor(255, 255)));
+    gui.add(courbesGroup.setup("Courbes"));
+    courbesGroup.add(bSplineCreate.setup("Creer B-Spline"));
+    courbesGroup.add(CRomCreate.setup("Creer Catmull-Rom"));
+    courbesGroup.add(controlPointsSlider.setup("Points de controle", 5, 1, 10));
 
     editToggle = false;
 
@@ -129,6 +136,16 @@ void GUI::AddDissociateShapesListener(std::function<void(std::string)> fnc)
     dissociateShapesCallback = fnc;
 }
 
+void GUI::AddBSplineCreateListener(std::function<void()> fnc)
+{
+    bSplineCreateCallback = fnc;
+}
+
+void GUI::AddCRomCreateListener(std::function<void()> fnc)
+{
+    cRomCreateCallback = fnc;
+}
+
 void GUI::AddCameraChangedListener(std::function<void(GUI::CameraSelected)> fnc)
 {
     cameraChangedCallback = fnc;
@@ -214,6 +231,10 @@ GUI::ActionType GUI::GetCurrentMode()
     }
 }
 
+int GUI::getCurveControlPoints() const{
+    return curveControlPoints;
+}
+
 void GUI::openFileBtnCallback()
 {
 	ofFileDialogResult result = requestUsrFile();
@@ -278,6 +299,18 @@ void GUI::associateShapesCaller(){
 
 void GUI::dissociateShapesCaller(){
     dissociateShapesCallback("");
+}
+
+void GUI::bSplineCreateCaller(){
+    bSplineCreateCallback();
+}
+
+void GUI::cRomCreateCaller(){
+    cRomCreateCallback();
+}
+
+void GUI::controlPointsSliderCaller(int &val){
+    curveControlPoints = val;
 }
 
 ofFileDialogResult GUI::requestUsrFile()

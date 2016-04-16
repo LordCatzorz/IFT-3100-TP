@@ -219,7 +219,7 @@ void Object3D::setBondingCube()
 	refreshBorders();
 }
 
-void Object3D::AddTranslation(ofVec3f _draggedPixelVector)
+void Object3D::AddTranslation(int x, int y, ofVec3f _draggedPixelVector)
 {
 	ofVec3f vec = getWorldPosition(_draggedPixelVector);
 	this->setTranslation(vec + this->getTranslation());

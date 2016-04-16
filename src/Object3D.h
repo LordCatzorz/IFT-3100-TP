@@ -19,7 +19,7 @@ public:
 
 	ofVec3f GetCentre();
 	// Inherited via Shape3D
-	void AddTranslation(ofVec3f _draggedPixelVector);
+    void AddTranslation(int x, int y, ofVec3f _draggedPixelVector);
 	void AddRotation(ofVec3f _draggedPixelVector, int _axis);
 	void AddScale(bool _zoomIn);
 	void Draw();

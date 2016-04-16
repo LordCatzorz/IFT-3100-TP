@@ -35,7 +35,7 @@ public:
 	// Inherited via Shape
 	bool IsPointWithinBounds(float x, float y);
 
-	void AddTranslation(ofVec3f _draggedPixelVector);
+    void AddTranslation(int x, int y, ofVec3f _draggedPixelVector);
 
 	void AddRotation(ofVec3f _draggedPixelVector, int _axis);
 

@@ -18,7 +18,7 @@ public:
 
     virtual void Create(int x1, int y1, int width, int height) = 0;
 
-    void AddTranslation(ofVec3f _draggedPixelVector);
+    void AddTranslation(int x, int y, ofVec3f _draggedPixelVector);
     void AddRotation(ofVec3f _draggedPixelVector, int _axis);
     void AddScale(bool _zoomIn);
 
@@ -45,6 +45,7 @@ public:
             ofFill();
             ofSetColor(borderColor);
             ofDrawRectangle(horizontalBorder1);
+            ofLog() << "rect1: (" << horizontalBorder1.x << ", " << horizontalBorder1.y << ") w: " << horizontalBorder1.width << " h: " << horizontalBorder1.height;
             ofDrawRectangle(horizontalBorder2);
             ofDrawRectangle(verticalBorder1);
             ofDrawRectangle(verticalBorder2);

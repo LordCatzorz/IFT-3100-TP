@@ -10,6 +10,8 @@
 #include "Shapes2d/Triangle2D.h"
 #include "Shapes2d/Rectangle2D.h"
 #include "Shapes2d/Ellipse2D.h"
+#include "Shapes2d/Courbes/BSpliline.h"
+#include "Shapes2d/Courbes/CatmullRom.h"
 #include "Camera/CameraManager.h"
 
 class Renderer
@@ -50,6 +52,8 @@ public:
     void AssociateShapesCallback(string arg);
     void DissociateShapesCallback(string arg);
 	void ImportObjFileCallback(string param);
+    void drawBSplineWorker();
+    void drawCRomWorker();
     void CameraChangedCallback(const GUI::CameraSelected & activeCamera);
     void VFOVChangedCallback(float val);
     void HFOVCallback(float val);
@@ -151,6 +155,7 @@ private:
     void drawTriangleManager(string param);
     void drawRectangleManager(string param);
     void drawEllipseManager(string param);
+    void drawBSplineManager();
     void drawShapeWorker(int x, int y, int button);
     void unbindShapeWorkers(int x, int y, int button);
     void dissociateShapesWorkers(int x, int y, int button);
