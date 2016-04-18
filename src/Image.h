@@ -19,7 +19,7 @@ public:
     //bool        IsPointWithinBounds(float x, float y);
     //bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2);
     //void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
-    void Create(int x1, int y1, int width, int height){}
+    void Create(int x1, int y1, int width, int height, bool isXInverted = false, bool isYInverted = false){}
     //void        Draw();
 private:
 

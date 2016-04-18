@@ -3,16 +3,17 @@
 BSpliline::BSpliline(int controlPoints)
 {
     ctrlPoints = controlPoints + 1;
+    shapeHasBorders = false;
 }
 
-void BSpliline::Create(int x1, int y1, int width, int height){
+void BSpliline::Create(int x1, int y1, int width, int height, bool isXInverted, bool isYInverted){
 
     this->setTranslation(ofVec3f(x1, y1));
 
-    int padding = width < 10 ? 0 : 5;
     points.clear();
-    points.push_back(ofPoint(padding, height / 2));
-    double xDiff = (width - padding * 2) / ctrlPoints;
+    points.push_back(ofPoint(isXInverted ? width : 0, isYInverted? height : 0));
+
+    double xDiff = width / ctrlPoints;
     double yDiff = height / ctrlPoints;
 
     for(int i = 1; i < ctrlPoints; i++){
@@ -28,24 +29,13 @@ void BSpliline::Create(int x1, int y1, int width, int height){
         yOffset *= -1;
     }
 
-    points.push_back(ofPoint(width - padding, height / 2));
+    points.push_back(ofPoint(isXInverted ? 0 : width, isYInverted? 0 : height));
 
     topLeftPoint.set(0, 0);
     topRightPoint.set(width, 0);
     bottomLeftPoint.set(0, height);
     bottomRightPoint.set(width, height);
     refreshBorders();
-}
-
-void BSpliline::AddTranslation(int x, int y, ofVec3f _draggedPixelVector){
-    ofPoint * inersected = intersectsPoint(x - this->getTranslation().x, y - this->getTranslation().y);
-    if(inersected == nullptr){
-        Object2D::AddTranslation(x, y, _draggedPixelVector);
-    }else{
-        inersected->x = x - this->getTranslation().x;
-        inersected->y = y - this->getTranslation().y;
-    }
-
 }
 
 void BSpliline::refreshPoints(){}
@@ -58,6 +48,7 @@ void BSpliline::drawShape(){
     for(ofPoint & p : points){
         ofEllipse(p.x, p.y, 10, 10);
     }
+
     curve.clear();
 
     curve.curveTo(points[0]);
@@ -66,7 +57,6 @@ void BSpliline::drawShape(){
     for(float t = 1.f; t >= 0.f; t-= 0.01){
         curve.curveTo(Bezier(points, t));
     }
-
     curve.curveTo(points[points.size() - 1]);
     curve.curveTo(points[points.size() - 1]);
 

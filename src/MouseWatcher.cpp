@@ -79,6 +79,14 @@ bool MouseWatcher::GetShowSelectionZone(){
     return shouldDrawSelectionZone;
 }
 
+bool MouseWatcher::isXInverted() const{
+    return coordX2 < coordX1;
+}
+
+bool MouseWatcher::isYInverted() const{
+    return coordY2 < coordY1;
+}
+
 void MouseWatcher::AddMouseDownDelegate(MouseActionDelegate * delegate){
     MouseActionDelegate d1 = *delegate;
     mouseDownDelegates.push_back(d1);

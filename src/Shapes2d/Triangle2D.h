@@ -11,7 +11,7 @@
         //bool        DoesRectangleOverlap(int x1, int y1, int x2, int y2);
         //void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
         //void        Draw();
-        void        Create(int x1, int y1, int width, int height);
+        void        Create(int x1, int y1, int width, int height, bool isXInverted = false, bool isYInverted = false);
     private:
         ofPoint     point1,
                     point2,

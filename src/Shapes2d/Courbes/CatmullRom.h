@@ -7,8 +7,7 @@ class CatmullRom: public Curve
 public:
     CatmullRom(int controlPoints = 6);
     void affectPoint(int deltaX, int deltaY);
-    void Create(int x1, int y1, int width, int height);
-    void AddTranslation(int x, int y, ofVec3f _draggedPixelVector);
+    void Create(int x1, int y1, int width, int height, bool isXInverted = false, bool isYInverted = false);
     ofPoint getPointX(int val);
     ofPoint getPointZ(int val);
 private:

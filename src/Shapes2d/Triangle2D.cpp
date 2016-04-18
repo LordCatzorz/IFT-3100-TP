@@ -12,7 +12,7 @@ void Triangle2D::drawShape(){
     ofDrawTriangle(point1, point2, point3);
 }
 
-void Triangle2D::Create(int x1, int y1, int width, int height){
+void Triangle2D::Create(int x1, int y1, int width, int height, bool isXInverted, bool isYInverted){
 
     xOffset = x1;
     yOffset = y1;

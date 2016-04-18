@@ -86,7 +86,7 @@ void Rectangle2D::drawShape(){
     }
 }*/
 
-void Rectangle2D::Create(int x1, int y1, int width, int height){
+void Rectangle2D::Create(int x1, int y1, int width, int height, bool isXInverted, bool isYInverted){
 
     xOffset = x1;
     yOffset = y1;

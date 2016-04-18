@@ -16,7 +16,7 @@ public:
     ofPoint * BottomLeftPoint() { return &bottomLeftPoint; }
     ofPoint * BottomRightPoint() { return &bottomRightPoint; }
 
-    virtual void Create(int x1, int y1, int width, int height) = 0;
+    virtual void Create(int x1, int y1, int width, int height, bool isXInverted = false, bool isYInverted = false) = 0;
 
     void AddTranslation(int x, int y, ofVec3f _draggedPixelVector);
     void AddRotation(ofVec3f _draggedPixelVector, int _axis);
@@ -41,11 +41,10 @@ public:
 
         drawShape();
 
-        if(shouldShowBorders){
+        if(shapeHasBorders && shouldShowBorders){
             ofFill();
             ofSetColor(borderColor);
             ofDrawRectangle(horizontalBorder1);
-            ofLog() << "rect1: (" << horizontalBorder1.x << ", " << horizontalBorder1.y << ") w: " << horizontalBorder1.width << " h: " << horizontalBorder1.height;
             ofDrawRectangle(horizontalBorder2);
             ofDrawRectangle(verticalBorder1);
             ofDrawRectangle(verticalBorder2);
@@ -136,6 +135,8 @@ protected:
     ofColor     borderColor = ofColor::gray;
     Object2D     * parentShape = nullptr;
     std::vector<Object2D*> children;
+
+    bool shapeHasBorders = true;
 
     enum Action{Move, Resize, Rotate, Rest};
     Action currentAction = Action::Rest;

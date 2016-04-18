@@ -21,6 +21,8 @@ public:
     void Draw();
     void SetShowSelectionZone(bool shouldShow);
     bool GetShowSelectionZone();
+    bool isXInverted() const;
+    bool isYInverted() const;
     void AddMouseDownDelegate(MouseActionDelegate * delegate);
     void RemoveMouseDownDelegate(MouseActionDelegate * delegate);
     void AddMouseUpDelegate(MouseActionDelegate * delegate);

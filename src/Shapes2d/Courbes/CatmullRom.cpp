@@ -3,16 +3,15 @@
 CatmullRom::CatmullRom(int controlPoints)
 {
     ctrlPoints = controlPoints + 1;
+    shapeHasBorders = false;
 }
 
-void CatmullRom::Create(int x1, int y1, int width, int height){
+void CatmullRom::Create(int x1, int y1, int width, int height, bool isXInverted, bool isYInverted){
 
     this->setTranslation(ofVec3f(x1, y1));
 
-    int padding = width < 10 ? 0 : 5;
     points.clear();
-
-    points.push_back(ofPoint(padding, padding));
+    points.push_back(ofPoint(isXInverted ? width : 0, isYInverted? height : 0));
 
     double xDiff = (width) / ctrlPoints;
     double yDiff = (height) / ctrlPoints;
@@ -26,24 +25,13 @@ void CatmullRom::Create(int x1, int y1, int width, int height){
         points.push_back(tmp);
     }
 
-    points.push_back(ofPoint(width - padding, height - padding));
+    points.push_back(ofPoint(isXInverted ? 0 : width, isYInverted? 0 : height));
 
     topLeftPoint.set(0, 0);
     topRightPoint.set(width, 0);
     bottomLeftPoint.set(0, height);
     bottomRightPoint.set(width, height);
     refreshBorders();
-}
-
-void CatmullRom::AddTranslation(int x, int y, ofVec3f _draggedPixelVector){
-    ofPoint * inersected = intersectsPoint(x - this->getTranslation().x, y - this->getTranslation().y);
-    if(inersected == nullptr){
-        Object2D::AddTranslation(x, y, _draggedPixelVector);
-    }else{
-        inersected->x = x - this->getTranslation().x;
-        inersected->y = y - this->getTranslation().y;
-    }
-
 }
 
 void CatmullRom::drawShape(){

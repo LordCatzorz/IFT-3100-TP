@@ -51,7 +51,7 @@ ofMatrix4x4 Object2D::getFinalTransformationMatrix()
 	return matrix;
 }
 
-void Object2D::Create(int x1, int y1, int width, int height)
+void Object2D::Create(int x1, int y1, int width, int height, bool isXInverted, bool isYInverted)
 {
 }
 
