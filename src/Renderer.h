@@ -44,6 +44,7 @@ public:
 	void Draw();
     void SetMouseRecorder(MouseWatcher * mouseRecorder);
     void FileOpenCallback(string param);
+	void HeightMapOpenCallback(string param);
     void PrintScreenTakenCallback(string param);
     void PrintScreenSectionCallback(string arg);
     void AssociateShapesCallback(string arg);
