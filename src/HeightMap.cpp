@@ -24,6 +24,8 @@ void HeightMap::Setup(ofImage* _image)
 	float extrusion = 25.0;
 	int w = _image->getWidth();
 	int h = _image->getHeight();
+
+	//Create the vertices
 	for (int x = 0;x < w;x++)
 	{
 		for (int y = 0; y < h; y++)
@@ -35,6 +37,7 @@ void HeightMap::Setup(ofImage* _image)
 		}
 	}
 
+	//Create the triangles
 	for (int y = 0; y<h - 1; y++)
 	{
 		for (int x = 0; x<w - 1; x++)
