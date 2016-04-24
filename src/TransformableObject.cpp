@@ -124,6 +124,22 @@ ofMatrix4x4 TransformableObject::getFinalTransformationMatrix()
 	return matrix;
 }
 
+void TransformableObject::applyTransformationMatrix()
+{
+	ofVec3f translation;
+	ofQuaternion rotation;
+	ofVec3f scale;
+	ofQuaternion so;
+	this->getFinalTransformationMatrix().decompose(translation, rotation, scale, so);
+	float f;
+	ofVec3f v;
+	rotation.getRotate(f, v);
+	ofTranslate(translation);
+	ofScale(scale.x, scale.y, scale.z);
+	ofRotate(f, v.x, v.y, v.z);
+
+}
+
 TransformableObject::TransformableObject()
 {
 	this->boundingBox = new ofBoxPrimitive();

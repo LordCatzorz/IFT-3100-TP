@@ -26,6 +26,8 @@ void ofApp::draw()
     this->renderer->Draw();
 
     ofDisableDepthTest();
+
+	
 }
 
 //--------------------------------------------------------------

@@ -4,12 +4,12 @@ void Structure::Draw()
 {
 	ofColor colours[4] = {ofColor::red, ofColor::green, ofColor::blue, ofColor::purple};
 	ofLight* light = this->shadersManager->GetLight(0);
-	ofEnableLighting();
+	//ofEnableLighting();
 	light->setPointLight();
 	light->setAttenuation(0.5f);
 	light->setPosition(ofVec3f(500, 500, -500));
-	light->enable();
-	this->shadersManager->EnableShaders();
+	//light->enable();
+	//this->shadersManager->EnableShaders();
     ofPushMatrix();
 	for (Structure* child : *(this->children))
 	{
@@ -20,7 +20,7 @@ void Structure::Draw()
 		shape->Draw();
 	}
 	ofPopMatrix();
-	this->shadersManager->DisableShaders();
+	//this->shadersManager->DisableShaders();
 	light->disable();
 
     ofDisableLighting();
