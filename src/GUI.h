@@ -120,7 +120,6 @@ private:
     void editToggleCallback(bool & inval);
     void callScreenSectionCallback();
     void importObjFileCallBack();
-<<<<<<< HEAD
     void createTriangleCaller();
     void createRectangleCaller();
     void createEllipseCaller();
@@ -153,45 +152,11 @@ private:
     ofFileDialogResult requestUsrFile();
     ofFileDialogResult saveUsrFile(string defaultName);
     std::function<void(std::string)> imageOpenCallback;
-=======
-    void createTriangleCaller();
-    void createRectangleCaller();
-    void createEllipseCaller();
-    void associateShapesCaller();
-    void dissociateShapesCaller();
-    void bSplineCreateCaller();
-    void cRomCreateCaller();
-    void controlPointsSliderCaller(int & val);
-    void surfaceCreateCaller();
-    void surfacePoints1SliderCaller(int & val);
-    void surfacePoints2SliderCaller(int & val);
-    void surfacePoints3SliderCaller(int & val);
-    void surfacePoints4SliderCaller(int & val);
-
-    //Left-side pane callers
-    void frontCameraCaller(bool & inval);
-    void backCameraCaller(bool & inval);
-    void VFOVCaller(float & val);
-    void HFOVCaller(float & val);
-    void FarClipCaller(int & val);
-    void NearClipCaller(int & val);
-    void squareCaller(bool & inval);
-    void wideCaller(bool & inval);
-    void ultraWideCaller(bool & inval);
-    void perspectiveCaller(bool & inval);
-    void orthogonalCaller(bool & inval);
-
-
-    ofFileDialogResult requestUsrFile();
-    ofFileDialogResult saveUsrFile(string defaultName);
-    std::function<void(std::string)> imageOpenCallback;
->>>>>>> 833bb582948d36e63485881791af0d1926c4aebd
     std::function<void(std::string)> heightMapOpenCallback;
     std::function<void(std::string)> printScreenSelectionCallback;
     std::function<void(std::string)> printScreenTakenCallback;
     std::function<void(std::string)> printScreenBlurTakenCallback;
     std::function<void(std::string)> objFileImportedCallback;
-<<<<<<< HEAD
     std::function<void(std::string)> createTriangleCallback;
     std::function<void(std::string)> createRectangleCallback;
     std::function<void(std::string)> createEllipseCallback;
@@ -210,25 +175,6 @@ private:
     std::function<void(int val)> NearClipChangedCallback;
     std::function<void(GUI::AspectRatio)> aspectRatioChangedCallback;
     std::function<void(GUI::ProjectionType)> projectionChangedCallback;
-=======
-    std::function<void(std::string)> createTriangleCallback;
-    std::function<void(std::string)> createRectangleCallback;
-    std::function<void(std::string)> createEllipseCallback;
-    std::function<void(std::string)> associateShapesCallback;
-    std::function<void(std::string)> dissociateShapesCallback;
-    std::function<void(GUI::ActionType)> modeChangedCallback;
-    std::function<void()> bSplineCreateCallback;
-    std::function<void()> cRomCreateCallback;
-    std::function<void()> surfaceCreateCallback;
-
-    std::function<void(GUI::CameraSelected)> cameraChangedCallback;
-    std::function<void(float val)> VFOVChangedCallback;
-    std::function<void(float val)> HFOVChangedCallback;
-    std::function<void(int val)> FarClipChangedCallback;
-    std::function<void(int val)> NearClipChangedCallback;
-    std::function<void(GUI::AspectRatio)> aspectRatioChangedCallback;
-    std::function<void(GUI::ProjectionType)> projectionChangedCallback;
->>>>>>> 833bb582948d36e63485881791af0d1926c4aebd
 
 };
 
