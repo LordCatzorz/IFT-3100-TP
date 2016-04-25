@@ -12,29 +12,32 @@ Object2D::~Object2D()
 
 void Object2D::AddTranslation(int x, int y, ofVec3f _draggedPixelVector)
 {
-    ofVec3f vec = getWorldPosition(_draggedPixelVector);
-    this->setTranslation(vec + this->getTranslation());
+	ofVec3f vec = getWorldPosition(_draggedPixelVector);
+	this->setTranslation(vec + this->getTranslation());
 }
 
 void Object2D::AddRotation(ofVec3f _draggedPixelVector, int _axis)
 {
-   // this->GetCentre();
-    float length = _draggedPixelVector.length();
-    length = _draggedPixelVector.x + -_draggedPixelVector.y;
-    double angle = atan((length / ofGetWindowWidth())) * 180 / M_PI;
-    float a, x, y, z;
-    if (_axis == 0) // x
-    {
-        this->glRotate(angle, 1, 0, 0);
-    }
-    else if (_axis == 1) //y
-    {
-        this->glRotate(angle, 0, 1, 0);
-    }
-    else //z
-    {
-        this->glRotate(-angle, 0, 0, 1);
-    }
+	// this->GetCentre();
+	float length = _draggedPixelVector.length();
+	length = _draggedPixelVector.x + _draggedPixelVector.y;
+	double angle = atan((length / ofGetWindowWidth())) * 180 / M_PI;
+
+
+
+	float a, x, y, z;
+	if (_axis == 0) // x
+	{
+		this->glRotate(angle, 1, 0, 0);
+	}
+	else if (_axis == 1) //y
+	{
+		this->glRotate(angle, 0, 1, 0);
+	}
+	else //z
+	{
+		this->glRotate(-angle, 0, 0, 1);
+	}
 }
 
 void Object2D::AddScale(bool _zoomIn)
@@ -71,9 +74,9 @@ void Object2D::refreshPoints()
 ofPoint Object2D::getWorldPosition(ofVec3f _point)
 {
 
-    ofVec3f point = this->parent->GetFinalTransformationMatrix().getInverse().preMult(_point);
-    ofVec3f point2 = this->parent->GetFinalTransformationMatrix().getInverse().postMult(_point);
+	ofVec3f point = this->parent->GetFinalTransformationMatrix().getInverse().preMult(_point);
+	ofVec3f point2 = this->parent->GetFinalTransformationMatrix().getInverse().postMult(_point);
 
-    return point;
+	return point;
 }
 

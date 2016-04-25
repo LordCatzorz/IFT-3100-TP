@@ -32,11 +32,11 @@ public:
     void AddMouseDragDelegate(MouseActionDelegate * delegate);
     void RemoveMouseDragDelegate(MouseActionDelegate * delegate);
     void AddMouseMoveDelegate(MouseActionDelegate * delegate);
-    void RemoveMouseMoveDelegate(MouseActionDelegate * delegate);
+	void RemoveMouseMoveDelegate(MouseActionDelegate * delegate) ;
     ofVec3f * CurretVector();
     ofPoint * TopLeftPoint();
     ofPoint * TopRightPoint();
-    ofPoint * BottomLeftPoint();
+	ofPoint * BottomLeftPoint();
     ofPoint * BottomRightPoint();
 private:
     bool    isRecording = false,

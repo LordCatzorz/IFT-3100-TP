@@ -1,33 +1,33 @@
 #include "ofApp.h"
-
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-    mouseWatcher = new MouseWatcher();
-    this->renderer = new Renderer();
-    this->renderer->Setup();
-    this->renderer->SetMouseRecorder(mouseWatcher);
-    ofEnableDepthTest();
-    ofSetFrameRate(24);
+	mouseWatcher = new MouseWatcher();
+	this->renderer = new Renderer();
+	this->renderer->Setup();
+	this->renderer->SetMouseRecorder(mouseWatcher);
+	ofEnableDepthTest();
+	ofSetFrameRate(24);
 
 }
 
 //--------------------------------------------------------------
 void ofApp::update()
 {
-    this->renderer->Update();
+	this->renderer->Update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-    ofEnableDepthTest();
+	ofEnableDepthTest();
 
-    this->renderer->Draw();
+	this->renderer->Draw();
 
-    ofDisableDepthTest();
+	ofDisableDepthTest();
 
-	
+
+
 }
 
 //--------------------------------------------------------------
@@ -49,7 +49,7 @@ void ofApp::keyPressed(int key)
 	{
 		this->renderer->TestMoveUp();
 	}
-	else if(key == 's')
+	else if (key == 's')
 	{
 		this->renderer->TestMoveDown();
 	}
@@ -98,7 +98,7 @@ void ofApp::keyPressed(int key)
 		{
 			this->renderer->TestRotateXNeg();
 		}
-		
+
 	}
 	else if (key == 'z')
 	{
@@ -132,15 +132,15 @@ void ofApp::keyPressed(int key)
 	{
 		this->renderer->TestDeselectAll();
 	}
-	
 
-    this->renderer->KeyDown(key);
+
+	this->renderer->KeyDown(key);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key)
 {
-    this->renderer->KeyUp(key);
+	this->renderer->KeyUp(key);
 }
 
 //--------------------------------------------------------------
@@ -150,32 +150,32 @@ void ofApp::mouseMoved(int x, int y)
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button)
 {
-    mouseWatcher->Record(x, y, button, MouseWatcher::Drag);
+	mouseWatcher->Record(x, y, button, MouseWatcher::Drag);
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button)
 {
-    mouseWatcher->Record(x, y, button, MouseWatcher::Down);
+	mouseWatcher->Record(x, y, button, MouseWatcher::Down);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button)
 {
-    mouseWatcher->Record(x, y, button, MouseWatcher::Up);
-    mouseWatcher->StopRecording(x, y, button);
+	mouseWatcher->Record(x, y, button, MouseWatcher::Up);
+	mouseWatcher->StopRecording(x, y, button);
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseEntered(int x, int y)
 {
-    mouseWatcher->ResumeRecording();
+	mouseWatcher->ResumeRecording();
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseExited(int x, int y)
 {
-    mouseWatcher->PauseRecording();
+	mouseWatcher->PauseRecording();
 }
 
 //--------------------------------------------------------------

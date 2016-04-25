@@ -21,6 +21,10 @@ public:
     //void        AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false);
     void Create(int x1, int y1, int width, int height, bool isXInverted = false, bool isYInverted = false){}
     //void        Draw();
+	static ofImage Blur(ofImage _image);
+	static ofImage Sharpen(ofImage _image);;
+	static ofImage Edge(ofImage _image);;
+	static ofImage Emboss(ofImage _image);;
 private:
 
     string      imgName;
@@ -31,7 +35,8 @@ private:
     bool        valueInRange(int value, int min, int max){ return (value >= min) && (value <= max); }
     double      dotProduct(const ofPoint & point1, const ofPoint & point2);
     void drawShape();
-    void refreshPoints(){}
+	void refreshPoints() {}
+	static ofImage applyFilter(ofImage _image, ofMatrix3x3 _kernel);
 
 };
 

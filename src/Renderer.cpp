@@ -15,6 +15,7 @@ Renderer::Renderer()
 	Gui->AddImageOpenedListener(std::bind(&Renderer::FileOpenCallback, this, std::placeholders::_1));
 	Gui->AddHeightMapListener(std::bind(&Renderer::HeightMapOpenCallback, this, std::placeholders::_1));
 	Gui->AddPrintscreenTakenListener(std::bind(&Renderer::PrintScreenTakenCallback, this, std::placeholders::_1));
+	Gui->AddPrintscreenBlurTakenListener(std::bind(&Renderer::PrintScreenTakenBlurCallback, this, std::placeholders::_1));
 	Gui->AddPrintscreenSelectionListener(std::bind(&Renderer::PrintScreenSectionCallback, this, std::placeholders::_1));
 	Gui->AddObjFileImportedListener(std::bind(&Renderer::ImportObjFileCallback, this, std::placeholders::_1));
 	//Gui->AddModeChangedListener(std::bind(&Renderer::ModeChangeCallback, this, std::placeholders::_1));
@@ -393,6 +394,10 @@ void Renderer::HeightMapOpenCallback(string param)
 void Renderer::PrintScreenTakenCallback(string param)
 {
 	ScreenshotManager::TakeScreenshot(param, 0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+}
+void Renderer::PrintScreenTakenBlurCallback(string param)
+{
+	ScreenshotManager::TakeScreenshot(param, 0, 0, ofGetWindowWidth(), ofGetWindowHeight(), true);
 }
 
 void Renderer::PrintScreenSectionCallback(string arg)
