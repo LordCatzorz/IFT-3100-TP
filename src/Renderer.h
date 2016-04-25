@@ -38,7 +38,7 @@ public:
 	void TestCreateHexahedron();
 	void TestCreateOctahedron();
 	void TestCreateDodecahedron();
-	void TestCreateIsocahedron();
+	void TestCreateIcosahedron();
 	void TestSelectNext();
 	void TestSelectPrevious();
 	void TestDeselectAll();

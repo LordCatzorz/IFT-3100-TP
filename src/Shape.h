@@ -3,6 +3,9 @@
 #define SHAPE_H
 #include "ofMain.h"
 #include <climits>
+#ifdef _WIN32
+#define M_PI PI
+#endif
 class Structure;
 class Shape
 {
