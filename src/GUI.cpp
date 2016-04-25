@@ -8,6 +8,7 @@ GUI::GUI()
     openHeightMapBtn.addListener(this, &GUI::openHeightMapBtnCallback);
     printscreenSection.addListener(this, &GUI::callScreenSectionCallback);
     printscreen.addListener(this, &GUI::openFilePrintscreenCallback);
+	printscreenBlur.addListener(this, &GUI::openFilePrintscreenBlurCallback);
     selectionToggle.addListener(this, &GUI::selectionToggleCallback);
     editToggle.addListener(this, &GUI::editToggleCallback);
     importObjFile.addListener(this, &GUI::importObjFileCallBack);
@@ -44,6 +45,7 @@ GUI::GUI()
     gui.add(openFileBtn.setup("Ouvir une image"));
     gui.add(printscreenSection.setup("Capturer une zone"));
     gui.add(printscreen.setup("Capturer l'ecran"));
+	gui.add(printscreenBlur.setup("Capturer l'ecran et brouiller"));
     gui.add(openHeightMapBtn.setup("Ouvrir une carte d'elevation"));
     gui.add(importObjFile.setup("Importer un OBJ"));
 
@@ -124,6 +126,12 @@ void GUI::AddPrintscreenTakenListener(std::function<void(std::string)> fnc)
 {
 
 	printScreenTakenCallback = fnc;
+}
+
+void GUI::AddPrintscreenBlurTakenListener(std::function<void(std::string)> fnc)
+{
+
+	printScreenBlurTakenCallback = fnc;
 }
 
 void GUI::AddModeChangedListener(std::function<void(GUI::ActionType)> fnc)
@@ -330,6 +338,16 @@ void GUI::openFilePrintscreenCallback()
 	if (result.bSuccess)
 	{
 		printScreenTakenCallback(result.filePath);
+	}
+}
+
+void GUI::openFilePrintscreenBlurCallback()
+{
+
+	ofFileDialogResult result = saveUsrFile("captureDEcranBlur");
+	if (result.bSuccess)
+	{
+		printScreenBlurTakenCallback(result.filePath);
 	}
 }
 

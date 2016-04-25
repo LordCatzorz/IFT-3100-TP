@@ -50,6 +50,7 @@ public:
     void FileOpenCallback(string param);
 	void HeightMapOpenCallback(string param);
     void PrintScreenTakenCallback(string param);
+	void PrintScreenTakenBlurCallback(string param);
     void PrintScreenSectionCallback(string arg);
     void AssociateShapesCallback(string arg);
     void DissociateShapesCallback(string arg);
