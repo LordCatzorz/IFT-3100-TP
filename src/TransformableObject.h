@@ -24,6 +24,7 @@ protected:
 	void setBondingCube(ofMesh* _mesh);
 	ofBoxPrimitive* boundingBox;
 	ofMatrix4x4 getFinalTransformationMatrix();
+	void applyTransformationMatrix();
 private:
 
 

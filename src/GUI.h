@@ -32,6 +32,7 @@ public:
     void AddPrintscreenTakenListener(std::function<void(std::string)> fnc);
     void AddModeChangedListener(std::function<void(GUI::ActionType)> fnc);
 	void AddObjFileImportedListener(std::function<void(std::string)> fnc);
+	void AddHeightMapListener(std::function<void(std::string)> fnc);
     void AddCreateTriangleListener(std::function<void(std::string)> fnc);
     void AddCreateRectangleListener(std::function<void(std::string)> fnc);
     void AddCreateEllipseListener(std::function<void(std::string)> fnc);
@@ -67,6 +68,7 @@ private:
         surfaceControlCount4 = 2;
 
 	ofxButton openFileBtn;
+	ofxButton openHeightMapBtn;
     ofxButton printscreenSection;
     ofxButton printscreen;
 	ofxButton importObjFile;
@@ -102,6 +104,7 @@ private:
 
     //Right-Side pane callers
 	void openFileBtnCallback();
+	void openHeightMapBtnCallback();
     void openFilePrintscreenCallback();
     void selectionToggleCallback(bool & inval);
     void editToggleCallback(bool & inval);
@@ -138,6 +141,7 @@ private:
     ofFileDialogResult requestUsrFile();
     ofFileDialogResult saveUsrFile(string defaultName);
     std::function<void(std::string)> imageOpenCallback;
+	std::function<void(std::string)> heightMapOpenCallback;
     std::function<void(std::string)> printScreenSelectionCallback;
     std::function<void(std::string)> printScreenTakenCallback;
 	std::function<void(std::string)> objFileImportedCallback;

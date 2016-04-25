@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Object3D.h"
+#include "HeightMap.h"
 Object2D * downCast2D;
 
 Renderer::Renderer()
@@ -12,6 +13,7 @@ Renderer::Renderer()
 
 	Gui = new GUI();
 	Gui->AddImageOpenedListener(std::bind(&Renderer::FileOpenCallback, this, std::placeholders::_1));
+	Gui->AddHeightMapListener(std::bind(&Renderer::HeightMapOpenCallback, this, std::placeholders::_1));
 	Gui->AddPrintscreenTakenListener(std::bind(&Renderer::PrintScreenTakenCallback, this, std::placeholders::_1));
 	Gui->AddPrintscreenSelectionListener(std::bind(&Renderer::PrintScreenSectionCallback, this, std::placeholders::_1));
 	Gui->AddObjFileImportedListener(std::bind(&Renderer::ImportObjFileCallback, this, std::placeholders::_1));
@@ -184,7 +186,6 @@ void Renderer::TestRotateYNeg()
 	}
 }
 
-
 void Renderer::TestCreateTetrahedron()
 {
     Object3D* obj = new Object3D("models/tetrahedron/tetrahedron.obj");
@@ -227,48 +228,42 @@ void Renderer::TestCreateIcosahedron()
 
 void Renderer::TestSelectNext()
 {
-	if (this->testSelectedElement > -1)
-	{
-		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
-	}
-	this->testSelectedElement++;
-	if (this->testSelectedElement >= this->sceneStructure->GetElementsCount())
-	{
-		this->testSelectedElement = -1;
-	}
-	else
-	{
-		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
-	}
+	//if (this->testSelectedElement > -1)
+	//{
+	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
+	//}
+	//this->testSelectedElement++;
+	//if (this->testSelectedElement >= this->sceneStructure->GetElementsCount())
+	//{
+	//	this->testSelectedElement = -1;
+	//}
+	//else
+	//{
+	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
+	//}
 }
 
 void Renderer::TestSelectPrevious()
 {
-	if (this->testSelectedElement > -1 && this->testSelectedElement < this->sceneStructure->GetElementsCount())
-	{
-		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
-	}
-	if (this->testSelectedElement == -1)
-	{
-		this->testSelectedElement = this->sceneStructure->GetElementsCount();
-	}
-	this->testSelectedElement--;
-	if (this->testSelectedElement > -1)
-	{
-		this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
-	}
+	//if (this->testSelectedElement > -1 && this->testSelectedElement < this->sceneStructure->GetElementsCount())
+	//{
+	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
+	//}
+	//if (this->testSelectedElement == -1)
+	//{
+	//	this->testSelectedElement = this->sceneStructure->GetElementsCount();
+	//}
+	//this->testSelectedElement--;
+	//if (this->testSelectedElement > -1)
+	//{
+	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
+	//}
 }
 
 void Renderer::TestDeselectAll()
 {
-	this->testSelectedElement = -1;
-	for (Shape* shape : *(this->sceneStructure->GetElements()))
-	{
-		shape->SetSelected(false);
-	}
+	this->clearSelectedShapes();
 }
-
-
 
 void Renderer::Setup()
 {
@@ -291,9 +286,13 @@ void Renderer::Setup()
 	light->setSpecularColor(ofColor(191, 191, 191));
 	light->setPointLight();
 	this->sceneStructure->shadersManager->AddLight(light);
-
+	ofImage* textureImage = new ofImage("IFT3100H16_TP1.png");
+	//HeightMap* heightmap = new HeightMap();
+	//heightmap->Setup(textureImage);
+	textureImage->bind(0);
 	ofShader* defaultShader = new ofShader();
 	this->sceneStructure->shadersManager->AddShader(defaultShader);
+	//this->sceneStructure->AddElement(heightmap);
 	defaultShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
 
     cameraManager.setTarget(ofVec3f((ofGetWidth() / 2), (ofGetHeight() / 2)));
@@ -330,11 +329,12 @@ void Renderer::Draw()
 {
     GuiLight.enable();
     Gui->Draw();
+    mouseWatcher->Draw();
+
     GuiLight.disable();
     cameraManager.begin();
     ofPushMatrix();
     this->sceneStructure->Draw();
-    mouseWatcher->Draw();
 
     ofPopMatrix();
 
@@ -367,6 +367,23 @@ void Renderer::FileOpenCallback(string param)
     //TODO: Reintegrate
     //newImage->AffectVector((int) (newImage->TopRightPoint()->x / 2), (int) (newImage->BottomLeftPoint()->y / 2), new ofVec3f(100, 100));
 	addVisibleShape(newImage);
+}
+
+void Renderer::HeightMapOpenCallback(string param)
+{
+	std::ifstream input(param, std::ios::binary);
+
+	std::replace(param.begin(), param.end(), '\\', '/');
+	string imageName = param.substr(param.find_last_of("/"));
+	saveFile("./data" + imageName, input);
+	input.close();
+
+	ofImage * newImage = new ofImage(imageName.substr(1));
+	HeightMap * hm = new HeightMap();
+	hm->Setup(newImage);
+	//TODO: Reintegrate
+	//newImage->AffectVector((int) (newImage->TopRightPoint()->x / 2), (int) (newImage->BottomLeftPoint()->y / 2), new ofVec3f(100, 100));
+	addVisibleShape(hm);
 }
 
 void Renderer::PrintScreenTakenCallback(string param)
@@ -644,7 +661,7 @@ void Renderer::mouseClickHandler(int x, int y, int button)
 {
 	if (!isCtrlDown())
 		clearSelectedShapes();
-	for (Shape* visible : visibleShapes)
+	for (Shape* visible : *(this->sceneStructure->GetElements()) /*visibleShapes*/)
 	{
 		if (visible->IsPointWithinBounds(x, y))
 		{
@@ -653,13 +670,7 @@ void Renderer::mouseClickHandler(int x, int y, int button)
 			break;
 		}
 	}
-	for (Shape* shape : *(this->sceneStructure->GetElements()))
-	{
-		if (shape->IsPointWithinBounds(x, y))
-		{
 
-		}
-	}
 }
 void Renderer::mouseDragHandler(int x, int y, int button)
 {

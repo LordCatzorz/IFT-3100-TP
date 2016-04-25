@@ -77,8 +77,7 @@ bool TransformableObject::IsPointWithinBounds(float x, float y)
 	ofPoint screenPoint2 = getScreenPosition(vertice2);
 	float distanceScreen = screenPoint1.distance(screenPoint2);
 
-	ofPoint middlePoint= (vertice1 + vertice2)*0.5;
-	ofPoint screenPoint=  getScreenPosition(middlePoint);
+	ofPoint screenPoint=  getScreenPosition(this->GetCentre());
 	float distanceClic = screenPoint.distance(ofPoint(x, y));
 	if (distanceClic*0.5 < distanceScreen)
 	{
@@ -123,6 +122,22 @@ ofMatrix4x4 TransformableObject::getFinalTransformationMatrix()
 		matrix = matrix * (this->parent->GetFinalTransformationMatrix());
 	}
 	return matrix;
+}
+
+void TransformableObject::applyTransformationMatrix()
+{
+	ofVec3f translation;
+	ofQuaternion rotation;
+	ofVec3f scale;
+	ofQuaternion so;
+	this->getFinalTransformationMatrix().decompose(translation, rotation, scale, so);
+	float f;
+	ofVec3f v;
+	rotation.getRotate(f, v);
+	ofTranslate(translation);
+	ofScale(scale.x, scale.y, scale.z);
+	ofRotate(f, v.x, v.y, v.z);
+
 }
 
 TransformableObject::TransformableObject()

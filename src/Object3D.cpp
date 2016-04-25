@@ -28,18 +28,7 @@ void Object3D::Draw()
 {
 	
 	ofPushMatrix();
-	ofVec3f translation;
-	ofQuaternion rotation;
-	ofVec3f scale;
-	ofQuaternion so;
-	this->getFinalTransformationMatrix().decompose(translation, rotation, scale, so);
-	float f;
-	ofVec3f v;
-	rotation.getRotate(f, v);
-	ofTranslate(translation);
-	ofScale(scale.x, scale.y, scale.z);
-	ofRotate(f, v.x, v.y, v.z);
-
+	this->applyTransformationMatrix();
 	//ofRotate(rot)
 	ofSetColor(255);
 	if (this->model->getMeshCount() > 0)

@@ -3,7 +3,8 @@
 GUI::GUI()
 {
     ofDisableDepthTest();
-    openFileBtn.addListener(this, &GUI::openFileBtnCallback);
+	openFileBtn.addListener(this, &GUI::openFileBtnCallback);
+		openHeightMapBtn.addListener(this, &GUI::openHeightMapBtnCallback);
     printscreenSection.addListener(this, &GUI::callScreenSectionCallback);
     printscreen.addListener(this, &GUI::openFilePrintscreenCallback);
     selectionToggle.addListener(this, &GUI::selectionToggleCallback);
@@ -39,7 +40,9 @@ GUI::GUI()
     gui.add(openFileBtn.setup("Ouvir une image"));
     gui.add(printscreenSection.setup("Capturer une zone"));
     gui.add(printscreen.setup("Capturer l'ecran"));
+    gui.add(openHeightMapBtn.setup("Ouvrir une carte d'elevation"));
     gui.add(importObjFile.setup("Importer un OBJ"));
+
     gui.add(associateShapes.setup("Associer les formes"));
     gui.add(dissociateShapes.setup("Separer les enfants"));
     gui.add(drawTriangle.setup("Creer un triangle"));
@@ -99,6 +102,12 @@ GUI::GUI()
 void GUI::AddImageOpenedListener(std::function<void(std::string)> fnc){
 
 	imageOpenCallback = fnc;
+}
+
+void GUI::AddHeightMapListener(std::function<void(std::string)> fnc)
+{
+
+	heightMapOpenCallback = fnc;
 }
 
 void GUI::AddPrintscreenSelectionListener(std::function<void(std::string)> fnc)
@@ -275,6 +284,15 @@ void GUI::openFileBtnCallback()
 	if (result.bSuccess)
 	{
 		imageOpenCallback(result.filePath);
+	}
+}
+
+void GUI::openHeightMapBtnCallback()
+{
+	ofFileDialogResult result = requestUsrFile();
+	if (result.bSuccess)
+	{
+		heightMapOpenCallback(result.filePath);
 	}
 }
 
