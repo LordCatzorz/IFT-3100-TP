@@ -3,6 +3,7 @@
 GUI::GUI()
 {
     ofDisableDepthTest();
+    freeViewToggle.addListener(this, &GUI::activePanelSwitchCaller);
 	openFileBtn.addListener(this, &GUI::openFileBtnCallback);
     openHeightMapBtn.addListener(this, &GUI::openHeightMapBtnCallback);
     printscreenSection.addListener(this, &GUI::callScreenSectionCallback);
@@ -35,6 +36,9 @@ GUI::GUI()
     ulraWideToggle.addListener(this, &GUI::ultraWideCaller);
     perspectiveToggle.addListener(this, &GUI::perspectiveCaller);
     orthoToggle.addListener(this, &GUI::orthogonalCaller);
+
+    toolsToggleGui.setup("Menu");
+    toolsToggleGui.add(freeViewToggle.setup("Free view", false));
 
     gui.setup("Outils");
     gui.add(openFileBtn.setup("Ouvir une image"));
@@ -75,7 +79,7 @@ GUI::GUI()
     frontToggle.setName("Camera avant");
     backToggle.setName("Camera arrière");
 
-    cameraGui.setPosition(ofGetWidth() - cameraGui.getWidth() - 10, 10);
+    //cameraGui.setPosition(ofGetWidth() - cameraGui.getWidth() - 10, 10);
     cameraGui.add(fovVSlider.setup("FOV Verticale", 0, 0, 180));
     cameraGui.add(fovHSlider.setup("FOV Horizontale", 0, 0, 180));
     cameraGui.add(farClipSlider.setup("Far clip", 1032, 0, 1032));
@@ -224,9 +228,16 @@ string GUI::RequestSaveFilePath(string defaultName)
 
 void GUI::Draw(){
     ofDisableDepthTest();
-    gui.draw();
-    cameraGui.setPosition(ofGetWidth() - cameraGui.getWidth() - 10, 10);
-    cameraGui.draw();
+    toolsToggleGui.setPosition(10, 10);
+    toolsToggleGui.draw();
+    if(isFreeView()){
+        cameraGui.setPosition(10, 50);
+        cameraGui.draw();
+    }else{
+        gui.setPosition(10, 50);
+        gui.draw();
+    }
+
     ofEnableDepthTest();
 }
 
@@ -241,6 +252,10 @@ void GUI::Hide()
 	yPos = gui.getPosition().y;
 
 	gui.setPosition(-1000, -1000);
+}
+
+bool GUI::isFreeView() const{
+    return isInFreeView;
 }
 
 void GUI::SetCurrentMode(ActionType newMode)
@@ -276,6 +291,18 @@ int GUI::getSurfaceControlCount3() const{
 
 int GUI::getSurfaceControlCount4() const{
     return surfaceControlCount4;
+}
+
+void GUI::activePanelSwitchCaller(bool & inval)
+{
+    isInFreeView = inval;
+    /*gui.clear();
+    gui.add(freeViewToggle.setup("Free view", !inval));
+    if(inval){
+        gui.add(toolsGroup.setup("Outils"));
+    }else{
+        gui.add(cameraGroup.setup("Camera"));
+    }*/
 }
 
 void GUI::openFileBtnCallback()

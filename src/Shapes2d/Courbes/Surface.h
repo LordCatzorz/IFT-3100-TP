@@ -13,7 +13,7 @@ public:
     virtual void AddTranslation(int x, int y, ofVec3f _draggedPixelVector){};
     virtual void AddRotation(ofVec3f _draggedPixelVector, int _axis){};
     virtual void AddScale(bool _zoomIn){};
-    virtual bool IsPointWithinBounds(float x, float y){};
+	virtual bool IsPointWithinBounds(float x, float y) { return false; };
 private:
     ofVboMesh mesh;
     CatmullRom * s1, * s2, *s3, *s4;

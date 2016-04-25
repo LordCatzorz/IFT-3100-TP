@@ -39,6 +39,8 @@ public:
         ofScale(scale.x, scale.y, scale.z);
         ofRotate(f, v.x, v.y, v.z);
 
+
+        ofSetColor(255, 0, 0, 255);
         drawShape();
 
         if(shapeHasBorders && shouldShowBorders){

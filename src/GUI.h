@@ -20,6 +20,7 @@ public:
     void Draw();
     void Show();
     void Hide();
+    bool isFreeView() const;
     void SetCurrentMode(ActionType newMode);
     ActionType GetCurrentMode();
     int getCurveControlPoints() const;
@@ -59,6 +60,7 @@ public:
     string RequestSaveFilePath(string defaultName);
 private:
 
+    bool isInFreeView;
     int xPos,
         yPos,
         curveControlPoints = 5,
@@ -67,6 +69,8 @@ private:
         surfaceControlCount3 = 2,
         surfaceControlCount4 = 2;
 
+    ofxPanel toolsToggleGui;
+    ofxToggle freeViewToggle;
 	ofxButton openFileBtn;
 	ofxButton openHeightMapBtn;
     ofxButton printscreenSection;
@@ -101,6 +105,7 @@ private:
     ofxGuiGroup aspectRatioGroup, projectionGroup;
     ofxToggle squareToggle, wideToggle, ulraWideToggle, perspectiveToggle, orthoToggle;
 
+    void activePanelSwitchCaller(bool & inval);
 
     //Right-Side pane callers
 	void openFileBtnCallback();
