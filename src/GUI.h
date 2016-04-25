@@ -23,6 +23,10 @@ public:
     void SetCurrentMode(ActionType newMode);
     ActionType GetCurrentMode();
     int getCurveControlPoints() const;
+    int getSurfaceControlCount1() const;
+    int getSurfaceControlCount2() const;
+    int getSurfaceControlCount3() const;
+    int getSurfaceControlCount4() const;
     void AddImageOpenedListener(std::function<void(std::string)> fnc);
     void AddPrintscreenSelectionListener(std::function<void(std::string)> fnc);
     void AddPrintscreenTakenListener(std::function<void(std::string)> fnc);
@@ -35,7 +39,7 @@ public:
     void AddDissociateShapesListener(std::function<void(std::string)> fnc);
     void AddBSplineCreateListener(std::function<void()> fnc);
     void AddCRomCreateListener(std::function<void()> fnc);
-
+    void AddSurfaceCreateListener(std::function<void()> fnc);
 
     void AddCameraChangedListener(std::function<void(GUI::CameraSelected)> fnc);
     void AddVFOVChangedListener(std::function<void(float)> fnc);
@@ -54,7 +58,13 @@ public:
     string RequestSaveFilePath(string defaultName);
 private:
 
-    int xPos, yPos, curveControlPoints = 5;
+    int xPos,
+        yPos,
+        curveControlPoints = 5,
+        surfaceControlCount1 = 2,
+        surfaceControlCount2 = 2,
+        surfaceControlCount3 = 2,
+        surfaceControlCount4 = 2;
 
 	ofxButton openFileBtn;
     ofxButton printscreenSection;
@@ -72,6 +82,12 @@ private:
     ofxGuiGroup courbesGroup;
     ofxButton bSplineCreate, CRomCreate;
     ofxIntSlider controlPointsSlider;
+    ofxButton surfaceCreate;
+    ofxGuiGroup surfaceGroup;
+    ofxIntSlider surfaceSide1;
+    ofxIntSlider surfaceSide2;
+    ofxIntSlider surfaceSide3;
+    ofxIntSlider surfaceSide4;
 
     ofxPanel cameraGui;
     ofxGuiGroup cameraPickerGroup;
@@ -99,6 +115,11 @@ private:
     void bSplineCreateCaller();
     void cRomCreateCaller();
     void controlPointsSliderCaller(int & val);
+    void surfaceCreateCaller();
+    void surfacePoints1SliderCaller(int & val);
+    void surfacePoints2SliderCaller(int & val);
+    void surfacePoints3SliderCaller(int & val);
+    void surfacePoints4SliderCaller(int & val);
 
     //Left-side pane callers
     void frontCameraCaller(bool & inval);
@@ -128,6 +149,7 @@ private:
     std::function<void(GUI::ActionType)> modeChangedCallback;
     std::function<void()> bSplineCreateCallback;
     std::function<void()> cRomCreateCallback;
+    std::function<void()> surfaceCreateCallback;
 	
     std::function<void(GUI::CameraSelected)> cameraChangedCallback;
     std::function<void(float val)> VFOVChangedCallback;

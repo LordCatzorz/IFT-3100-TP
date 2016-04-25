@@ -7,15 +7,33 @@ CatmullRom::CatmullRom(int controlPoints)
 }
 
 void CatmullRom::Create(int x1, int y1, int width, int height, bool isXInverted, bool isYInverted){
+    creator(x1, y1, 0, width * (isXInverted ? -1 : 1), height * (isYInverted ? -1 : 1), 0);
+}
 
-    this->setTranslation(ofVec3f(x1, y1));
+void CatmullRom::Create(const ofPoint &p0, const ofPoint &p1){
+    creator(p0.x, p0.y, p0.z, p1.x, p1.y, p1.z, false);
+}
+
+void CatmullRom::creator(int x1, int y1, int z1, int width, int height, int depth, bool fixCoordinates){
 
     points.clear();
-    points.push_back(ofPoint(isXInverted ? width : 0, isYInverted? height : 0));
 
-    double xDiff = (width) / ctrlPoints;
-    double yDiff = (height) / ctrlPoints;
-    double zDiff = 0;//(endPoint.z - startPoint.z) / ctrlPoints;
+    double xDiff;
+    double yDiff;
+    double zDiff;
+
+    if(fixCoordinates){
+        this->setTranslation(ofVec3f(x1, y1, z1));
+        points.push_back(ofPoint(width < 0 ? -width : 0, height < 0? -height : 0, depth < 0? depth : 0));
+        xDiff = width / ctrlPoints;
+        yDiff = height / ctrlPoints;
+        zDiff = depth / ctrlPoints;
+    }else{
+        points.push_back(ofPoint(x1, y1, z1));
+        xDiff = (width - x1) / ctrlPoints;
+        yDiff = (height - y1) / ctrlPoints;
+        zDiff = (depth - z1) / ctrlPoints;
+    }
 
     for(int i = 1; i < ctrlPoints; i++){
         ofPoint tmp;
@@ -25,20 +43,31 @@ void CatmullRom::Create(int x1, int y1, int width, int height, bool isXInverted,
         points.push_back(tmp);
     }
 
-    points.push_back(ofPoint(isXInverted ? 0 : width, isYInverted? 0 : height));
+    int yOffset = 40;
+        for(int i = 1; i < ctrlPoints; i++){
+            points[i].y += yOffset;
+            yOffset *= -1;
+        }
+
+        if(fixCoordinates){
+            points.push_back(ofPoint(width < 0 ? 0 : width, height < 0 ? 0 : height, depth < 0? 0 : depth));
+        }else{
+            points.push_back(ofPoint(width, height, depth));
+        }
 
     topLeftPoint.set(0, 0);
-    topRightPoint.set(width, 0);
-    bottomLeftPoint.set(0, height);
-    bottomRightPoint.set(width, height);
+    topRightPoint.set(abs(width), 0);
+    bottomLeftPoint.set(0, abs(height));
+    bottomRightPoint.set(abs(width), abs(height));
     refreshBorders();
 }
+
 
 void CatmullRom::drawShape(){
     if(points.size() < 2)
         return;
     ofFill();
-    ofSetColor(0);
+    //ofSetColor(0);
     for(ofPoint & p : points){
         ofEllipse(p.x, p.y, 10, 10);
     }
@@ -80,12 +109,6 @@ ofPoint CatmullRom::getPointX(int val){
             index = i - 1;
             break;
         }
-    }
-
-    if(index  == 1){
-        bool a = true;
-    }else if(index > 1){
-        bool a = true;
     }
 
     float tVal;

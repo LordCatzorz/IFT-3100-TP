@@ -12,6 +12,7 @@
 #include "Shapes2d/Ellipse2D.h"
 #include "Shapes2d/Courbes/BSpliline.h"
 #include "Shapes2d/Courbes/CatmullRom.h"
+#include "Shapes2d/Courbes/Surface.h"
 #include "Camera/CameraManager.h"
 
 class Renderer
@@ -54,6 +55,7 @@ public:
 	void ImportObjFileCallback(string param);
     void drawBSplineWorker();
     void drawCRomWorker();
+    void drawSurfaceWorker();
     void CameraChangedCallback(const GUI::CameraSelected & activeCamera);
     void VFOVChangedCallback(float val);
     void HFOVCallback(float val);

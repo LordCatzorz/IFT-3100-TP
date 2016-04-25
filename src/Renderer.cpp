@@ -23,6 +23,7 @@ Renderer::Renderer()
 	Gui->AddDissociateShapesListener(std::bind(&Renderer::DissociateShapesCallback, this, std::placeholders::_1));
     Gui->AddBSplineCreateListener(std::bind(&Renderer::drawBSplineWorker, this));
     Gui->AddCRomCreateListener(std::bind(&Renderer::drawCRomWorker, this));
+    Gui->AddSurfaceCreateListener(std::bind(&Renderer::drawSurfaceWorker, this));
     Gui->AddCameraChangedListener(std::bind(&Renderer::CameraChangedCallback, this, std::placeholders::_1));
     Gui->AddVFOVChangedListener(std::bind(&Renderer::VFOVChangedCallback, this, std::placeholders::_1));
     Gui->AddHFOVChangedListener(std::bind(&Renderer::HFOVCallback, this, std::placeholders::_1));
@@ -330,7 +331,7 @@ void Renderer::Draw()
     GuiLight.enable();
     Gui->Draw();
     GuiLight.disable();
-    //cameraManager.begin();
+    cameraManager.begin();
     ofPushMatrix();
     this->sceneStructure->Draw();
     mouseWatcher->Draw();
@@ -338,7 +339,7 @@ void Renderer::Draw()
     ofPopMatrix();
 
     //TODO: Camera testing code. To be removed
-    /*ambientLight.enable();
+    ambientLight.enable();
     ofFill();
     for(int i = 0; i < 20; i++){
         ofPushMatrix();
@@ -348,9 +349,9 @@ void Renderer::Draw()
         ofBox(40);
         ofPopMatrix();
     }
-    ambientLight.disable();*/
+    ambientLight.disable();
 
-    //cameraManager.end();
+    cameraManager.end();
 }
 
 void Renderer::FileOpenCallback(string param)
@@ -595,9 +596,9 @@ void Renderer::mouseDownHandler(int x, int y, int button)
         cameraManager.zoomIn();
     }else if(button == OF_MOUSE_BUTTON_5){
         cameraManager.zoomOut();
-    }/*else{
+    }else{
         cameraManager.notifyMousePressed(x, y, button);
-    }*/
+    }
 
 	bool clickedOnSelectedShape = false;
 	for (Shape* selected : selectedShapes)
@@ -783,6 +784,23 @@ void Renderer::drawCRomWorker(){
 
     mouseWatcher->SetShowSelectionZone(false);
     addVisibleShape(new CatmullRom(Gui->getCurveControlPoints()));
+
+    (visibleShapes.back())->SetSelected(true);
+    shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
+    mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
+    mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
+}
+
+void Renderer::drawSurfaceWorker(){
+    clearSelectedShapes();
+
+    if(shapeDelegateWorker != nullptr)
+        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+    delete shapeDelegateWorker;
+    shapeDelegateWorker = nullptr;
+
+    mouseWatcher->SetShowSelectionZone(false);
+    addVisibleShape(new Surface(Gui->getSurfaceControlCount1(), Gui->getSurfaceControlCount2(), Gui->getSurfaceControlCount3(), Gui->getSurfaceControlCount4()));
 
     (visibleShapes.back())->SetSelected(true);
     shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);

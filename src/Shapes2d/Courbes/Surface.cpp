@@ -1,80 +1,82 @@
 #include "Surface.h"
 
-Surface::Surface()
+Surface::Surface(int var1, int var2, int var3, int var4)
 {
     int size = 200;
-    mesh;// = ofMesh::plane(size, size, 100, 100, OF_PRIMITIVE_TRIANGLES);
-    /*vector<ofVec3f> verts = mesh.getVertices();
+        mesh;
 
-        for (int i=0; i<verts.size(); i++) {
-            mesh.setTexCoord(i, ofVec2f(verts[i].x, verts[i].y));
-        }*/
-    ofPoint p1, p2, p3, p4;
-    p1.x = 0;
-    p1.y = 0;
-    p1.z = 0;
+        ofPoint p1, p2, p3, p4;
+        p1.x = 0;
+        p1.y = 0;
+        p1.z = 0;
 
-    p2.x = 0;
-    p2.y = 0;
-    p2.z = size;
+        p2.x = 0;
+        p2.y = 0;
+        p2.z = size;
 
-    p3.x = size;
-    p3.y = 0;
-    p3.z = size;
+        p3.x = size;
+        p3.y = 0;
+        p3.z = size;
 
-    p4.x = size;
-    p4.y = 0;
-    p4.z = 0;
-    /*s1 = new CatmullRom(p1, p2, 2);
-    s2 = new CatmullRom(p2, p3, 2);
-    s3 = new CatmullRom(p4, p3, 2);
-    s4 = new CatmullRom(p1, p4, 2);
+        p4.x = size;
+        p4.y = 0;
+        p4.z = 0;
+        s1 = new CatmullRom(var1);
+        s1->Create(p1, p2);
+        s2 = new CatmullRom(var2);
+        s2->Create(p2, p3);
+        s3 = new CatmullRom(var3);
+        s3->Create(p4, p3);
+        s4 = new CatmullRom(var4);
+        s4->Create(p1, p4);
 
-    for(double i = 0; i <= size; i++){
-        for(double j = 0; j <= size; j++){
-            double s = i / (double)size;
-            double t = j / (double)size;
-            points.push_back(((1 - t) * s4->getPointX(i) + t * s2->getPointX(i)) +
-                             ((1 - s) * s1->getPointZ(j) + s * s3->getPointZ(j)) -
-                                ((1 - s) * (1 - t) * p1 +
-                                (1 - s) * t * p2 +
-                                s * (1 - t) * p4 +
-                                s * t * p3));
-            mesh.addVertex(points[points.size() - 1]);
-        }
-    }
+        for(double i = 0; i <= size; i++){
+                for(double j = 0; j <= size; j++){
+                    double s = i / (double)size;
+                    double t = j / (double)size;
+                    points.push_back(((1 - t) * s4->getPointX(i) + t * s2->getPointX(i)) +
+                                     ((1 - s) * s1->getPointZ(j) + s * s3->getPointZ(j)) -
+                                        ((1 - s) * (1 - t) * p1 +
+                                        (1 - s) * t * p2 +
+                                        s * (1 - t) * p4 +
+                                        s * t * p3));
+                }
+            }
 
-    for(int i = 0; i < size; i++){
-        mesh.addVertex(points[i]);
-    }
+            for(int i = 0; i < size * size; i++){
+                mesh.addVertex(points[i]);
+            }
 
-    int width = size, height = size;
+            int width = size, height = size;
+            for (int y = 0; y<height; y++){
+                for (int x=0; x<width; x++){
+                    mesh.addIndex(x+y*width);
+                    mesh.addIndex((x+1)+y*width);
+                    mesh.addIndex(x+(y+1)*width);
 
-    for (int y = 0; y<height-1; y++){
-        for (int x=0; x<width-1; x++){
-            mesh.addIndex(x+y*width);               // 0
-            mesh.addIndex((x+1)+y*width);           // 1
-            mesh.addIndex(x+(y+1)*width);           // 10
-
-            mesh.addIndex((x+1)+y*width);           // 1
-            mesh.addIndex((x+1)+(y+1)*width);       // 11
-            mesh.addIndex(x+(y+1)*width);           // 10
-        }
-    }*/
+                    mesh.addIndex((x+1)+y*width);
+                    mesh.addIndex((x+1)+(y+1)*width);
+                    mesh.addIndex(x+(y+1)*width);
+                }
+            }
 }
 
 void Surface::Draw(){
     ofPushMatrix();
     ofTranslate(400, 400, 250);
-    mesh.drawWireframe();
-    s1->Draw();
+    mesh.drawVertices();
+    ofSetColor(200, 0, 0, 255);
+
+    /*s1->Draw();
+
+    ofSetColor(0, 200, 0, 255);
     s2->Draw();
+    ofSetColor(0, 0, 200, 255);
     s3->Draw();
     s4->Draw();
-    ofSetColor(200, 0, 0, 255);
-    /*for(ofPoint & x : points){
-        ofEllipse(x, 1, 1);
-    }*/
+    for(ofPoint & x : points){
+            ofEllipse(x, 1, 1);
+        }*/
     ofPopMatrix();
 }
 

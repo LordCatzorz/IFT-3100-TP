@@ -13,13 +13,13 @@ void BSpliline::Create(int x1, int y1, int width, int height, bool isXInverted, 
     points.clear();
     points.push_back(ofPoint(isXInverted ? width : 0, isYInverted? height : 0));
 
-    double xDiff = width / ctrlPoints;
-    double yDiff = height / ctrlPoints;
+    double xDiff = (width * (isXInverted ? -1 : 1)) / ctrlPoints;
+    double yDiff = (height * (isYInverted ? -1 : 1)) / ctrlPoints;
 
     for(int i = 1; i < ctrlPoints; i++){
         ofPoint tmp;
         tmp.x = points[i - 1].x + xDiff;
-        tmp.y = points[i - 1].y;// + yDiff;
+        tmp.y = points[i - 1].y + yDiff;
         points.push_back(tmp);
     }
 

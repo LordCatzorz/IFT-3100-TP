@@ -17,6 +17,11 @@ GUI::GUI()
     bSplineCreate.addListener(this, &GUI::bSplineCreateCaller);
     CRomCreate.addListener(this, &GUI::cRomCreateCaller);
     controlPointsSlider.addListener(this, &GUI::controlPointsSliderCaller);
+    surfaceCreate.addListener(this, &GUI::surfaceCreateCaller);
+    surfaceSide1.addListener(this, &GUI::surfacePoints1SliderCaller);
+    surfaceSide2.addListener(this, &GUI::surfacePoints2SliderCaller);
+    surfaceSide3.addListener(this, &GUI::surfacePoints3SliderCaller);
+    surfaceSide4.addListener(this, &GUI::surfacePoints4SliderCaller);
 
     frontToggle.addListener(this, &GUI::frontCameraCaller);
     backToggle.addListener(this, &GUI::backCameraCaller);
@@ -45,6 +50,14 @@ GUI::GUI()
     courbesGroup.add(bSplineCreate.setup("Creer B-Spline"));
     courbesGroup.add(CRomCreate.setup("Creer Catmull-Rom"));
     courbesGroup.add(controlPointsSlider.setup("Points de controle", 5, 1, 10));
+    gui.add(surfaceCreate.setup("Creer une surface"));
+    gui.add(surfaceGroup.setup("Parametres surface"));
+    surfaceGroup.minimize();
+    surfaceGroup.add(surfaceSide1.setup("Ondulations cote 1", 3, 0, 10));
+    surfaceGroup.add(surfaceSide2.setup("Ondulations cote 2", 3, 0, 10));
+    surfaceGroup.add(surfaceSide3.setup("Ondulations cote 3", 3, 0, 10));
+    surfaceGroup.add(surfaceSide4.setup("Ondulations cote 4", 3, 0, 10));
+
 
     editToggle = false;
 
@@ -146,6 +159,11 @@ void GUI::AddCRomCreateListener(std::function<void()> fnc)
     cRomCreateCallback = fnc;
 }
 
+void GUI::AddSurfaceCreateListener(std::function<void()> fnc)
+{
+    surfaceCreateCallback = fnc;
+}
+
 void GUI::AddCameraChangedListener(std::function<void(GUI::CameraSelected)> fnc)
 {
     cameraChangedCallback = fnc;
@@ -235,6 +253,22 @@ int GUI::getCurveControlPoints() const{
     return curveControlPoints;
 }
 
+int GUI::getSurfaceControlCount1() const{
+    return surfaceControlCount1;
+}
+
+int GUI::getSurfaceControlCount2() const{
+    return surfaceControlCount2;
+}
+
+int GUI::getSurfaceControlCount3() const{
+    return surfaceControlCount3;
+}
+
+int GUI::getSurfaceControlCount4() const{
+    return surfaceControlCount4;
+}
+
 void GUI::openFileBtnCallback()
 {
 	ofFileDialogResult result = requestUsrFile();
@@ -309,8 +343,28 @@ void GUI::cRomCreateCaller(){
     cRomCreateCallback();
 }
 
+void GUI::surfaceCreateCaller(){
+    surfaceCreateCallback();
+}
+
 void GUI::controlPointsSliderCaller(int &val){
     curveControlPoints = val;
+}
+
+void GUI::surfacePoints1SliderCaller(int &val){
+    surfaceControlCount1 = val;
+}
+
+void GUI::surfacePoints2SliderCaller(int &val){
+    surfaceControlCount2 = val;
+}
+
+void GUI::surfacePoints3SliderCaller(int &val){
+    surfaceControlCount3 = val;
+}
+
+void GUI::surfacePoints4SliderCaller(int &val){
+    surfaceControlCount4 = val;
 }
 
 ofFileDialogResult GUI::requestUsrFile()
