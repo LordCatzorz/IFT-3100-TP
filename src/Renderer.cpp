@@ -332,7 +332,7 @@ void Renderer::Draw()
     mouseWatcher->Draw();
 
     GuiLight.disable();
-    cameraManager.begin();
+    //cameraManager.begin();
     ofPushMatrix();
     this->sceneStructure->Draw();
 
@@ -351,7 +351,7 @@ void Renderer::Draw()
     }
     ambientLight.disable();
 
-    cameraManager.end();
+    //cameraManager.end();
 }
 
 void Renderer::FileOpenCallback(string param)

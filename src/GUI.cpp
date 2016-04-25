@@ -4,7 +4,7 @@ GUI::GUI()
 {
     ofDisableDepthTest();
 	openFileBtn.addListener(this, &GUI::openFileBtnCallback);
-		openHeightMapBtn.addListener(this, &GUI::openHeightMapBtnCallback);
+    openHeightMapBtn.addListener(this, &GUI::openHeightMapBtnCallback);
     printscreenSection.addListener(this, &GUI::callScreenSectionCallback);
     printscreen.addListener(this, &GUI::openFilePrintscreenCallback);
     selectionToggle.addListener(this, &GUI::selectionToggleCallback);
