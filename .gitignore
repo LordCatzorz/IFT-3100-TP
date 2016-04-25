@@ -249,3 +249,4 @@ _Pvt_Extensions
 *.make
 bin/data/*
 *.autosave
+*.VC.db

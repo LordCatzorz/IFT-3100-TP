@@ -23,19 +23,19 @@ Renderer::Renderer()
 	Gui->AddCreateEllipseListener(std::bind(&Renderer::drawEllipseManager, this, std::placeholders::_1));
 	Gui->AddAssociateShapesListener(std::bind(&Renderer::AssociateShapesCallback, this, std::placeholders::_1));
 	Gui->AddDissociateShapesListener(std::bind(&Renderer::DissociateShapesCallback, this, std::placeholders::_1));
-    Gui->AddBSplineCreateListener(std::bind(&Renderer::drawBSplineWorker, this));
-    Gui->AddCRomCreateListener(std::bind(&Renderer::drawCRomWorker, this));
-    Gui->AddSurfaceCreateListener(std::bind(&Renderer::drawSurfaceWorker, this));
-    Gui->AddCameraChangedListener(std::bind(&Renderer::CameraChangedCallback, this, std::placeholders::_1));
-    Gui->AddVFOVChangedListener(std::bind(&Renderer::VFOVChangedCallback, this, std::placeholders::_1));
-    Gui->AddHFOVChangedListener(std::bind(&Renderer::HFOVCallback, this, std::placeholders::_1));
-    Gui->AddFarClipChangedListener(std::bind(&Renderer::FarClipChangedCallback, this, std::placeholders::_1));
-    Gui->AddNearClipChangedListener(std::bind(&Renderer::NearClipChangedCallback, this, std::placeholders::_1));
-    Gui->AddAspectRatioChangedListener(std::bind(&Renderer::AspectRatioChangedCallback, this, std::placeholders::_1));
-    Gui->AddProjectionChangedListener(std::bind(&Renderer::ProjectionChangedCallback, this, std::placeholders::_1));
+	Gui->AddBSplineCreateListener(std::bind(&Renderer::drawBSplineWorker, this));
+	Gui->AddCRomCreateListener(std::bind(&Renderer::drawCRomWorker, this));
+	Gui->AddSurfaceCreateListener(std::bind(&Renderer::drawSurfaceWorker, this));
+	Gui->AddCameraChangedListener(std::bind(&Renderer::CameraChangedCallback, this, std::placeholders::_1));
+	Gui->AddVFOVChangedListener(std::bind(&Renderer::VFOVChangedCallback, this, std::placeholders::_1));
+	Gui->AddHFOVChangedListener(std::bind(&Renderer::HFOVCallback, this, std::placeholders::_1));
+	Gui->AddFarClipChangedListener(std::bind(&Renderer::FarClipChangedCallback, this, std::placeholders::_1));
+	Gui->AddNearClipChangedListener(std::bind(&Renderer::NearClipChangedCallback, this, std::placeholders::_1));
+	Gui->AddAspectRatioChangedListener(std::bind(&Renderer::AspectRatioChangedCallback, this, std::placeholders::_1));
+	Gui->AddProjectionChangedListener(std::bind(&Renderer::ProjectionChangedCallback, this, std::placeholders::_1));
 
-    Gui->setVFOV(cameraManager.getVFOV());
-    Gui->setHFOV(cameraManager.getHFOV());
+	Gui->setVFOV(cameraManager.getVFOV());
+	Gui->setHFOV(cameraManager.getHFOV());
 }
 
 Renderer::~Renderer()
@@ -49,7 +49,7 @@ void Renderer::TestMoveLeft()
 	{
 		if (shape->GetSelected())
 		{
-            shape->AddTranslation( 0, 0, ofVec3f(-10, 0, 0));
+			shape->AddTranslation(0, 0, ofVec3f(-10, 0, 0));
 		}
 	}
 }
@@ -60,7 +60,7 @@ void Renderer::TestMoveRight()
 	{
 		if (shape->GetSelected())
 		{
-            shape->AddTranslation( 0, 0, ofVec3f(10, 0, 0));
+			shape->AddTranslation(0, 0, ofVec3f(10, 0, 0));
 		}
 	}
 }
@@ -71,7 +71,7 @@ void Renderer::TestMoveUp()
 	{
 		if (shape->GetSelected())
 		{
-            shape->AddTranslation( 0, 0, ofVec3f(0, -10, 0));
+			shape->AddTranslation(0, 0, ofVec3f(0, -10, 0));
 		}
 	}
 }
@@ -82,7 +82,7 @@ void Renderer::TestMoveDown()
 	{
 		if (shape->GetSelected())
 		{
-            shape->AddTranslation( 0, 0, ofVec3f(0, 10, 0));
+			shape->AddTranslation(0, 0, ofVec3f(0, 10, 0));
 		}
 	}
 }
@@ -93,7 +93,7 @@ void Renderer::TestMoveDiag()
 	{
 		if (shape->GetSelected())
 		{
-            shape->AddTranslation( 0, 0, ofVec3f(10, 20, 0));
+			shape->AddTranslation(0, 0, ofVec3f(10, 20, 0));
 		}
 	}
 }
@@ -188,7 +188,7 @@ void Renderer::TestRotateYNeg()
 
 void Renderer::TestCreateTetrahedron()
 {
-    Object3D* obj = new Object3D("models/tetrahedron/tetrahedron.obj");
+	Object3D* obj = new Object3D("models/tetrahedron/tetrahedron.obj");
 	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
 	//obj->glScale(200, 200, 200);
 	this->sceneStructure->AddElement(obj);
@@ -295,11 +295,11 @@ void Renderer::Setup()
 	//this->sceneStructure->AddElement(heightmap);
 	defaultShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
 
-    cameraManager.setTarget(ofVec3f((ofGetWidth() / 2), (ofGetHeight() / 2)));
-    cameraManager.setDistance(500);
-    cameraManager.setup();
-    ambientLight.setPosition(0, 0, -50);
-    GuiLight.setPosition(0, 0, 10000);
+	cameraManager.setTarget(ofVec3f((ofGetWidth() / 2), (ofGetHeight() / 2)));
+	cameraManager.setDistance(500);
+	cameraManager.setup();
+	ambientLight.setPosition(0, 0, -50);
+	GuiLight.setPosition(0, 0, 10000);
 
 	reset();
 	//ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
@@ -327,31 +327,32 @@ void Renderer::Update()
 
 void Renderer::Draw()
 {
-    GuiLight.enable();
-    Gui->Draw();
-    mouseWatcher->Draw();
+	GuiLight.enable();
+	Gui->Draw();
+	mouseWatcher->Draw();
 
-    GuiLight.disable();
-    cameraManager.begin();
-    ofPushMatrix();
-    this->sceneStructure->Draw();
+	GuiLight.disable();
+	//cameraManager.begin();
+	ofPushMatrix();
+	this->sceneStructure->Draw();
 
-    ofPopMatrix();
+	ofPopMatrix();
 
-    //TODO: Camera testing code. To be removed
-    ambientLight.enable();
-    ofFill();
-    for(int i = 0; i < 20; i++){
-        ofPushMatrix();
-        ofTranslate(20 + 50 * i, (ofGetHeight() / 2) - 50);
-        //ofRotate(-52, 0, 0, 1);
-        ofSetColor(255);
-        ofBox(40);
-        ofPopMatrix();
-    }
-    ambientLight.disable();
+	//TODO: Camera testing code. To be removed
+	ambientLight.enable();
+	ofFill();
+	for (int i = 0; i < 20; i++)
+	{
+		ofPushMatrix();
+		ofTranslate(20 + 50 * i, (ofGetHeight() / 2) - 50);
+		//ofRotate(-52, 0, 0, 1);
+		ofSetColor(255);
+		ofBox(40);
+		ofPopMatrix();
+	}
+	ambientLight.disable();
 
-    cameraManager.end();
+	//cameraManager.end();
 }
 
 void Renderer::FileOpenCallback(string param)
@@ -364,8 +365,8 @@ void Renderer::FileOpenCallback(string param)
 	input.close();
 
 	Image * newImage = new Image(imageName.substr(1));
-    //TODO: Reintegrate
-    //newImage->AffectVector((int) (newImage->TopRightPoint()->x / 2), (int) (newImage->BottomLeftPoint()->y / 2), new ofVec3f(100, 100));
+	//TODO: Reintegrate
+	//newImage->AffectVector((int) (newImage->TopRightPoint()->x / 2), (int) (newImage->BottomLeftPoint()->y / 2), new ofVec3f(100, 100));
 	addVisibleShape(newImage);
 }
 
@@ -392,8 +393,8 @@ void Renderer::PrintScreenTakenCallback(string param)
 }
 
 void Renderer::PrintScreenSectionCallback(string arg)
-{    
-    mouseWatcher->SetShowSelectionZone(true);
+{
+	mouseWatcher->SetShowSelectionZone(true);
 	mouseWatcher->AddMouseUpDelegate(screenshotSectionDelegate);
 }
 
@@ -401,15 +402,15 @@ void Renderer::AssociateShapesCallback(string arg)
 {
 	if (selectedShapes.size() <= 1)
 		return;
-    Object2D* parent;
-    if (parent = dynamic_cast<Object2D*>(selectedShapes.front()))
+	Object2D* parent;
+	if (parent = dynamic_cast<Object2D*>(selectedShapes.front()))
 	{
 		std::vector<Shape*>::iterator itr = selectedShapes.begin();
 		itr++;
 		for (itr; itr != selectedShapes.end(); ++itr)
 		{
-            Object2D* child;
-            if (child = dynamic_cast<Object2D*>(*itr))
+			Object2D* child;
+			if (child = dynamic_cast<Object2D*>(*itr))
 			{
 				parent->AddChild(child);
 			}
@@ -422,7 +423,7 @@ void Renderer::AssociateShapesCallback(string arg)
 
 void Renderer::DissociateShapesCallback(string arg)
 {
-    mouseWatcher->AddMouseClickDelegate(dissociateShapesDelegateWorker);
+	mouseWatcher->AddMouseClickDelegate(dissociateShapesDelegateWorker);
 }
 
 void Renderer::ImportObjFileCallback(string param)
@@ -435,57 +436,62 @@ void Renderer::ImportObjFileCallback(string param)
 
 void Renderer::CameraChangedCallback(const GUI::CameraSelected & activeCamera)
 {
-    cameraManager.switchCam(activeCamera == GUI::Front ? CameraManager::front : CameraManager::back);
+	cameraManager.switchCam(activeCamera == GUI::Front ? CameraManager::front : CameraManager::back);
 }
 
 void Renderer::VFOVChangedCallback(float val)
 {
-    cameraManager.setVFOV(val);
-    Gui->setHFOV(cameraManager.getHFOV());
+	cameraManager.setVFOV(val);
+	Gui->setHFOV(cameraManager.getHFOV());
 }
 
 void Renderer::HFOVCallback(float val)
 {
-    cameraManager.setHFOV(val);
-    Gui->setVFOV(cameraManager.getVFOV());
+	cameraManager.setHFOV(val);
+	Gui->setVFOV(cameraManager.getVFOV());
 }
 
 void Renderer::FarClipChangedCallback(int val)
 {
-    cameraManager.setFarClip(val);
+	cameraManager.setFarClip(val);
 }
 
 void Renderer::NearClipChangedCallback(int val)
 {
-    cameraManager.setNearClip(val);
+	cameraManager.setNearClip(val);
 }
 
 void Renderer::AspectRatioChangedCallback(const GUI::AspectRatio & aspectRatio)
 {
-    switch (aspectRatio) {
-    case GUI::Wide:
-        ofSetWindowShape((int)(ofGetHeight() * wideARMultiplier), ofGetHeight());
-        cameraManager.setAspectRatio(CameraManager::wide);
-        break;
-    case GUI::UltraWide:
-        ofSetWindowShape((int)(ofGetHeight() * ultraWideARMultiplier), ofGetHeight());
-        cameraManager.setAspectRatio(CameraManager::ultraWide);
-        break;
-    default:
-        ofSetWindowShape((int)(ofGetHeight() * squareARMultiplier), ofGetHeight());
-        cameraManager.setAspectRatio(CameraManager::square);
-        break;
-    }
-    Gui->setVFOV(cameraManager.getVFOV());
-    Gui->setHFOV(cameraManager.getHFOV());
+	switch (aspectRatio)
+	{
+	case GUI::Wide:
+		ofSetWindowShape((int) (ofGetHeight() * wideARMultiplier), ofGetHeight());
+		cameraManager.setAspectRatio(CameraManager::wide);
+		break;
+	case GUI::UltraWide:
+		ofSetWindowShape((int) (ofGetHeight() * ultraWideARMultiplier), ofGetHeight());
+		cameraManager.setAspectRatio(CameraManager::ultraWide);
+		break;
+	default:
+		ofSetWindowShape((int) (ofGetHeight() * squareARMultiplier), ofGetHeight());
+		cameraManager.setAspectRatio(CameraManager::square);
+		break;
+	}
+	Gui->setVFOV(cameraManager.getVFOV());
+	Gui->setHFOV(cameraManager.getHFOV());
 }
 
-void Renderer::ProjectionChangedCallback(const GUI::ProjectionType & projection){
-    if(projection == GUI::Orthogonal){
-        cameraManager.enableOrtho();
-    }else{
-        cameraManager.disableOrtho();
-    }
+void Renderer::ProjectionChangedCallback(const GUI::ProjectionType & projection)
+{
+	if (projection == GUI::Orthogonal)
+	{
+		cameraManager.enableOrtho();
+	}
+	else
+	{
+		cameraManager.disableOrtho();
+	}
 }
 
 void Renderer::KeyDown(int key)
@@ -519,12 +525,13 @@ void Renderer::KeyUp(int key)
 }
 
 
-void Renderer::screenSectionSectionWorker(int x, int y, int button){
+void Renderer::screenSectionSectionWorker(int x, int y, int button)
+{
 
-    ScreenshotManager::TakeScreenshot(Gui->RequestSaveFilePath("captureDEcran"), mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
-                                      x - mouseWatcher->TopLeftPoint()->x, y - mouseWatcher->TopLeftPoint()->y);
-    mouseWatcher->RemoveMouseUpDelegate(screenshotSectionDelegate);
-    mouseWatcher->SetShowSelectionZone(false);
+	ScreenshotManager::TakeScreenshot(Gui->RequestSaveFilePath("captureDEcran"), mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y,
+		x - mouseWatcher->TopLeftPoint()->x, y - mouseWatcher->TopLeftPoint()->y);
+	mouseWatcher->RemoveMouseUpDelegate(screenshotSectionDelegate);
+	mouseWatcher->SetShowSelectionZone(false);
 
 }
 
@@ -544,7 +551,7 @@ void Renderer::addVisibleShape(Shape * toAdd)
 	{
 		isInArray = toAdd == (*itr);
 	}
-    this->sceneStructure->AddElement(toAdd);
+	this->sceneStructure->AddElement(toAdd);
 	if (!isInArray)
 		visibleShapes.push_back(toAdd);
 }
@@ -609,13 +616,18 @@ void Renderer::reset()
 void Renderer::mouseDownHandler(int x, int y, int button)
 {
 
-    if(button == OF_MOUSE_BUTTON_4){
-        cameraManager.zoomIn();
-    }else if(button == OF_MOUSE_BUTTON_5){
-        cameraManager.zoomOut();
-    }else{
-        cameraManager.notifyMousePressed(x, y, button);
-    }
+	if (button == OF_MOUSE_BUTTON_4)
+	{
+		cameraManager.zoomIn();
+	}
+	else if (button == OF_MOUSE_BUTTON_5)
+	{
+		cameraManager.zoomOut();
+	}
+	else
+	{
+		cameraManager.notifyMousePressed(x, y, button);
+	}
 
 	bool clickedOnSelectedShape = false;
 	for (Shape* selected : selectedShapes)
@@ -632,7 +644,7 @@ void Renderer::mouseDownHandler(int x, int y, int button)
 		{
 			if (visible->IsPointWithinBounds(x, y))
 			{
-				if (!isCtrlDown())
+				if (!isKeyDown(261))
 					clearSelectedShapes();
 				selectedShapes.push_back(visible);
 				visible->SetSelected(true);
@@ -643,23 +655,23 @@ void Renderer::mouseDownHandler(int x, int y, int button)
 }
 void Renderer::mouseUpHandler(int x, int y, int button)
 {
-    cameraManager.notifyMouseReleased(x, y, button);
+	cameraManager.notifyMouseReleased(x, y, button);
 	for (Shape* selected : selectedShapes)
 	{
-        /*if (downCast2D = dynamic_cast<Object2D*>(selected))
+		/*if (downCast2D = dynamic_cast<Object2D*>(selected))
 		{
-            //downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), false);
-            //downCast2D->ActionStop();
+			//downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), false);
+			//downCast2D->ActionStop();
 		}
-        else if (downCast3D = dynamic_cast<Shape3D*>(selected))
+		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
 		{
 			//TODO::Implement;
-        }*/
-    }
+		}*/
+	}
 }
 void Renderer::mouseClickHandler(int x, int y, int button)
 {
-	if (!isCtrlDown())
+	if (!isKeyDown(261))
 		clearSelectedShapes();
 	for (Shape* visible : *(this->sceneStructure->GetElements()) /*visibleShapes*/)
 	{
@@ -674,25 +686,47 @@ void Renderer::mouseClickHandler(int x, int y, int button)
 }
 void Renderer::mouseDragHandler(int x, int y, int button)
 {
-    cameraManager.notifyMouseDragged(x, y, button);
+	cameraManager.notifyMouseDragged(x, y, button);
 	for (Shape * selected : selectedShapes)
 	{
-        if(button != 2)
-            selected->AddTranslation(x, y, *(mouseWatcher->CurretVector()));
-        else
-            selected->AddRotation(*(mouseWatcher->CurretVector()), 2);
-        /*if (downCast2D = dynamic_cast<Object2D*>(selected))
+		if (button != 2)
+			selected->AddTranslation(x, y, *(mouseWatcher->CurretVector()));
+		else
 		{
-            if(button != 2)
-                downCast2D->AddTranslation(*(mouseWatcher->CurretVector()));
-            else
-                downCast2D->AddRotation(*(mouseWatcher->CurretVector()), 2);
-            //downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2 && downCast2D->IsPointWithinBounds(x, y));
+			bool rotated = false;
+			if (isKeyDown('1'))
+			{
+				selected->AddRotation(*(mouseWatcher->CurretVector()), 0);
+				rotated = true;
+			}
+			if (isKeyDown('2'))
+			{
+				selected->AddRotation(*(mouseWatcher->CurretVector()), 1);
+				rotated = true;
+			}
+			if (isKeyDown('3'))
+			{
+				selected->AddRotation(*(mouseWatcher->CurretVector()), 2);
+				rotated = true;
+			}
+			if (!rotated)
+			{
+				selected->AddRotation(*(mouseWatcher->CurretVector()), 0);
+
+			}
+		}
+		/*if (downCast2D = dynamic_cast<Object2D*>(selected))
+		{
+			if(button != 2)
+				downCast2D->AddTranslation(*(mouseWatcher->CurretVector()));
+			else
+				downCast2D->AddRotation(*(mouseWatcher->CurretVector()), 2);
+			//downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2 && downCast2D->IsPointWithinBounds(x, y));
 		}
 		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
 		{
 			//TODO::Implement;
-        }*/
+		}*/
 	}
 }
 
@@ -717,141 +751,155 @@ void Renderer::clearSelectedShapes()
 	selectedShapes.clear();
 }
 
-void Renderer::drawTriangleManager(string param){
-    clearSelectedShapes();
-    if(shapeDelegateWorker != nullptr)
-        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
-    delete shapeDelegateWorker;
-    shapeDelegateWorker = nullptr;
+void Renderer::drawTriangleManager(string param)
+{
+	clearSelectedShapes();
+	if (shapeDelegateWorker != nullptr)
+		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+	delete shapeDelegateWorker;
+	shapeDelegateWorker = nullptr;
 
-    mouseWatcher->SetShowSelectionZone(false);
-    addVisibleShape(new Triangle2D());
+	mouseWatcher->SetShowSelectionZone(false);
+	addVisibleShape(new Triangle2D());
 
-    (visibleShapes.back())->SetSelected(true);
-    shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
-    mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
-    mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
+	(visibleShapes.back())->SetSelected(true);
+	shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
+	mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
+	mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
 }
 
-void Renderer::drawRectangleManager(string param){
-    clearSelectedShapes();
-    if(shapeDelegateWorker != nullptr)
-        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
-    delete shapeDelegateWorker;
-    shapeDelegateWorker = nullptr;
+void Renderer::drawRectangleManager(string param)
+{
+	clearSelectedShapes();
+	if (shapeDelegateWorker != nullptr)
+		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+	delete shapeDelegateWorker;
+	shapeDelegateWorker = nullptr;
 
-    mouseWatcher->SetShowSelectionZone(false);
-    addVisibleShape(new Rectangle2D());
+	mouseWatcher->SetShowSelectionZone(false);
+	addVisibleShape(new Rectangle2D());
 
-    (visibleShapes.back())->SetSelected(true);
-    shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
-    mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
-    mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
+	(visibleShapes.back())->SetSelected(true);
+	shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
+	mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
+	mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
 }
 
-void Renderer::drawEllipseManager(string param){
-    clearSelectedShapes();
-    if(shapeDelegateWorker != nullptr)
-        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
-    delete shapeDelegateWorker;
-    shapeDelegateWorker = nullptr;
+void Renderer::drawEllipseManager(string param)
+{
+	clearSelectedShapes();
+	if (shapeDelegateWorker != nullptr)
+		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+	delete shapeDelegateWorker;
+	shapeDelegateWorker = nullptr;
 
-    mouseWatcher->SetShowSelectionZone(false);
-    addVisibleShape(new Ellipse2D());
+	mouseWatcher->SetShowSelectionZone(false);
+	addVisibleShape(new Ellipse2D());
 
-    (visibleShapes.back())->SetSelected(true);
-    shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
-    mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
-    mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
+	(visibleShapes.back())->SetSelected(true);
+	shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
+	mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
+	mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
 }
 
-void Renderer::drawShapeWorker(int x, int y, int button){
-    if (downCast2D = dynamic_cast<Object2D*>(visibleShapes.back()))
-    {
-        ofColor tmpColor = *(Gui->GetCurrentColor());
-        ((Object2D *)visibleShapes.back())->SetColor(&tmpColor);
-        downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y, mouseWatcher->isXInverted(), mouseWatcher->isYInverted());
-        //downCast2D->Create(0, 0, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
-    }
+void Renderer::drawShapeWorker(int x, int y, int button)
+{
+	if (downCast2D = dynamic_cast<Object2D*>(visibleShapes.back()))
+	{
+		ofColor tmpColor = *(Gui->GetCurrentColor());
+		((Object2D *) visibleShapes.back())->SetColor(&tmpColor);
+		downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y, mouseWatcher->isXInverted(), mouseWatcher->isYInverted());
+		//downCast2D->Create(0, 0, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
+	}
 }
 
-void Renderer::drawBSplineWorker(){
-    clearSelectedShapes();
+void Renderer::drawBSplineWorker()
+{
+	clearSelectedShapes();
 
-    if(shapeDelegateWorker != nullptr)
-        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
-    delete shapeDelegateWorker;
-    shapeDelegateWorker = nullptr;
+	if (shapeDelegateWorker != nullptr)
+		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+	delete shapeDelegateWorker;
+	shapeDelegateWorker = nullptr;
 
-    mouseWatcher->SetShowSelectionZone(false);
-    addVisibleShape(new BSpliline(Gui->getCurveControlPoints()));
+	mouseWatcher->SetShowSelectionZone(false);
+	addVisibleShape(new BSpliline(Gui->getCurveControlPoints()));
 
-    (visibleShapes.back())->SetSelected(true);
-    shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
-    mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
-    mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
+	(visibleShapes.back())->SetSelected(true);
+	shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
+	mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
+	mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
 }
 
-void Renderer::drawCRomWorker(){
-    clearSelectedShapes();
+void Renderer::drawCRomWorker()
+{
+	clearSelectedShapes();
 
-    if(shapeDelegateWorker != nullptr)
-        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
-    delete shapeDelegateWorker;
-    shapeDelegateWorker = nullptr;
+	if (shapeDelegateWorker != nullptr)
+		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+	delete shapeDelegateWorker;
+	shapeDelegateWorker = nullptr;
 
-    mouseWatcher->SetShowSelectionZone(false);
-    addVisibleShape(new CatmullRom(Gui->getCurveControlPoints()));
+	mouseWatcher->SetShowSelectionZone(false);
+	addVisibleShape(new CatmullRom(Gui->getCurveControlPoints()));
 
-    (visibleShapes.back())->SetSelected(true);
-    shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
-    mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
-    mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
+	(visibleShapes.back())->SetSelected(true);
+	shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
+	mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
+	mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
 }
 
-void Renderer::drawSurfaceWorker(){
-    clearSelectedShapes();
+void Renderer::drawSurfaceWorker()
+{
+	clearSelectedShapes();
 
-    if(shapeDelegateWorker != nullptr)
-        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
-    delete shapeDelegateWorker;
-    shapeDelegateWorker = nullptr;
+	if (shapeDelegateWorker != nullptr)
+		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+	delete shapeDelegateWorker;
+	shapeDelegateWorker = nullptr;
 
-    mouseWatcher->SetShowSelectionZone(false);
-    addVisibleShape(new Surface(Gui->getSurfaceControlCount1(), Gui->getSurfaceControlCount2(), Gui->getSurfaceControlCount3(), Gui->getSurfaceControlCount4()));
+	mouseWatcher->SetShowSelectionZone(false);
+	addVisibleShape(new Surface(Gui->getSurfaceControlCount1(), Gui->getSurfaceControlCount2(), Gui->getSurfaceControlCount3(), Gui->getSurfaceControlCount4()));
 
-    (visibleShapes.back())->SetSelected(true);
-    shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
-    mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
-    mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
+	(visibleShapes.back())->SetSelected(true);
+	shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
+	mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
+	mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
 }
 
-void Renderer::unbindShapeWorkers(int x, int y, int button){
-    if(shapeDelegateWorker != nullptr)
-        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);
-    mouseWatcher->RemoveMouseUpDelegate(unbindShapeDelegateWorker);
-    delete shapeDelegateWorker;
-    shapeDelegateWorker = nullptr;
-    (visibleShapes.back())->SetSelected(false);
-    //mouseWatcher->SetShowSelectionZone(Gui->GetCurrentMode() == GUI::Select);
+void Renderer::unbindShapeWorkers(int x, int y, int button)
+{
+	if (shapeDelegateWorker != nullptr)
+		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);
+	mouseWatcher->RemoveMouseUpDelegate(unbindShapeDelegateWorker);
+	delete shapeDelegateWorker;
+	shapeDelegateWorker = nullptr;
+	(visibleShapes.back())->SetSelected(false);
+	//mouseWatcher->SetShowSelectionZone(Gui->GetCurrentMode() == GUI::Select);
 }
 
-void Renderer::dissociateShapesWorkers(int x, int y, int button){
-    for(Shape * selected : visibleShapes){
-        if (downCast2D = dynamic_cast<Object2D*>(selected))
-        {
-            if(downCast2D->IsPointWithinBounds(x, y)){
-                clearSelectedShapes();
-                downCast2D->ClearChildren();
-                mouseWatcher->RemoveMouseClickDelegate(dissociateShapesDelegateWorker);
-            }
-        }
-    }
+void Renderer::dissociateShapesWorkers(int x, int y, int button)
+{
+	for (Shape * selected : visibleShapes)
+	{
+		if (downCast2D = dynamic_cast<Object2D*>(selected))
+		{
+			if (downCast2D->IsPointWithinBounds(x, y))
+			{
+				clearSelectedShapes();
+				downCast2D->ClearChildren();
+				mouseWatcher->RemoveMouseClickDelegate(dissociateShapesDelegateWorker);
+			}
+		}
+	}
 }
-bool Renderer::isCtrlDown(){
-    for(std::vector<int>::iterator itr = pressedKeys.begin(); itr != pressedKeys.end(); itr++){
-        if((*itr) == 768)
-            return true;
-    }
-    return false;
+bool Renderer::isKeyDown(char _keyCode)
+{
+	for (std::vector<int>::iterator itr = pressedKeys.begin(); itr != pressedKeys.end(); itr++)
+	{
+		if ((*itr) == _keyCode)
+			return true;
+	}
+	return false;
 }
+

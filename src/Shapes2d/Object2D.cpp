@@ -20,7 +20,7 @@ void Object2D::AddRotation(ofVec3f _draggedPixelVector, int _axis)
 {
    // this->GetCentre();
     float length = _draggedPixelVector.length();
-    length = _draggedPixelVector.x + _draggedPixelVector.y;
+    length = _draggedPixelVector.x + -_draggedPixelVector.y;
     double angle = atan((length / ofGetWindowWidth())) * 180 / M_PI;
     float a, x, y, z;
     if (_axis == 0) // x

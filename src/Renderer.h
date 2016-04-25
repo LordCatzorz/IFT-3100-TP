@@ -163,5 +163,5 @@ private:
     void unbindShapeWorkers(int x, int y, int button);
     void dissociateShapesWorkers(int x, int y, int button);
 
-    bool isCtrlDown();
+	bool isKeyDown(char _keyCode);
 };
