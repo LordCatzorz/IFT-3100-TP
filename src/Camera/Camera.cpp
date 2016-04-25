@@ -77,6 +77,9 @@ void Camera::setViewport(const ofRectangle & newVP){
 }
 
 float Camera::getDistance() const{
+    ofVec3f targetPosition = innerTarget.getPosition();
+    targetPosition.x = innerCamera.getPosition().x;
+    targetPosition.y = innerCamera.getPosition().y;
     return innerTarget.getPosition().distance(innerCamera.getPosition());
 }
 
