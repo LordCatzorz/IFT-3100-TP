@@ -42,6 +42,7 @@ public:
     void AddBSplineCreateListener(std::function<void()> fnc);
     void AddCRomCreateListener(std::function<void()> fnc);
     void AddSurfaceCreateListener(std::function<void()> fnc);
+    void RemoveSurfaceCreateListener(std::function<void()> fnc);
 
     void AddCameraChangedListener(std::function<void(GUI::CameraSelected)> fnc);
     void AddVFOVChangedListener(std::function<void(float)> fnc);
@@ -89,6 +90,7 @@ private:
     ofxButton bSplineCreate, CRomCreate;
     ofxIntSlider controlPointsSlider;
     ofxButton surfaceCreate;
+    ofxButton surfaceRemove;
     ofxGuiGroup surfaceGroup;
     ofxIntSlider surfaceSide1;
     ofxIntSlider surfaceSide2;
@@ -124,6 +126,7 @@ private:
     void cRomCreateCaller();
     void controlPointsSliderCaller(int & val);
     void surfaceCreateCaller();
+    void surfaceRemoveCaller();
     void surfacePoints1SliderCaller(int & val);
     void surfacePoints2SliderCaller(int & val);
     void surfacePoints3SliderCaller(int & val);
@@ -159,6 +162,7 @@ private:
     std::function<void()> bSplineCreateCallback;
     std::function<void()> cRomCreateCallback;
     std::function<void()> surfaceCreateCallback;
+    std::function<void()> surfaceRemoveCallback;
 	
     std::function<void(GUI::CameraSelected)> cameraChangedCallback;
     std::function<void(float val)> VFOVChangedCallback;

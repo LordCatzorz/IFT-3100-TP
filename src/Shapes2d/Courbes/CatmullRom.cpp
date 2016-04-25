@@ -1,8 +1,9 @@
 #include "CatmullRom.h"
 
-CatmullRom::CatmullRom(int controlPoints)
+CatmullRom::CatmullRom(int controlPoints, int initialOndulation)
 {
     ctrlPoints = controlPoints + 1;
+    baseOndulation = initialOndulation;
     shapeHasBorders = false;
 }
 
@@ -43,10 +44,10 @@ void CatmullRom::creator(int x1, int y1, int z1, int width, int height, int dept
         points.push_back(tmp);
     }
 
-    int yOffset = 40;
+
         for(int i = 1; i < ctrlPoints; i++){
-            points[i].y += yOffset;
-            yOffset *= -1;
+            points[i].y += baseOndulation;
+            baseOndulation *= -1;
         }
 
         if(fixCoordinates){
@@ -67,7 +68,7 @@ void CatmullRom::drawShape(){
     if(points.size() < 2)
         return;
     ofFill();
-    //ofSetColor(0);
+    ofSetColor(0);
     for(ofPoint & p : points){
         ofEllipse(p.x, p.y, 10, 10);
     }
@@ -79,7 +80,6 @@ void CatmullRom::drawShape(){
 
     for (int i = 0; i < points.size() - 3; i++){
         for(float t = 0.f; t <= 1; t += 0.01f){
-            ofPoint tmp = Catmull(points[i], points[i + 1], points[i + 2], points[i + 3], t);
             curve.curveTo(Catmull(points[i], points[i + 1], points[i + 2], points[i + 3], t));
         }
     }

@@ -12,7 +12,7 @@ public:
                      wide,//16:9
                      ultraWide};//21:9
     CameraManager();
-    void setup();
+    void setup(int offset = 0);
     void begin();
     void end();
     void enableOrtho();

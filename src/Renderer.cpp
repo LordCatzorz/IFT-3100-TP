@@ -26,6 +26,7 @@ Renderer::Renderer()
 	Gui->AddBSplineCreateListener(std::bind(&Renderer::drawBSplineWorker, this));
 	Gui->AddCRomCreateListener(std::bind(&Renderer::drawCRomWorker, this));
 	Gui->AddSurfaceCreateListener(std::bind(&Renderer::drawSurfaceWorker, this));
+    Gui->RemoveSurfaceCreateListener(std::bind(&Renderer::removeSurfaceWorker, this));
 	Gui->AddCameraChangedListener(std::bind(&Renderer::CameraChangedCallback, this, std::placeholders::_1));
 	Gui->AddVFOVChangedListener(std::bind(&Renderer::VFOVChangedCallback, this, std::placeholders::_1));
 	Gui->AddHFOVChangedListener(std::bind(&Renderer::HFOVCallback, this, std::placeholders::_1));
@@ -336,15 +337,14 @@ void Renderer::Draw()
     if(Gui->isFreeView())
         cameraManager.begin();
 
+    ambientLight.enable();
+	ofFill();
     ofPushMatrix();
     this->sceneStructure->Draw();
 
-	ofPopMatrix();
-
-	//TODO: Camera testing code. To be removed
-	ambientLight.enable();
-	ofFill();
-	for (int i = 0; i < 20; i++)
+    ofPopMatrix();
+    /*
+    for (int i = 0; i < 20; i++)
 	{
 		ofPushMatrix();
 		ofTranslate(20 + 50 * i, (ofGetHeight() / 2) - 50);
@@ -352,7 +352,7 @@ void Renderer::Draw()
 		ofSetColor(255);
 		ofBox(40);
 		ofPopMatrix();
-	}
+    }*/
 	ambientLight.disable();
     if(Gui->isFreeView())
         cameraManager.end();
@@ -497,6 +497,7 @@ void Renderer::ProjectionChangedCallback(const GUI::ProjectionType & projection)
 	}
 }
 
+int tmpY = 0;
 void Renderer::KeyDown(int key)
 {
 	if (pressedKeys.size() == 0)
@@ -512,7 +513,14 @@ void Renderer::KeyDown(int key)
 			}
 		if (!isInArray)
 			pressedKeys.push_back(key);
-	}
+    }
+    if(key == 'a'){
+        cameraManager.setup(++tmpY);
+    }else if(key == 'd'){
+        cameraManager.setup(--tmpY);
+    }
+
+    ofLog() << tmpY;
 }
 
 void Renderer::KeyUp(int key)
@@ -554,7 +562,7 @@ void Renderer::addVisibleShape(Shape * toAdd)
 	{
 		isInArray = toAdd == (*itr);
 	}
-	this->sceneStructure->AddElement(toAdd);
+    this->sceneStructure->AddElement(toAdd);
 	if (!isInArray)
 		visibleShapes.push_back(toAdd);
 }
@@ -562,12 +570,19 @@ void Renderer::removeVisibleShape(Shape * toAdd)
 {
 	for (std::vector<Shape*>::iterator itr = visibleShapes.end(); itr != visibleShapes.begin(); itr--)
 	{
+        Shape * tmp = *itr;
 		if (*itr == toAdd)
 		{
-			visibleShapes.erase(itr);
+            visibleShapes.erase(itr);
 			break;
 		}
 	}
+    for(int i = 0; i < sceneStructure->GetElementsCount(); i++){
+        if(sceneStructure->GetElement(i) == toAdd){
+            sceneStructure->RemoveElement(i);
+            break;
+        }
+    }
 }
 void Renderer::addSelectedShape(Shape * toAdd)
 {
@@ -615,10 +630,8 @@ void Renderer::reset()
 {
 	mouseWatcher->SetShowSelectionZone(newMode == GUI::Select);
 }*/
-
 void Renderer::mouseDownHandler(int x, int y, int button)
 {
-
     if(Gui->isFreeView()){
         if (button == OF_MOUSE_BUTTON_4)
         {
@@ -694,7 +707,7 @@ void Renderer::mouseClickHandler(int x, int y, int button)
 void Renderer::mouseDragHandler(int x, int y, int button)
 {
     if(Gui->isFreeView()){
-        cameraManager.notifyMouseDragged(x, y, button);
+        cameraManager.notifyMouseDragged(x,y, button);
     }else{
         for (Shape * selected : selectedShapes)
         {
@@ -814,13 +827,15 @@ void Renderer::drawEllipseManager(string param)
 
 void Renderer::drawShapeWorker(int x, int y, int button)
 {
-	if (downCast2D = dynamic_cast<Object2D*>(visibleShapes.back()))
-	{
-		ofColor tmpColor = *(Gui->GetCurrentColor());
-		((Object2D *) visibleShapes.back())->SetColor(&tmpColor);
-		downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y, mouseWatcher->isXInverted(), mouseWatcher->isYInverted());
-		//downCast2D->Create(0, 0, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
-	}
+    if(visibleShapes.size() > 0){
+        if (downCast2D = dynamic_cast<Object2D*>(visibleShapes.back()))
+        {
+            ofColor tmpColor = *(Gui->GetCurrentColor());
+            ((Object2D *) visibleShapes.back())->SetColor(&tmpColor);
+            downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y, mouseWatcher->isXInverted(), mouseWatcher->isYInverted());
+            //downCast2D->Create(0, 0, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
+        }
+    }
 }
 
 void Renderer::drawBSplineWorker()
@@ -869,12 +884,26 @@ void Renderer::drawSurfaceWorker()
 	shapeDelegateWorker = nullptr;
 
 	mouseWatcher->SetShowSelectionZone(false);
-	addVisibleShape(new Surface(Gui->getSurfaceControlCount1(), Gui->getSurfaceControlCount2(), Gui->getSurfaceControlCount3(), Gui->getSurfaceControlCount4()));
+    addVisibleShape(new Surface(Gui->getSurfaceControlCount1(), Gui->getSurfaceControlCount2(), Gui->getSurfaceControlCount3(), Gui->getSurfaceControlCount4(), ofFloatColor(Gui->GetCurrentColor()->r / 255.f, Gui->GetCurrentColor()->g / 255.f, Gui->GetCurrentColor()->b / 255.f, Gui->GetCurrentColor()->a / 255.f)));
 
 	(visibleShapes.back())->SetSelected(true);
 	shapeDelegateWorker = new MouseWatcher::MouseActionDelegate(this, &Renderer::drawShapeWorker);
 	mouseWatcher->AddMouseDragDelegate(shapeDelegateWorker);
 	mouseWatcher->AddMouseUpDelegate(unbindShapeDelegateWorker);
+}
+
+Surface * verficationObect;
+void Renderer::removeSurfaceWorker(){
+    int i = 0;
+    for(std::vector<Shape*>::iterator itr = visibleShapes.begin(); itr != visibleShapes.end(); itr++){
+        if(verficationObect = dynamic_cast<Surface*>(*itr)){
+            visibleShapes.erase(itr);
+            sceneStructure->RemoveElement(i);
+            break;
+        }
+        i++;
+    }
+    verficationObect = nullptr;
 }
 
 void Renderer::unbindShapeWorkers(int x, int y, int button)
@@ -892,7 +921,7 @@ void Renderer::dissociateShapesWorkers(int x, int y, int button)
 {
 	for (Shape * selected : visibleShapes)
 	{
-		if (downCast2D = dynamic_cast<Object2D*>(selected))
+        if (downCast2D = dynamic_cast<Object2D*>(selected))
 		{
 			if (downCast2D->IsPointWithinBounds(x, y))
 			{

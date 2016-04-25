@@ -1,6 +1,6 @@
 #include "Surface.h"
 
-Surface::Surface(int var1, int var2, int var3, int var4)
+Surface::Surface(int var1, int var2, int var3, int var4, const ofFloatColor & color)
 {
     int size = 200;
         mesh;
@@ -21,13 +21,13 @@ Surface::Surface(int var1, int var2, int var3, int var4)
         p4.x = size;
         p4.y = 0;
         p4.z = 0;
-        s1 = new CatmullRom(var1);
+        s1 = new CatmullRom(var1, 20);
         s1->Create(p1, p2);
-        s2 = new CatmullRom(var2);
+        s2 = new CatmullRom(var2, 20);
         s2->Create(p2, p3);
-        s3 = new CatmullRom(var3);
+        s3 = new CatmullRom(var3, 20);
         s3->Create(p4, p3);
-        s4 = new CatmullRom(var4);
+        s4 = new CatmullRom(var4, 20);
         s4->Create(p1, p4);
 
         for(double i = 0; i <= size; i++){
@@ -59,13 +59,15 @@ Surface::Surface(int var1, int var2, int var3, int var4)
                     mesh.addIndex(x+(y+1)*width);
                 }
             }
+            setMaterialColor(color);
 }
 
 void Surface::Draw(){
     ofPushMatrix();
     ofTranslate(400, 400, 250);
+    //material.begin();
     mesh.drawVertices();
-    ofSetColor(200, 0, 0, 255);
+    //material.end();
 
     /*s1->Draw();
 
@@ -78,6 +80,12 @@ void Surface::Draw(){
             ofEllipse(x, 1, 1);
         }*/
     ofPopMatrix();
+}
+
+void Surface::setMaterialColor(const ofFloatColor &color){
+    material.setAmbientColor(color);
+    material.setEmissiveColor(color);
+    material.setDiffuseColor(color);
 }
 
 int Surface::lerp(int u, int v, int p1, int p2){

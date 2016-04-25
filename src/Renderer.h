@@ -57,6 +57,7 @@ public:
     void drawBSplineWorker();
     void drawCRomWorker();
     void drawSurfaceWorker();
+    void removeSurfaceWorker();
     void CameraChangedCallback(const GUI::CameraSelected & activeCamera);
     void VFOVChangedCallback(float val);
     void HFOVCallback(float val);

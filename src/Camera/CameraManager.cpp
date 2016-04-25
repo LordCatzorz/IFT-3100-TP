@@ -6,9 +6,9 @@ CameraManager::CameraManager()
     standByCam = &backCamera;
 }
 
-void CameraManager::setup(){
+void CameraManager::setup(int offset){
     backCamera.setViewport(ofRectangle(0, 0, ofGetWidth(), ofGetHeight()));
-    backCamera.notifyMouseDragged(-1030, 0, OF_MOUSE_BUTTON_3);
+    backCamera.notifyMouseDragged(772, 0, OF_MOUSE_BUTTON_3);
 }
 
 void CameraManager::begin(){

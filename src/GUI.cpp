@@ -20,6 +20,7 @@ GUI::GUI()
     CRomCreate.addListener(this, &GUI::cRomCreateCaller);
     controlPointsSlider.addListener(this, &GUI::controlPointsSliderCaller);
     surfaceCreate.addListener(this, &GUI::surfaceCreateCaller);
+    surfaceRemove.addListener(this, &GUI::surfaceRemoveCaller);
     surfaceSide1.addListener(this, &GUI::surfacePoints1SliderCaller);
     surfaceSide2.addListener(this, &GUI::surfacePoints2SliderCaller);
     surfaceSide3.addListener(this, &GUI::surfacePoints3SliderCaller);
@@ -57,7 +58,8 @@ GUI::GUI()
     courbesGroup.add(bSplineCreate.setup("Creer B-Spline"));
     courbesGroup.add(CRomCreate.setup("Creer Catmull-Rom"));
     courbesGroup.add(controlPointsSlider.setup("Points de controle", 5, 1, 10));
-    gui.add(surfaceCreate.setup("Creer une surface"));
+    gui.add(surfaceCreate.setup("Creer la surface"));
+    gui.add(surfaceRemove.setup("Effacer la surface"));
     gui.add(surfaceGroup.setup("Parametres surface"));
     surfaceGroup.minimize();
     surfaceGroup.add(surfaceSide1.setup("Ondulations cote 1", 3, 0, 10));
@@ -73,9 +75,8 @@ GUI::GUI()
 
     cameraGui.setup("Camera");
 
-    cameraGui.add(cameraPickerGroup.setup("Aspect ratio"));
-    cameraPickerGroup.add(frontToggle.setup("Camera avant", true));
-    cameraPickerGroup.add(backToggle.setup("Camera arrière", false));
+    cameraGui.add(frontToggle.setup("Camera avant", true));
+    cameraGui.add(backToggle.setup("Camera arrière", false));
     frontToggle.setName("Camera avant");
     backToggle.setName("Camera arrière");
 
@@ -175,6 +176,11 @@ void GUI::AddCRomCreateListener(std::function<void()> fnc)
 void GUI::AddSurfaceCreateListener(std::function<void()> fnc)
 {
     surfaceCreateCallback = fnc;
+}
+
+void GUI::RemoveSurfaceCreateListener(std::function<void()> fnc)
+{
+    surfaceRemoveCallback = fnc;
 }
 
 void GUI::AddCameraChangedListener(std::function<void(GUI::CameraSelected)> fnc)
@@ -390,6 +396,10 @@ void GUI::cRomCreateCaller(){
 
 void GUI::surfaceCreateCaller(){
     surfaceCreateCallback();
+}
+
+void GUI::surfaceRemoveCaller(){
+    surfaceRemoveCallback();
 }
 
 void GUI::controlPointsSliderCaller(int &val){
