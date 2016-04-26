@@ -64,10 +64,10 @@ GUI::GUI()
     gui.add(surfaceRemove.setup("Effacer la surface"));
     gui.add(surfaceGroup.setup("Parametres surface"));
     surfaceGroup.minimize();
-    surfaceGroup.add(surfaceSide1.setup("Ondulations cote 1", 3, 0, 10));
-    surfaceGroup.add(surfaceSide2.setup("Ondulations cote 2", 3, 0, 10));
-    surfaceGroup.add(surfaceSide3.setup("Ondulations cote 3", 3, 0, 10));
-    surfaceGroup.add(surfaceSide4.setup("Ondulations cote 4", 3, 0, 10));
+    surfaceGroup.add(surfaceSide1.setup("Ondulations cote 1", 3, 1, 10));
+    surfaceGroup.add(surfaceSide2.setup("Ondulations cote 2", 3, 1, 10));
+    surfaceGroup.add(surfaceSide3.setup("Ondulations cote 3", 3, 1, 10));
+    surfaceGroup.add(surfaceSide4.setup("Ondulations cote 4", 3, 1, 10));
 
 
     editToggle = false;
