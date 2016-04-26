@@ -10,21 +10,7 @@ void TransformableObject::AddTranslation(int x, int y, ofVec3f _draggedPixelVect
 void TransformableObject::AddRotation(ofVec3f _draggedPixelVector, int _axis)
 {
 	this->GetCentre();
-	float length = _draggedPixelVector.length();
-	/*if (abs(_draggedPixelVector.x) < abs(_draggedPixelVector.y))
-	{
-	if (_draggedPixelVector.y < 0)
-	{
-	length *= -1;
-	}
-	}
-	else
-	{
-	if (_draggedPixelVector.x < 0)
-	{
-	length *= -1;
-	}
-	}*/
+    float length = _draggedPixelVector.length();
 	length = _draggedPixelVector.x + _draggedPixelVector.y;
 	double angle = atan((length / ofGetWindowWidth())) * 180 / M_PI;
 	float a, x, y, z;
@@ -59,8 +45,6 @@ void TransformableObject::AddScale(bool _zoomIn)
 
 bool TransformableObject::IsPointWithinBounds(float x, float y)
 {
-	//return this->boundingBox->
-	//@Todo IMPLEMENT IT
 	auto vertices = this->boundingBox->getMesh().getVertices();
 	ofPoint vertice1 = vertices.front();
 	ofPoint vertice2;
@@ -92,12 +76,7 @@ ofPoint TransformableObject::getScreenPosition(ofVec3f _point)
 	ofVec3f point = this->getFinalTransformationMatrix().preMult(_point);
 	ofVec3f point2 = this->getFinalTransformationMatrix().postMult(_point);
 
-	return point;
-	//int winX = round(((point.x + 1) / 2.0) * ofGetWindowWidth());
-	////we calculate -point3D.getY() because the screen Y axis is
-	////oriented top->down 
-	//int winY = round(((1 - point.y) / 2.0) * ofGetWindowHeight());
-	//return ofPoint(winX, winY);
+    return point;
 }
 
 //http://webglfactory.blogspot.ca/2011/05/how-to-convert-world-to-screen.html
@@ -106,12 +85,7 @@ ofPoint TransformableObject::getWorldPosition(ofVec3f _point)
 	ofVec3f point = this->parent->GetFinalTransformationMatrix().getInverse().preMult(_point);
 	ofVec3f point2 = this->parent->GetFinalTransformationMatrix().getInverse().postMult(_point);
 
-	return point;
-	//int winX = round(((point.x + 1) / 2.0) * ofGetWindowWidth());
-	////we calculate -point3D.getY() because the screen Y axis is
-	////oriented top->down 
-	//int winY = round(((1 - point.y) / 2.0) * ofGetWindowHeight());
-	//return ofPoint(winX, winY);
+    return point;
 }
 
 ofMatrix4x4 TransformableObject::getFinalTransformationMatrix()

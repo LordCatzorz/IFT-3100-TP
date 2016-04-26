@@ -10,9 +10,10 @@ public:
         screenImg.grabScreen(x, y, width, height);
 		if (blur)
 		{
-			screenImg = Image::Blur(screenImg);
+            screenImg = Image::Blur(screenImg);
 		}
         screenImg.saveImage(name + ".png");
+        screenImg.clear();
     }
 };
 

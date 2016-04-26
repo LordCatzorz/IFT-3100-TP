@@ -28,8 +28,7 @@ void Object3D::Draw()
 {
 	
 	ofPushMatrix();
-	this->applyTransformationMatrix();
-	//ofRotate(rot)
+    this->applyTransformationMatrix();
 	ofSetColor(255);
 	if (this->model->getMeshCount() > 0)
 	{

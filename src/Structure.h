@@ -58,21 +58,7 @@ private:
 	int iteration = 0;
 	std::vector<Shape*>* elements;
 	Structure* parent;
-	std::vector<Structure*>* children;
-
-	
-	// Inherited via of3dPrimitive
-	//virtual ofPoint * TopLeftPoint() override;
-	//virtual ofPoint * TopRightPoint() override;
-	//virtual ofPoint * BottomLeftPoint() override;
-	//virtual ofPoint * BottomRightPoint() override;
-	//virtual bool IsPointWithinBounds(int x, int y) override;
-	////virtual void AffectVector(int x, int y, ofVec3f * actionVector, bool isRotation = false) override;
-	//virtual void ShowBorders(bool shouldShow) override;
-	
-
-	
-
+    std::vector<Structure*>* children;
 };
 
 

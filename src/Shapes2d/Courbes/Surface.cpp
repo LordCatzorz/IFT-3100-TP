@@ -65,20 +65,7 @@ Surface::Surface(int var1, int var2, int var3, int var4, const ofFloatColor & co
 void Surface::Draw(){
     ofPushMatrix();
     ofTranslate(400, 400, 250);
-    //material.begin();
     mesh.drawVertices();
-    //material.end();
-
-    /*s1->Draw();
-
-    ofSetColor(0, 200, 0, 255);
-    s2->Draw();
-    ofSetColor(0, 0, 200, 255);
-    s3->Draw();
-    s4->Draw();
-    for(ofPoint & x : points){
-            ofEllipse(x, 1, 1);
-        }*/
     ofPopMatrix();
 }
 

@@ -17,8 +17,7 @@ Renderer::Renderer()
 	Gui->AddPrintscreenTakenListener(std::bind(&Renderer::PrintScreenTakenCallback, this, std::placeholders::_1));
 	Gui->AddPrintscreenBlurTakenListener(std::bind(&Renderer::PrintScreenTakenBlurCallback, this, std::placeholders::_1));
 	Gui->AddPrintscreenSelectionListener(std::bind(&Renderer::PrintScreenSectionCallback, this, std::placeholders::_1));
-	Gui->AddObjFileImportedListener(std::bind(&Renderer::ImportObjFileCallback, this, std::placeholders::_1));
-	//Gui->AddModeChangedListener(std::bind(&Renderer::ModeChangeCallback, this, std::placeholders::_1));
+    Gui->AddObjFileImportedListener(std::bind(&Renderer::ImportObjFileCallback, this, std::placeholders::_1));
 	Gui->AddCreateTriangleListener(std::bind(&Renderer::drawTriangleManager, this, std::placeholders::_1));
 	Gui->AddCreateRectangleListener(std::bind(&Renderer::drawRectangleManager, this, std::placeholders::_1));
 	Gui->AddCreateEllipseListener(std::bind(&Renderer::drawEllipseManager, this, std::placeholders::_1));
@@ -191,75 +190,36 @@ void Renderer::TestRotateYNeg()
 void Renderer::TestCreateTetrahedron()
 {
 	Object3D* obj = new Object3D("models/tetrahedron/tetrahedron.obj");
-	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
-	//obj->glScale(200, 200, 200);
+    obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
 	this->sceneStructure->AddElement(obj);
 }
 
 void Renderer::TestCreateHexahedron()
 {
 	Object3D* obj = new Object3D("models/hexahedron/hexahedron.obj");
-	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
-	//obj->glScale(200, 200, 200);
+    obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
 	this->sceneStructure->AddElement(obj);
 }
 
 void Renderer::TestCreateOctahedron()
 {
 	Object3D* obj = new Object3D("models/octahedron/octahedron.obj");
-	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
-	//obj->glScale(200, 200, 200);
+    obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
 	this->sceneStructure->AddElement(obj);
 }
 
 void Renderer::TestCreateDodecahedron()
 {
 	Object3D* obj = new Object3D("models/dodecahedron/dodecahedron.obj");
-	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
-	//obj->glScale(200, 200, 200);
+    obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
 	this->sceneStructure->AddElement(obj);
 }
 
 void Renderer::TestCreateIcosahedron()
 {
 	Object3D* obj = new Object3D("models/icosahedron/icosahedron.obj");
-	obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
-	//obj->glScale(200, 200, 200);
+    obj->glTranslate(ofGetWindowWidth()*0.5, ofGetWindowHeight()*0.5, 0);
 	this->sceneStructure->AddElement(obj);
-}
-
-void Renderer::TestSelectNext()
-{
-	//if (this->testSelectedElement > -1)
-	//{
-	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
-	//}
-	//this->testSelectedElement++;
-	//if (this->testSelectedElement >= this->sceneStructure->GetElementsCount())
-	//{
-	//	this->testSelectedElement = -1;
-	//}
-	//else
-	//{
-	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
-	//}
-}
-
-void Renderer::TestSelectPrevious()
-{
-	//if (this->testSelectedElement > -1 && this->testSelectedElement < this->sceneStructure->GetElementsCount())
-	//{
-	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(false);
-	//}
-	//if (this->testSelectedElement == -1)
-	//{
-	//	this->testSelectedElement = this->sceneStructure->GetElementsCount();
-	//}
-	//this->testSelectedElement--;
-	//if (this->testSelectedElement > -1)
-	//{
-	//	this->sceneStructure->GetElement(this->testSelectedElement)->SetSelected(true);
-	//}
 }
 
 void Renderer::TestDeselectAll()
@@ -288,14 +248,10 @@ void Renderer::Setup()
 	light->setSpecularColor(ofColor(191, 191, 191));
 	light->setPointLight();
 	this->sceneStructure->shadersManager->AddLight(light);
-	ofImage* textureImage = new ofImage("IFT3100H16_TP1.png");
-	//HeightMap* heightmap = new HeightMap();
-	//heightmap->Setup(textureImage);
+    ofImage* textureImage = new ofImage("IFT3100H16_TP1.png");
 	textureImage->bind(0);
 	ofShader* defaultShader = new ofShader();
-	this->sceneStructure->shadersManager->AddShader(defaultShader);
-	//this->sceneStructure->AddElement(heightmap);
-	defaultShader->load("shader/V120/LambertVS.glsl", "shader/V120/LambertFS.glsl");
+    this->sceneStructure->shadersManager->AddShader(defaultShader);
 
 	cameraManager.setTarget(ofVec3f((ofGetWidth() / 2), (ofGetHeight() / 2)));
 	cameraManager.setDistance(500);
@@ -303,13 +259,11 @@ void Renderer::Setup()
 	ambientLight.setPosition(0, 0, -50);
 	GuiLight.setPosition(0, 0, 10000);
 
-	reset();
-	//ofSetLogLevel(ofLogLevel::OF_LOG_WARNING);
+    reset();
 }
 
 void Renderer::Update()
 {
-	//((Object3D*)(this->sceneStructure->GetElement(0)))->glRotate(1, 0, 1, 0);
 	ofPushMatrix();
 	ofShader* shader = this->sceneStructure->shadersManager->GetShader(0);
 	shader->begin();
@@ -344,16 +298,6 @@ void Renderer::Draw()
     this->sceneStructure->Draw();
 
     ofPopMatrix();
-    /*
-    for (int i = 0; i < 20; i++)
-	{
-		ofPushMatrix();
-		ofTranslate(20 + 50 * i, (ofGetHeight() / 2) - 50);
-		//ofRotate(-52, 0, 0, 1);
-		ofSetColor(255);
-		ofBox(40);
-		ofPopMatrix();
-    }*/
 	ambientLight.disable();
     if(Gui->isFreeView())
         cameraManager.end();
@@ -368,9 +312,7 @@ void Renderer::FileOpenCallback(string param)
 	saveFile("./data" + imageName, input);
 	input.close();
 
-	Image * newImage = new Image(imageName.substr(1));
-	//TODO: Reintegrate
-	//newImage->AffectVector((int) (newImage->TopRightPoint()->x / 2), (int) (newImage->BottomLeftPoint()->y / 2), new ofVec3f(100, 100));
+    Image * newImage = new Image(imageName.substr(1));
 	addVisibleShape(newImage);
 }
 
@@ -385,9 +327,7 @@ void Renderer::HeightMapOpenCallback(string param)
 
 	ofImage * newImage = new ofImage(imageName.substr(1));
 	HeightMap * hm = new HeightMap();
-	hm->Setup(newImage);
-	//TODO: Reintegrate
-	//newImage->AffectVector((int) (newImage->TopRightPoint()->x / 2), (int) (newImage->BottomLeftPoint()->y / 2), new ofVec3f(100, 100));
+    hm->Setup(newImage);
 	addVisibleShape(hm);
 }
 
@@ -424,8 +364,7 @@ void Renderer::AssociateShapesCallback(string arg)
 			}
 		}
 		clearSelectedShapes();
-	}
-	//Shape * parent = selectedShapes.front();
+    }
 
 }
 
@@ -631,10 +570,6 @@ void Renderer::reset()
 }
 
 
-/*void Renderer::ModeChangeCallback(GUI::ActionType newMode)
-{
-	mouseWatcher->SetShowSelectionZone(newMode == GUI::Select);
-}*/
 void Renderer::mouseDownHandler(int x, int y, int button)
 {
     if(Gui->isFreeView()){
@@ -681,18 +616,6 @@ void Renderer::mouseUpHandler(int x, int y, int button)
 {
     if(Gui->isFreeView())
         cameraManager.notifyMouseReleased(x, y, button);
-	for (Shape* selected : selectedShapes)
-	{
-		/*if (downCast2D = dynamic_cast<Object2D*>(selected))
-		{
-			//downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), false);
-			//downCast2D->ActionStop();
-		}
-		else if (downCast3D = dynamic_cast<Shape3D*>(selected))
-		{
-			//TODO::Implement;
-		}*/
-	}
 }
 void Renderer::mouseClickHandler(int x, int y, int button)
 {
@@ -742,18 +665,6 @@ void Renderer::mouseDragHandler(int x, int y, int button)
 
                 }
             }
-            /*if (downCast2D = dynamic_cast<Object2D*>(selected))
-        {
-            if(button != 2)
-                downCast2D->AddTranslation(*(mouseWatcher->CurretVector()));
-            else
-                downCast2D->AddRotation(*(mouseWatcher->CurretVector()), 2);
-            //downCast2D->AffectVector(x, y, mouseWatcher->CurretVector(), button == 2 && downCast2D->IsPointWithinBounds(x, y));
-        }
-        else if (downCast3D = dynamic_cast<Shape3D*>(selected))
-        {
-            //TODO::Implement;
-        }*/
         }
 	}
 }
@@ -783,7 +694,7 @@ void Renderer::drawTriangleManager(string param)
 {
 	clearSelectedShapes();
 	if (shapeDelegateWorker != nullptr)
-		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);
 	delete shapeDelegateWorker;
 	shapeDelegateWorker = nullptr;
 
@@ -800,7 +711,7 @@ void Renderer::drawRectangleManager(string param)
 {
 	clearSelectedShapes();
 	if (shapeDelegateWorker != nullptr)
-		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);
 	delete shapeDelegateWorker;
 	shapeDelegateWorker = nullptr;
 
@@ -817,7 +728,7 @@ void Renderer::drawEllipseManager(string param)
 {
 	clearSelectedShapes();
 	if (shapeDelegateWorker != nullptr)
-		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);
 	delete shapeDelegateWorker;
 	shapeDelegateWorker = nullptr;
 
@@ -838,7 +749,6 @@ void Renderer::drawShapeWorker(int x, int y, int button)
             ofColor tmpColor = *(Gui->GetCurrentColor());
             ((Object2D *) visibleShapes.back())->SetColor(&tmpColor);
             downCast2D->Create(mouseWatcher->TopLeftPoint()->x, mouseWatcher->TopLeftPoint()->y, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y, mouseWatcher->isXInverted(), mouseWatcher->isYInverted());
-            //downCast2D->Create(0, 0, mouseWatcher->TopRightPoint()->x - mouseWatcher->TopLeftPoint()->x, mouseWatcher->BottomLeftPoint()->y - mouseWatcher->TopLeftPoint()->y);
         }
     }
 }
@@ -848,7 +758,7 @@ void Renderer::drawBSplineWorker()
 	clearSelectedShapes();
 
 	if (shapeDelegateWorker != nullptr)
-		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);
 	delete shapeDelegateWorker;
 	shapeDelegateWorker = nullptr;
 
@@ -866,7 +776,7 @@ void Renderer::drawCRomWorker()
 	clearSelectedShapes();
 
 	if (shapeDelegateWorker != nullptr)
-		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);
 	delete shapeDelegateWorker;
 	shapeDelegateWorker = nullptr;
 
@@ -884,7 +794,7 @@ void Renderer::drawSurfaceWorker()
 	clearSelectedShapes();
 
 	if (shapeDelegateWorker != nullptr)
-		mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);//mouseDownDelegate = new MouseWatcher::MouseActionDelegate(this, &Renderer::mouseDownHandler);
+        mouseWatcher->RemoveMouseDragDelegate(shapeDelegateWorker);
 	delete shapeDelegateWorker;
 	shapeDelegateWorker = nullptr;
 
@@ -918,8 +828,7 @@ void Renderer::unbindShapeWorkers(int x, int y, int button)
 	mouseWatcher->RemoveMouseUpDelegate(unbindShapeDelegateWorker);
 	delete shapeDelegateWorker;
 	shapeDelegateWorker = nullptr;
-	(visibleShapes.back())->SetSelected(false);
-	//mouseWatcher->SetShowSelectionZone(Gui->GetCurrentMode() == GUI::Select);
+    (visibleShapes.back())->SetSelected(false);
 }
 
 void Renderer::dissociateShapesWorkers(int x, int y, int button)

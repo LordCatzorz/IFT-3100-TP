@@ -43,10 +43,6 @@ void Triangle2D::Create(int x1, int y1, int width, int height, bool isXInverted,
     refreshBorders();
 }
 
-/*bool Triangle2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2){
-    return false;
-}*/
-
 void Triangle2D::refreshPoints(){
 
     point1.set(bottomLeftPoint.x, bottomLeftPoint.y);

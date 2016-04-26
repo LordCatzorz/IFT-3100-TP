@@ -36,41 +36,12 @@ class ofApp : public ofBaseApp{
         void dragEvent(ofDragInfo dragInfo);
         void gotMessage(ofMessage msg);
         of3dPrimitive* primitive3d;
-        /*void FileOpenCallback(string param);
-        void PrintScreenTakenCallback(string param);
-        void printScreenTakenCallback(int x, int y, int width, int height, string param);
-        void PrintScreenSectionCallback(string arg);
-        void ModeChangeCallback(GUI::ActionType newMode);
-        void ImportObjFileCallback(string param);
 
-
-        void someFunction(int x, int y);*/
     private:
 		bool ctrlKeyPressed;
 		bool altKeyPressed;
 		bool shiftKeyPressed;
         MouseWatcher * mouseWatcher;
-        //typedef FastDelegate2<int, int> MouseActionDelegate;
-        //MouseActionDelegate mouseDownDelegates[12];
-        //MouseActionDelegate mouseUpDelegates[12];
-
-        /*void beginSelectionZoneDraw(int x, int y);
-        void endSelectionZoneDraw(int x, int y);
-
-        void takeScreenshotSection(int x, int y);
-
-        GUI* Gui;
-
-        std::vector<Shape*> visibleShapes;
-        std::vector<Shape*> selectedShapes;
-        void saveFile(string path, std::ifstream & file);
-
-        bool isRecordingMouseMouvements = false;
-        bool isMakingScreenshotSection = false;*/
-
-        //ofxAssimpModelLoader* importedModel;
-
-        //GUI::ActionType actionMode = GUI::ActionType::Select;
         int iteration;
 
         Renderer* renderer;

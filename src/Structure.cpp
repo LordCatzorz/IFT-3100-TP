@@ -3,13 +3,10 @@
 void Structure::Draw()
 {
 	ofColor colours[4] = {ofColor::red, ofColor::green, ofColor::blue, ofColor::purple};
-	ofLight* light = this->shadersManager->GetLight(0);
-	//ofEnableLighting();
+    ofLight* light = this->shadersManager->GetLight(0);
 	light->setPointLight();
 	light->setAttenuation(0.5f);
-	light->setPosition(ofVec3f(500, 500, -500));
-	//light->enable();
-	//this->shadersManager->EnableShaders();
+    light->setPosition(ofVec3f(500, 500, -500));
     ofPushMatrix();
 	for (Structure* child : *(this->children))
 	{
@@ -19,8 +16,7 @@ void Structure::Draw()
 	{
 		shape->Draw();
 	}
-	ofPopMatrix();
-	//this->shadersManager->DisableShaders();
+    ofPopMatrix();
 	light->disable();
 
     ofDisableLighting();
@@ -184,8 +180,7 @@ bool Structure::DeleteChild(int _position)
 {
 	if (_position < this->GetChildrenCount())
 	{
-		delete (*(this->children))[_position];
-		//(*(this->children))[_position] = NULL;
+        delete (*(this->children))[_position];
 		this->children->erase(this->children->begin() + _position);
 		return true;
 	}

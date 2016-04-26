@@ -119,15 +119,7 @@ void ofApp::keyPressed(int key)
 	else if (key == 'b')
 	{
 		this->renderer->TestCreateIcosahedron();
-	}
-	else if (key == 'f')
-	{
-		this->renderer->TestSelectPrevious();
-	}
-	else if (key == 'g')
-	{
-		this->renderer->TestSelectNext();
-	}
+    }
 	else if (key == 'h')
 	{
 		this->renderer->TestDeselectAll();

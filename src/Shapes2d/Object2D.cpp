@@ -58,7 +58,7 @@ void Object2D::notifyAttachedToParen(Object2D * parent)
 
 ofMatrix4x4 Object2D::getFinalTransformationMatrix()
 {
-	ofMatrix4x4 matrix = this->getInverse().getInverse(); // I don't know how to get the matrix.
+    ofMatrix4x4 matrix = this->getInverse().getInverse();
 	if (this->parent != NULL)
 	{
 		matrix = matrix * (this->parent->GetFinalTransformationMatrix());
@@ -69,11 +69,6 @@ ofMatrix4x4 Object2D::getFinalTransformationMatrix()
 void Object2D::Create(int x1, int y1, int width, int height, bool isXInverted, bool isYInverted)
 {
 }
-
-/*bool Object2D::DoesRectangleOverlap(int x1, int y1, int x2, int y2)
-{
-	return false;
-}*/
 
 void Object2D::Draw()
 {
@@ -148,8 +143,7 @@ void Object2D::RemoveChild(Object2D * child)
 			(*toDel)->parentShape = nullptr;
 			(*toDel)->xOffset = (*toDel)->parentXOffset + xOffset;
 			(*toDel)->yOffset = (*toDel)->parentYOffset + yOffset;
-			(*toDel)->SetSelected(false);
-			//(*toDel)->angleOffset += angleOffset;
+            (*toDel)->SetSelected(false);
 			children.erase(toDel);
 			break;
 		}

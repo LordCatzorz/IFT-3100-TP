@@ -42,13 +42,13 @@ void HeightMap::Setup(ofImage* _image)
 	{
 		for (int x = 0; x<w - 1; x++)
 		{
-			mesh->addIndex(x + y* w);               // 0
-			mesh->addIndex((x + 1) + y* w);           // 1
-			mesh->addIndex(x + (y + 1)* w);           // 10
+            mesh->addIndex(x + y* w);
+            mesh->addIndex((x + 1) + y* w);
+            mesh->addIndex(x + (y + 1)* w);
 				
-			mesh->addIndex((x + 1) + y* w);           // 1
-			mesh->addIndex((x + 1) + (y + 1)* w);       // 11
-			mesh->addIndex(x + (y + 1)* w);           // 10
+            mesh->addIndex((x + 1) + y* w);
+            mesh->addIndex((x + 1) + (y + 1)* w);
+            mesh->addIndex(x + (y + 1)* w);
 				
 		}
 	}

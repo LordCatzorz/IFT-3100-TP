@@ -36,7 +36,6 @@ public:
     void notifyMousePressed(int x, int y, int button);
     void notifyMouseDragged(int x, int y, int button);
     void notifyMouseReleased(int x, int y, int button);
-    //void roll(int deg){innerVal2 += deg;frontCamera.roll(deg); backCamera.roll(deg); ofLog() << innerVal2;}
     void switchCam(const DisplayCamera & cameraToShow);
 
 private:
@@ -44,7 +43,7 @@ private:
     Camera * selectedCam;
     Camera * standByCam;
     DisplayCamera selectedCamEnum;
-    ofRectangle secondaryViewport = ofRectangle();//0, 10, 2048, 256);
+    ofRectangle secondaryViewport = ofRectangle();
     void translateCoordinates(const ofRectangle & sourceViewport, int sourceX, int sourceY, const ofRectangle & destiantionViewport, int * destX, int * destY);
     void affectCameras(int x, int y, int button);
 };

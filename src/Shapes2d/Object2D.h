@@ -4,10 +4,8 @@
 class Object2D : public Shape, public ofMatrix4x4
 {
 public:
-    //enum Shape{Rectangle, Triangle, Ellipse};
 
     Object2D();
-    //Object2D(const Shape & shape);
 
 	~Object2D();
 
@@ -36,9 +34,6 @@ public:
 private:
 
     // Inherited via Object2D
-	
-    //virtual void Create(int x1, int y1, int width, int height) = 0;
-    //virtual bool DoesRectangleOverlap(int x1, int y1, int x2, int y2) =0;
     virtual void drawShape()=0;
     virtual void refreshPoints()=0;
 

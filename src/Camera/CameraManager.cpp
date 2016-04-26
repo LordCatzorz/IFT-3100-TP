@@ -127,10 +127,6 @@ void CameraManager::notifyMouseReleased(int x, int y, int button){
 }
 
 void CameraManager::switchCam(const DisplayCamera & cameraToShow){
-    /*if(selectedCam == &frontCamera)
-        selectedCam = &backCamera;
-    else
-       selectedCam = &frontCamera;*/
     switch (cameraToShow) {
     case back:
         selectedCam = &backCamera;

@@ -82,7 +82,6 @@ GUI::GUI()
     frontToggle.setName("Camera avant");
     backToggle.setName("Camera arrière");
 
-    //cameraGui.setPosition(ofGetWidth() - cameraGui.getWidth() - 10, 10);
     cameraGui.add(fovVSlider.setup("FOV Verticale", 0, 0, 180));
     cameraGui.add(fovHSlider.setup("FOV Horizontale", 0, 0, 180));
     cameraGui.add(farClipSlider.setup("Far clip", 1032, 0, 1032));
@@ -310,13 +309,6 @@ int GUI::getSurfaceControlCount4() const{
 void GUI::activePanelSwitchCaller(bool & inval)
 {
     isInFreeView = inval;
-    /*gui.clear();
-    gui.add(freeViewToggle.setup("Free view", !inval));
-    if(inval){
-        gui.add(toolsGroup.setup("Outils"));
-    }else{
-        gui.add(cameraGroup.setup("Camera"));
-    }*/
 }
 
 void GUI::openFileBtnCallback()
